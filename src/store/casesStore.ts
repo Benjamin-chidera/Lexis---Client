@@ -5,6 +5,9 @@ import axios from "axios";
 
 export type CaseStatus = "active" | "archived" | "closed" | "success" | "abandoned";
 
+// const API_BASE = "http://localhost:8000/api";
+const API_BASE = import.meta.env.VITE_API_URL;
+
 export interface ChatMessage {
   id: string;
   role: "user" | "ai";
@@ -109,7 +112,7 @@ export const useCasesStore = create<CasesStore>((set, get) => ({
     }
 
     try {
-      const response = await axios.get("http://localhost:8000/api/cases");
+      const response = await axios.get(`${API_BASE}/cases`);
       set({ cases: response.data, isLoading: false });
     } catch (error) {
       console.error("Failed to fetch cases:", error);
@@ -120,7 +123,7 @@ export const useCasesStore = create<CasesStore>((set, get) => ({
   loadMessages: async (caseId: string) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/cases/${caseId}/messages`
+        `${API_BASE}/cases/${caseId}/messages`
       );
       const messages: ChatMessage[] = response.data;
       set((state) => ({
@@ -195,7 +198,7 @@ export const useCasesStore = create<CasesStore>((set, get) => ({
 
   addUrlToVault: async (caseId, url) => {
     try {
-      await axios.post(`http://localhost:8000/api/cases/${caseId}/add-url`, { url });
+      await axios.post(`${API_BASE}/cases/${caseId}/add-url`, { url });
       const { fetchCases } = useCasesStore.getState();
       await fetchCases();
     } catch (error) {
