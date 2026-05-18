@@ -59,21 +59,21 @@ export const RightSplitSection = () => {
             <TabsList className="bg-transparent border-0 p-0 h-auto gap-3 flex flex-wrap justify-start">
               <TabsTrigger
                 value="pdf1"
-                className="rounded-lg px-4 py-2.5 text-[11px] font-semibold tracking-wide border border-white/10 bg-white/[0.03] text-slate-400 data-[state=active]:bg-purple-900/20 data-[state=active]:border-purple-500/50 data-[state=active]:text-purple-300 transition-all shadow-sm flex items-center gap-2"
+                className="rounded-lg px-4 py-2.5 text-[11px] font-semibold tracking-wide border border-white/10 bg-white/3 text-slate-400 data-[state=active]:bg-purple-900/20 data-[state=active]:border-purple-500/50 data-[state=active]:text-purple-300 transition-all shadow-sm flex items-center gap-2"
               >
                 <FileText className="w-4 h-4" />
                 Deposition_Witness_J.pdf
               </TabsTrigger>
               <TabsTrigger
                 value="pdf2"
-                className="rounded-lg px-4 py-2.5 text-[11px] font-semibold tracking-wide border border-white/10 bg-white/[0.03] text-slate-400 data-[state=active]:bg-purple-900/20 data-[state=active]:border-purple-500/50 data-[state=active]:text-purple-300 transition-all shadow-sm flex items-center gap-2"
+                className="rounded-lg px-4 py-2.5 text-[11px] font-semibold tracking-wide border border-white/10 bg-white/3 text-slate-400 data-[state=active]:bg-purple-900/20 data-[state=active]:border-purple-500/50 data-[state=active]:text-purple-300 transition-all shadow-sm flex items-center gap-2"
               >
                 <FileText className="w-4 h-4" />
                 Contract_Exhibit_A.pdf
               </TabsTrigger>
               <TabsTrigger
                 value="url1"
-                className="rounded-lg px-4 py-2.5 text-[11px] font-semibold tracking-wide border border-white/10 bg-white/[0.03] text-slate-400 data-[state=active]:bg-purple-900/20 data-[state=active]:border-purple-500/50 data-[state=active]:text-purple-300 transition-all shadow-sm flex items-center gap-2"
+                className="rounded-lg px-4 py-2.5 text-[11px] font-semibold tracking-wide border border-white/10 bg-white/3 text-slate-400 data-[state=active]:bg-purple-900/20 data-[state=active]:border-purple-500/50 data-[state=active]:text-purple-300 transition-all shadow-sm flex items-center gap-2"
               >
                 <Globe className="w-4 h-4" />
                 Legal_Precedent.gov
@@ -87,7 +87,7 @@ export const RightSplitSection = () => {
             className="flex-1 overflow-hidden m-0 data-[state=active]:flex flex-col relative"
           >
             <div className="flex-1 overflow-y-auto p-12 bg-black/80 flex justify-center custom-scrollbar scroll-smooth">
-              <div className="w-full max-w-2xl bg-[#0a0a0a] shadow-[0_30px_100px_rgba(0,0,0,0.9)] p-20 rounded-md border border-white/[0.03] relative min-h-[950px] group/pdf">
+              <div className="w-full max-w-2xl bg-[#0a0a0a] shadow-[0_30px_100px_rgba(0,0,0,0.9)] p-20 rounded-md border border-white/3 relative min-h-[950px] group/pdf">
                 {/* Watermark/Header */}
                 <div className="flex justify-between mb-20 opacity-30">
                   <span className="text-[10px] font-bold tracking-widest text-slate-500 uppercase">
@@ -127,7 +127,7 @@ export const RightSplitSection = () => {
 
                   {/* Highlighted section */}
                   <div className="relative group/highlight -mx-8 px-8 py-6">
-                    <div className="absolute inset-0 bg-cyan-500/[0.08] border border-cyan-500/30 rounded-lg shadow-[0_0_30px_rgba(6,182,212,0.15)] pointer-events-none" />
+                    <div className="absolute inset-0 bg-cyan-500/8 border border-cyan-500/30 rounded-lg shadow-[0_0_30px_rgba(6,182,212,0.15)] pointer-events-none" />
                     <div className="flex gap-4 relative z-10">
                       <span className="text-cyan-400 font-sans font-bold text-sm mt-1.5 w-6 shrink-0">
                         A:
@@ -178,7 +178,7 @@ export const RightSplitSection = () => {
                 {/* Footer */}
                 <div className="absolute bottom-16 inset-x-20 flex justify-between items-end opacity-30">
                   <div className="space-y-2">
-                    <div className="w-[120%] h-[1px] bg-slate-600" />
+                    <div className="w-[120%] h-px bg-slate-600" />
                     <span className="text-[10px] font-bold tracking-widest uppercase text-slate-400">
                       DIGITAL SIGNATURE: HASH_91220X
                     </span>
@@ -235,7 +235,7 @@ export const RightSplitSection = () => {
               </div>
 
               <Card className="bg-[#0a0a0a] border-white/10 shadow-2xl overflow-hidden rounded-2xl group">
-                <div className="h-40 bg-gradient-to-br from-blue-900/40 via-slate-900 to-[#0a0c14] relative border-b border-white/5 flex items-center justify-center overflow-hidden">
+                <div className="h-40 bg-linear-to-br from-blue-900/40 via-slate-900 to-[#0a0c14] relative border-b border-white/5 flex items-center justify-center overflow-hidden">
                   <Scale className="w-24 h-24 text-blue-500/10 absolute -right-4 -bottom-4 rotate-12" />
                   <BookOpen className="w-16 h-16 text-white/5" />
                   <div className="absolute inset-0 bg-blue-500/5 group-hover:bg-blue-500/10 transition-colors" />

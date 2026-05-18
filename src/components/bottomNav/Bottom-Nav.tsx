@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "../ui/button";
-import { FolderOpen, Zap, BookOpen, Clock, Upload, AlertCircle } from "lucide-react";
+import { FolderOpen, Clock, Upload, AlertCircle } from "lucide-react";
 
 export const BottomNav = () => {
   const location = useLocation();

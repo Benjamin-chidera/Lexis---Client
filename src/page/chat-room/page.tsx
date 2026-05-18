@@ -1,30 +1,3 @@
-import {
-  FileText,
-  Link as LinkIcon,
-  Mic,
-  Zap,
-  Briefcase,
-  Brain,
-  Archive,
-  Search,
-  ZoomIn,
-  Download,
-  X,
-  MessageSquare,
-  Terminal,
-  Layout,
-  ShieldCheck,
-  AlertCircle,
-  ExternalLink,
-  MoreHorizontal,
-  Globe,
-  Scale,
-  BookOpen,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { LeftSplitSection } from "@/components/chat-room/left-split-section";
 import { RightSplitSection } from "@/components/chat-room/right-split-section";
 

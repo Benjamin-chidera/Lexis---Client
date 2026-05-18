@@ -11,7 +11,7 @@ import { BellDropdown } from "./components/notifications/BellDropdown";
 import { InAppNotification } from "./components/notifications/InAppNotification";
 import { CallPage } from "./page/call/page";
 import { CaseAlertPage } from "./page/CaseAlert/page";
-import { MeetingHistoryPage } from "./page/meetingHistory/page";
+// import { MeetingHistoryPage } from "./page/meetingHistory/page";
 import { CaseHistoryPage } from "./page/caseHistory/page";
 import ErrorPage from "./page/error/page";
 import { ProtectedRoute } from "./components/ProtectedRoute";

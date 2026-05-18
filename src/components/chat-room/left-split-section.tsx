@@ -30,7 +30,7 @@ export const LeftSplitSection = () => {
 
           {/* User Message */}
           <div className="flex flex-col items-end gap-2 max-w-[85%] ml-auto group">
-            <div className="bg-white/[0.04] border border-white/10 rounded-2xl p-5 text-slate-300 text-sm leading-relaxed shadow-xl">
+            <div className="bg-white/4 border border-white/10 rounded-2xl p-5 text-slate-300 text-sm leading-relaxed shadow-xl">
               Hey, I'm worried about the witness's credibility regarding the
               timeline.
             </div>
@@ -54,7 +54,7 @@ export const LeftSplitSection = () => {
               </div>
             </div>
 
-            <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-6 relative overflow-hidden group shadow-xl">
+            <div className="bg-white/2 border border-white/5 rounded-3xl p-6 relative overflow-hidden group shadow-xl">
               <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-500" />
               <p className="text-slate-200 text-[17px] font-medium leading-relaxed mb-6">
                 Wait, the deposition on Page 14 says he was at the office,{" "}
@@ -65,7 +65,7 @@ export const LeftSplitSection = () => {
               </p>
 
               {/* Citation Card */}
-              <div className="bg-white/[0.03] border border-white/10 rounded-xl p-4 flex items-center justify-between group/card hover:border-white/20 transition-all cursor-pointer">
+              <div className="bg-white/3 border border-white/10 rounded-xl p-4 flex items-center justify-between group/card hover:border-white/20 transition-all cursor-pointer">
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center border border-white/10">
                     <FileText className="w-5 h-5 text-slate-400" />
@@ -93,7 +93,7 @@ export const LeftSplitSection = () => {
           <div className="relative">
             <Input
               placeholder="Direct query to case history..."
-              className="bg-white/[0.03] border-white/10 h-14 pl-6 pr-20 rounded-xl text-slate-200 placeholder:text-slate-600 focus:border-purple-500/40 focus:ring-0 transition-all text-sm shadow-lg"
+              className="bg-white/3 border-white/10 h-14 pl-6 pr-20 rounded-xl text-slate-200 placeholder:text-slate-600 focus:border-purple-500/40 focus:ring-0 transition-all text-sm shadow-lg"
             />
           </div>
         </div>

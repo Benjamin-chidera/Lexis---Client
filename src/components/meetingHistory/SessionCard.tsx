@@ -1,4 +1,4 @@
-import { Clock, Sparkles, ChevronRight, Play } from "lucide-react";
+import { Clock, Sparkles, Play } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -74,7 +74,7 @@ export const SessionCard = ({
         {Array.from({ length: participantCount }).map((_, i) => (
           <div
             key={i}
-            className="w-7 h-7 rounded-full bg-gradient-to-br from-slate-600 to-slate-800 border-2 border-[#11141e]"
+            className="w-7 h-7 rounded-full bg-linear-to-br from-slate-600 to-slate-800 border-2 border-[#11141e]"
             style={{ zIndex: participantCount - i }}
           />
         ))}

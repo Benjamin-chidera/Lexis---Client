@@ -1,5 +1,1 @@
-@layer base {
-  body {
-    @apply bg-black;
-  }
-}   
+/* App.css is intentionally left blank because Tailwind base styles are managed in index.css */
