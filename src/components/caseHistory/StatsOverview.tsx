@@ -1,0 +1,61 @@
+import { CheckCircle2, XCircle, Ban } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+interface StatsOverviewProps {
+  successCount: number;
+  canceledCount: number;
+  failedCount: number;
+  total: number;
+}
+
+const stats = (successCount: number, canceledCount: number, failedCount: number, total: number) => [
+  {
+    label: "Successful",
+    count: successCount,
+    percent: Math.round((successCount / total) * 100),
+    icon: <CheckCircle2 className="w-5 h-5 text-emerald-400" />,
+    iconBg: "bg-emerald-500/10 border border-emerald-500/20",
+    barColor: "bg-emerald-500",
+    textColor: "text-emerald-400",
+  },
+  {
+    label: "Canceled",
+    count: canceledCount,
+    percent: Math.round((canceledCount / total) * 100),
+    icon: <Ban className="w-5 h-5 text-amber-400" />,
+    iconBg: "bg-amber-500/10 border border-amber-500/20",
+    barColor: "bg-amber-500",
+    textColor: "text-amber-400",
+  },
+  {
+    label: "Failed",
+    count: failedCount,
+    percent: Math.round((failedCount / total) * 100),
+    icon: <XCircle className="w-5 h-5 text-red-400" />,
+    iconBg: "bg-red-500/10 border border-red-500/20",
+    barColor: "bg-red-500",
+    textColor: "text-red-400",
+  },
+];
+
+export const StatsOverview = ({ successCount, canceledCount, failedCount, total }: StatsOverviewProps) => {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+      {stats(successCount, canceledCount, failedCount, total).map((s) => (
+        <div key={s.label} className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-6">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{s.label}</span>
+            <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center", s.iconBg)}>
+              {s.icon}
+            </div>
+          </div>
+          <p className={cn("text-3xl font-bold mb-1", s.textColor)}>{s.count}</p>
+          <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mt-3">
+            <div className={cn("h-full rounded-full", s.barColor)} style={{ width: `${s.percent}%` }} />
+          </div>
+          <span className="text-xs text-slate-500 mt-2 block">{s.percent}% of total cases</span>
+        </div>
+      ))}
+    </div>
+  );
+};
