@@ -30,7 +30,7 @@ export const VaultUrlCard = ({ evidence }: VaultUrlCardProps) => {
       setIsLoading(true);
       setError(null);
       try {
-        const res = await fetch("http://localhost:8000/api/vault/summarize-url", {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/vault/summarize-url`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ url: evidence.url }),
