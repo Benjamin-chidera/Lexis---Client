@@ -8,6 +8,7 @@ const SERVER_URL = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.r
 const socket = io(SERVER_URL, {
   autoConnect: false,
   withCredentials: true,
+  transports: ["websocket"],
 });
 
 export default socket;
