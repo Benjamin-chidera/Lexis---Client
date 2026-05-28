@@ -12,6 +12,7 @@ export interface AlertItem {
   case_name: string | null;
   title: string;
   summary: string;
+  ai_reasoning: string | null;
   severity: AlertSeverity;
   status: AlertStatus;
   created_at: string;

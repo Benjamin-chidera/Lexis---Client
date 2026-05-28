@@ -9,7 +9,7 @@ export const BottomNav = () => {
   return (
     <div className="fixed bottom-0 z-50 left-0 right-0 pointer-events-none">
       <div className="pb-8 pt-2 flex justify-center relative">
-        <nav className="bg-[#0a0a0a]/80 border border-white/10 px-4 py-3 rounded-full flex items-center gap-4 backdrop-blur-2xl shadow-2xl pointer-events-auto">
+        <nav className="bg-white/[0.04] border border-white/[0.1] px-4 py-3 rounded-full flex items-center gap-4 backdrop-blur-3xl shadow-[0_8px_32px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.07)] pointer-events-auto">
           <Link to="/">
             <Button
               variant="ghost"

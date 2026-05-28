@@ -10,17 +10,26 @@ import { TextMicInput } from "@/components/bottomNav/text-mic-input";
 import { useBriefingStore } from "@/store/briefingStore";
 import socket from "@/lib/socket";
 import { uploadPdfs, uploadImages } from "@/lib/api";
+import { toast } from "sonner";
 
 const BriefingPage = () => {
-  const { pdfs, urls, images, context } = useBriefingStore();
+  const { pdfs, urls, images, context, clearAll } = useBriefingStore();
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+
+  const hasContent =
+    pdfs.length > 0 ||
+    urls.length > 0 ||
+    images.length > 0 ||
+    context.trim().length > 0;
 
   const handleStart = async () => {
+    if (!hasContent) {
+      toast.error("Add at least one document, URL, image, or context note before starting.");
+      return;
+    }
     setIsLoading(true);
-    setErrorMessage("");
 
     try {
       // Step 1: Upload PDFs and Images
@@ -42,6 +51,7 @@ const BriefingPage = () => {
       // Step 3: Listen for success
       socket.once("case_created", (data: { case_id: number }) => {
         setIsLoading(false);
+        clearAll();
         navigate(`/cases?case_id=${data.case_id}`);
       });
 
@@ -54,7 +64,7 @@ const BriefingPage = () => {
       });
     } catch (error) {
       setIsLoading(false);
-      setErrorMessage(error instanceof Error ? error.message : "Something went wrong.");
+      toast.error(error instanceof Error ? error.message : "Something went wrong.");
     }
   };
 
@@ -73,20 +83,14 @@ const BriefingPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
            <PdfSelectors />
            <ImageSelectors />
-        </div>
+         </div>
         <Urls />
         <TextMicInput />
-
-        {errorMessage && (
-          <p className="text-red-400 text-center text-sm px-4">
-            {errorMessage}
-          </p>
-        )}
 
         <div className="flex justify-center pt-4">
           <Button
             onClick={handleStart}
-            disabled={isLoading}
+            disabled={isLoading || !hasContent}
             className="h-16 px-14 bg-white hover:bg-slate-200 text-black font-black rounded-2xl shadow-[0_0_50px_rgba(255,255,255,0.15)] border border-white/40 flex items-center gap-4 text-xl uppercase tracking-[0.15em] transition-all hover:scale-105 active:scale-95 group relative overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <span className="relative z-10">

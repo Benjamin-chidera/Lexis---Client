@@ -16,6 +16,7 @@ import type { ChatMessage } from "@/store/casesStore";
 export function useCaseSocket() {
   const setAiTyping = useCasesStore((state) => state.setAiTyping);
   const addAiMessage = useCasesStore((state) => state.addAiMessage);
+  const setResearchStage = useCasesStore((state) => state.setResearchStage);
 
   useEffect(() => {
     // Connect socket if not already connected
@@ -31,6 +32,7 @@ export function useCaseSocket() {
     // Server is telling us the AI stopped (error case)
     const handleAiTypingDone = () => {
       setAiTyping(false);
+      setResearchStage(null);
     };
 
     // Server is sending back the AI's completed response
@@ -38,18 +40,30 @@ export function useCaseSocket() {
       case_id: number;
       message: ChatMessage;
     }) => {
+      setResearchStage(null);
       addAiMessage(String(data.case_id), data.message);
+    };
+
+    // Live pipeline stage updates (analyst → researcher → strategist)
+    const handleStageUpdate = (data: {
+      case_id: number;
+      stage: string;
+      message: string;
+    }) => {
+      setResearchStage(data.message);
     };
 
     socket.on("ai_typing", handleAiTyping);
     socket.on("ai_typing_done", handleAiTypingDone);
     socket.on("ai_response", handleAiResponse);
+    socket.on("stage_update", handleStageUpdate);
 
     // Clean up listeners when the modal closes
     return () => {
       socket.off("ai_typing", handleAiTyping);
       socket.off("ai_typing_done", handleAiTypingDone);
       socket.off("ai_response", handleAiResponse);
+      socket.off("stage_update", handleStageUpdate);
     };
-  }, [setAiTyping, addAiMessage]);
+  }, [setAiTyping, addAiMessage, setResearchStage]);
 }

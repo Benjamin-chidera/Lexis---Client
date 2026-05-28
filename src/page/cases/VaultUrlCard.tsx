@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Sparkles, Globe, ExternalLink, RefreshCw } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import type { VaultEvidence } from "@/store/casesStore";
+import { toast } from "sonner";
 
 interface VaultUrlCardProps {
   evidence: VaultEvidence;
@@ -10,7 +11,6 @@ interface VaultUrlCardProps {
 export const VaultUrlCard = ({ evidence }: VaultUrlCardProps) => {
   const [summary, setSummary] = useState<string>(evidence.summary || "");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // If the backend has already generated and provided the summary, use it instantly.
@@ -28,7 +28,6 @@ export const VaultUrlCard = ({ evidence }: VaultUrlCardProps) => {
     let isMounted = true;
     const fetchSummary = async () => {
       setIsLoading(true);
-      setError(null);
       try {
         const res = await fetch(`${import.meta.env.VITE_API_URL}/vault/summarize-url`, {
           method: "POST",
@@ -43,7 +42,7 @@ export const VaultUrlCard = ({ evidence }: VaultUrlCardProps) => {
           setSummary(data.summary);
         }
       } catch (err) {
-        if (isMounted) setError(err instanceof Error ? err.message : "Unknown error");
+        toast.error(err instanceof Error ? err.message : "Failed to load summary");
       } finally {
         if (isMounted) setIsLoading(false);
       }
@@ -92,11 +91,6 @@ export const VaultUrlCard = ({ evidence }: VaultUrlCardProps) => {
           <div className="flex flex-col items-center justify-center h-64 space-y-4">
             <RefreshCw className="w-8 h-8 text-purple-500/50 animate-spin" />
             <p className="text-slate-400 text-sm font-medium animate-pulse">Extracting and summarizing web page...</p>
-          </div>
-        ) : error ? (
-          <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6 text-center">
-            <p className="text-red-400 font-medium">Failed to load summary</p>
-            <p className="text-slate-500 text-xs mt-2">{error}</p>
           </div>
         ) : (
           <div className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-8 shadow-2xl">

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Lock, Mail, ShieldCheck, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/authStore";
+import { toast } from "sonner";
 
 type Step = "email" | "login" | "set-password";
 
@@ -18,15 +19,13 @@ const LoginPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [userName, setUserName] = useState("");
   const [step, setStep] = useState<Step>("email");
-  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleContinue = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
 
     if (!email.trim()) {
-      setError("Corporate email is required.");
+      toast.error("Corporate email is required.");
       return;
     }
 
@@ -36,7 +35,7 @@ const LoginPage = () => {
       setUserName(result.name);
       setStep(result.has_password ? "login" : "set-password");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      toast.error(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
       setIsLoading(false);
     }
@@ -44,10 +43,9 @@ const LoginPage = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
 
     if (!password) {
-      setError("Password is required.");
+      toast.error("Password is required.");
       return;
     }
 
@@ -56,7 +54,7 @@ const LoginPage = () => {
       await login(email.trim(), password);
       navigate("/", { replace: true });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed. Please try again.");
+      toast.error(err instanceof Error ? err.message : "Login failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -64,18 +62,17 @@ const LoginPage = () => {
 
   const handleSetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
 
     if (!password) {
-      setError("Password is required.");
+      toast.error("Password is required.");
       return;
     }
     if (password.length < 8) {
-      setError("Password must be at least 8 characters.");
+      toast.error("Password must be at least 8 characters.");
       return;
     }
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      toast.error("Passwords do not match.");
       return;
     }
 
@@ -84,7 +81,7 @@ const LoginPage = () => {
       await setPassword(email.trim(), password, confirmPassword);
       navigate("/", { replace: true });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to set password.");
+      toast.error(err instanceof Error ? err.message : "Failed to set password.");
     } finally {
       setIsLoading(false);
     }
@@ -94,7 +91,6 @@ const LoginPage = () => {
     setStep("email");
     setPasswordValue("");
     setConfirmPassword("");
-    setError("");
   };
 
   return (
@@ -145,16 +141,10 @@ const LoginPage = () => {
                   </div>
                 </div>
 
-                {error && (
-                  <p className="text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
-                    {error}
-                  </p>
-                )}
-
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-12 bg-white hover:bg-zinc-200 text-black border border-white/20 font-bold rounded-xl shadow-[0_0_30px_rgba(147,51,234,0.3)] border border-purple-400/30 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed mt-2 flex items-center justify-center gap-2"
+                  className="w-full h-12 bg-white hover:bg-zinc-200 text-black border border-purple-400/30 font-bold rounded-xl shadow-[0_0_30px_rgba(147,51,234,0.3)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed mt-2 flex items-center justify-center gap-2"
                 >
                   {isLoading ? "Checking..." : (
                     <>
@@ -198,16 +188,10 @@ const LoginPage = () => {
                   </div>
                 </div>
 
-                {error && (
-                  <p className="text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
-                    {error}
-                  </p>
-                )}
-
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-12 bg-white hover:bg-zinc-200 text-black border border-white/20 font-bold rounded-xl shadow-[0_0_30px_rgba(147,51,234,0.3)] border border-purple-400/30 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+                  className="w-full h-12 bg-white hover:bg-zinc-200 text-black border border-purple-400/30 font-bold rounded-xl shadow-[0_0_30px_rgba(147,51,234,0.3)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed mt-2"
                 >
                   {isLoading ? "Signing in..." : "Sign In"}
                 </Button>
@@ -278,16 +262,10 @@ const LoginPage = () => {
                   </div>
                 </div>
 
-                {error && (
-                  <p className="text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
-                    {error}
-                  </p>
-                )}
-
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-12 bg-white hover:bg-zinc-200 text-black border border-white/20 font-bold rounded-xl shadow-[0_0_30px_rgba(147,51,234,0.3)] border border-purple-400/30 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+                  className="w-full h-12 bg-white hover:bg-zinc-200 text-black border border-purple-400/30 font-bold rounded-xl shadow-[0_0_30px_rgba(147,51,234,0.3)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed mt-2"
                 >
                   {isLoading ? "Setting password..." : "Set Password & Sign In"}
                 </Button>

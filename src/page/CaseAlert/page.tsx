@@ -1,14 +1,24 @@
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import {
-  Archive, Eye, Hourglass, AlertTriangle,
-  Search, Activity, Bell, ChevronDown, ChevronRight, Scale,
+  Archive,
+  Eye,
+  Hourglass,
+  AlertTriangle,
+  Search,
+  Activity,
+  Bell,
+  ChevronDown,
+  ChevronRight,
+  Scale,
+  Brain,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAlertStore } from "@/store/alertStore";
 import type { AlertItem } from "@/store/alertStore";
+import { useCasesStore } from "@/store/casesStore";
 
 // Style maps per severity level
 const SEVERITY_STYLES = {
@@ -18,7 +28,8 @@ const SEVERITY_STYLES = {
     badge: "bg-red-500/10 text-red-400 border border-red-500/20",
     badgeLabel: "Urgent",
     icon: <AlertTriangle className="w-6 h-6 text-red-400" />,
-    actionBg: "bg-red-600 hover:bg-red-500 shadow-[0_0_15px_rgba(220,38,38,0.3)]",
+    actionBg:
+      "bg-red-600 hover:bg-red-500 shadow-[0_0_15px_rgba(220,38,38,0.3)]",
   },
   strategic: {
     border: "border-white/5 hover:border-purple-500/30",
@@ -26,7 +37,8 @@ const SEVERITY_STYLES = {
     badge: "bg-purple-500/10 text-purple-400 border border-purple-500/20",
     badgeLabel: "Strategic",
     icon: <Search className="w-6 h-6 text-purple-400" />,
-    actionBg: "bg-white hover:bg-zinc-200 text-black border border-white/20 shadow-[0_0_15px_rgba(147,51,234,0.3)]",
+    actionBg:
+      "bg-white hover:bg-zinc-200 text-black border border-white/20 shadow-[0_0_15px_rgba(147,51,234,0.3)]",
   },
   routine: {
     border: "border-white/5 hover:border-cyan-500/30",
@@ -64,22 +76,34 @@ function groupAlertsByCase(alerts: AlertItem[]): CaseGroup[] {
 }
 
 export const CaseAlertPage = () => {
-  const { alerts, isLoading, fetchAlerts, markAsRead, archiveAll } = useAlertStore();
+  const { alerts, isLoading, fetchAlerts, markAsRead, archiveAll } =
+    useAlertStore();
+  const cases = useCasesStore((state) => state.cases);
 
   useEffect(() => {
     fetchAlerts();
   }, [fetchAlerts]);
 
-  const urgentCount = alerts.filter((a) => a.severity === "urgent" && a.status === "unread").length;
-  const strategicCount = alerts.filter((a) => a.severity === "strategic" && a.status === "unread").length;
-  const routineCount = alerts.filter((a) => a.severity === "routine" && a.status === "unread").length;
+  const researchingCases = cases.filter(
+    (c) => c.researchStatus === "processing" || c.researchStatus === "pending",
+  );
+  const isResearching = researchingCases.length > 0;
+
+  const urgentCount = alerts.filter(
+    (a) => a.severity === "urgent" && a.status !== "archived",
+  ).length;
+  const strategicCount = alerts.filter(
+    (a) => a.severity === "strategic" && a.status !== "archived",
+  ).length;
+  const routineCount = alerts.filter(
+    (a) => a.severity === "routine" && a.status !== "archived",
+  ).length;
 
   const visibleAlerts = alerts.filter((a) => a.status !== "archived");
   const caseGroups = groupAlertsByCase(visibleAlerts);
 
   return (
-    <div className="min-h-screen bg-black text-slate-200 pt-5 font-sans selection:bg-purple-500/30">
-
+    <div className="min-h-screen bg-black text-slate-200 pt-5 font-sans selection:bg-purple-500/30 pb-30">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
         <div>
@@ -101,10 +125,8 @@ export const CaseAlertPage = () => {
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8">
-
         {/* Left sidebar */}
         <div className="w-full lg:w-72 flex flex-col gap-6 shrink-0">
-
           {/* Active Vigilance card */}
           <div className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-6 shadow-xl">
             <div className="flex items-center justify-between mb-6">
@@ -142,27 +164,43 @@ export const CaseAlertPage = () => {
               Deep Dig Status
             </span>
             <div className="flex items-center gap-3 mb-4">
-              <Hourglass className="w-5 h-5 text-slate-400" />
+              <Hourglass
+                className={`w-5 h-5 ${isResearching ? "text-purple-400 animate-spin" : "text-slate-600"}`}
+              />
               <span className="text-sm font-semibold text-white">
                 Background Research
               </span>
             </div>
             <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mb-3">
-              <div className="h-full bg-purple-500 rounded-full w-[60%] animate-pulse" />
+              {isResearching ? (
+                <div className="h-full bg-purple-500 rounded-full animate-pulse w-full" />
+              ) : (
+                <div className="h-full bg-green-500/60 rounded-full w-full" />
+              )}
             </div>
-            <span className="text-xs text-slate-500 font-medium">
-              AI agents running in background
+            <span
+              className="text-xs font-medium"
+              style={{ color: isResearching ? "#a78bfa" : "#6b7280" }}
+            >
+              {isResearching
+                ? `${researchingCases.length} case${researchingCases.length > 1 ? "s" : ""} in research`
+                : "All research complete"}
             </span>
           </div>
         </div>
 
         {/* Right: Alert list grouped by case */}
         <div className="flex-1 flex flex-col gap-6">
-
           {/* Loading state — skeleton cards */}
           {isLoading && (
             <div className="flex flex-col gap-6">
-              {(caseGroups.length > 0 ? caseGroups : [{ caseId: "loading1", alerts: [1] }, { caseId: "loading2", alerts: [1, 2] }]).map((group: any) => (
+              {(caseGroups.length > 0
+                ? caseGroups
+                : [
+                    { caseId: "loading1", alerts: [1] },
+                    { caseId: "loading2", alerts: [1, 2] },
+                  ]
+              ).map((group: any) => (
                 <div key={group.caseId} className="flex flex-col gap-4">
                   {/* Skeleton case header — matches CaseGroupSection button layout */}
                   <div className="flex items-center gap-3">
@@ -210,22 +248,25 @@ export const CaseAlertPage = () => {
               <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4">
                 <Bell className="w-8 h-8 text-slate-700" />
               </div>
-              <p className="text-slate-500 text-sm font-medium">No alerts yet</p>
+              <p className="text-slate-500 text-sm font-medium">
+                No alerts yet
+              </p>
               <p className="text-slate-700 text-xs mt-1 max-w-xs">
-                AI research alerts will appear here as background agents
-                find relevant information for your cases.
+                AI research alerts will appear here as background agents find
+                relevant information for your cases.
               </p>
             </div>
           )}
 
           {/* Case-grouped alert cards */}
-          {!isLoading && caseGroups.map((group) => (
-            <CaseGroupSection
-              key={group.caseId ?? "general"}
-              group={group}
-              onMarkRead={markAsRead}
-            />
-          ))}
+          {!isLoading &&
+            caseGroups.map((group) => (
+              <CaseGroupSection
+                key={group.caseId ?? "general"}
+                group={group}
+                onMarkRead={markAsRead}
+              />
+            ))}
         </div>
       </div>
     </div>
@@ -275,10 +316,11 @@ const CaseGroupSection = ({ group, onMarkRead }: CaseGroupSectionProps) => {
 
         {/* Expand/collapse chevron */}
         <div className="ml-auto text-slate-600 group-hover:text-slate-400 transition-colors">
-          {isExpanded
-            ? <ChevronDown className="w-4 h-4" />
-            : <ChevronRight className="w-4 h-4" />
-          }
+          {isExpanded ? (
+            <ChevronDown className="w-4 h-4" />
+          ) : (
+            <ChevronRight className="w-4 h-4" />
+          )}
         </div>
       </button>
 
@@ -308,10 +350,11 @@ interface AlertCardProps {
 const AlertCard = ({ alert, onMarkRead }: AlertCardProps) => {
   const style = SEVERITY_STYLES[alert.severity] ?? SEVERITY_STYLES.routine;
   const isUnread = alert.status === "unread";
+  const [showReasoning, setShowReasoning] = useState(false);
 
   return (
     <div
-      className={`bg-[#0a0a0a] border rounded-2xl p-6 shadow-xl relative group transition-all ${style.border} ${isUnread ? "shadow-[0_0_0_1px_rgba(168,85,247,0.05)]" : ""}`}
+      className={`bg-[#0a0a0a] border rounded-2xl p-6 shadow-xl relative group transition-all overflow-hidden ${style.border} ${isUnread ? "shadow-[0_0_0_1px_rgba(168,85,247,0.05)]" : ""} `}
     >
       {/* Unread dot */}
       {isUnread && (
@@ -320,18 +363,47 @@ const AlertCard = ({ alert, onMarkRead }: AlertCardProps) => {
 
       <div className="flex items-start gap-5">
         {/* Icon */}
-        <div className={`w-12 h-12 shrink-0 rounded-xl flex items-center justify-center border mt-1 ${style.iconBg}`}>
+        <div
+          className={`w-12 h-12 shrink-0 rounded-xl flex items-center justify-center border mt-1 ${style.iconBg}`}
+        >
           {style.icon}
         </div>
 
         <div className="flex-1 min-w-0">
           {/* Title + badge row */}
           <div className="flex items-start justify-between gap-4 mb-2">
-            <h3 className="text-xl font-bold text-white truncate">{alert.title}</h3>
+            <h3 className="text-xl font-bold text-white truncate">
+              {alert.title}
+            </h3>
             <div className="flex items-center gap-3 shrink-0">
-              <Badge className={`px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase tracking-widest ${style.badge}`}>
+              {/* Brain icon — hover shows AI reasoning popup */}
+              <div
+                className="relative"
+                onMouseEnter={() => setShowReasoning(true)}
+                onMouseLeave={() => setShowReasoning(false)}
+              >
+                <Brain
+                  className={`w-4 h-4 cursor-pointer transition-opacity ${alert.ai_reasoning ? "opacity-100" : "opacity-30"} ${style.badge} border-none`}
+                />
+
+                {showReasoning && alert.ai_reasoning && (
+                  <div className="absolute right-0 top-6 z-50 w-80 bg-[#111] border border-white/10 rounded-xl shadow-2xl p-4">
+                    <p className="text-[10px] font-black text-purple-400 uppercase tracking-widest mb-2">
+                      Why this matters
+                    </p>
+                    <p className="text-slate-300 text-xs leading-relaxed">
+                      {alert.ai_reasoning}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <Badge
+                className={`px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase tracking-widest ${style.badge}`}
+              >
                 {style.badgeLabel}
               </Badge>
+
               <span className="text-[11px] font-medium text-slate-500">
                 {formatRelativeTime(alert.created_at)}
               </span>
@@ -339,54 +411,96 @@ const AlertCard = ({ alert, onMarkRead }: AlertCardProps) => {
           </div>
 
           {/* Summary — rendered as Markdown so headings, links, and lists display correctly */}
-          <div className="text-slate-400 text-sm leading-relaxed pr-8 mb-5 prose prose-invert prose-sm max-w-none">
+          <div className="text-slate-400 text-sm leading-relaxed mb-5 prose prose-invert prose-sm max-w-none wrap-break-word overflow-hidden w-full overflow-x-hidden">
             <ReactMarkdown
               components={{
                 // Headings — keep them compact inside the card
-                h1: ({ children }) => <h1 className="text-white font-bold text-base mt-3 mb-1">{children}</h1>,
-                h2: ({ children }) => <h2 className="text-white font-bold text-sm mt-3 mb-1">{children}</h2>,
-                h3: ({ children }) => <h3 className="text-slate-200 font-semibold text-sm mt-2 mb-1">{children}</h3>,
-                h4: ({ children }) => <h4 className="text-slate-300 font-semibold text-xs mt-2 mb-1 uppercase tracking-wide">{children}</h4>,
+                h1: ({ children }) => (
+                  <h1 className="text-white font-bold text-base mt-3 mb-1 wrap-break-word">
+                    {children}
+                  </h1>
+                ),
+                h2: ({ children }) => (
+                  <h2 className="text-white font-bold text-sm mt-3 mb-1 wrap-break-word">
+                    {children}
+                  </h2>
+                ),
+                h3: ({ children }) => (
+                  <h3 className="text-slate-200 font-semibold text-sm mt-2 mb-1 wrap-break-word">
+                    {children}
+                  </h3>
+                ),
+                h4: ({ children }) => (
+                  <h4 className="text-slate-300 font-semibold text-xs mt-2 mb-1 uppercase tracking-wide wrap-break-word">
+                    {children}
+                  </h4>
+                ),
 
                 // Paragraphs
-                p: ({ children }) => <p className="text-slate-400 mb-2">{children}</p>,
+                p: ({ children }) => (
+                  <p className="text-slate-400 mb-2 wrap-break-word">
+                    {children}
+                  </p>
+                ),
 
                 // Bold text — highlight key legal terms
-                strong: ({ children }) => <strong className="text-white font-semibold">{children}</strong>,
+                strong: ({ children }) => (
+                  <strong className="text-white font-semibold">
+                    {children}
+                  </strong>
+                ),
 
-                // Links — clickable citations with a distinct color
+                // Links — clickable citations with a distinct color, wrapping long URLs
                 a: ({ href, children }) => (
                   <a
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-purple-400 hover:text-purple-300 underline underline-offset-2 transition-colors"
+                    className="text-purple-400 hover:text-purple-300 underline underline-offset-2 transition-colors break-all"
                   >
                     {children}
                   </a>
                 ),
 
                 // Unordered lists
-                ul: ({ children }) => <ul className="list-disc list-inside space-y-1 text-slate-400 mb-2">{children}</ul>,
+                ul: ({ children }) => (
+                  <ul className="list-disc list-inside space-y-1 text-slate-400 mb-2 wrap-break-word">
+                    {children}
+                  </ul>
+                ),
 
                 // Ordered lists
-                ol: ({ children }) => <ol className="list-decimal list-inside space-y-1 text-slate-400 mb-2">{children}</ol>,
+                ol: ({ children }) => (
+                  <ol className="list-decimal list-inside space-y-1 text-slate-400 mb-2 wrap-break-word">
+                    {children}
+                  </ol>
+                ),
 
                 // List items
-                li: ({ children }) => <li className="text-slate-400">{children}</li>,
+                li: ({ children }) => (
+                  <li className="text-slate-400 wrap-break-word">{children}</li>
+                ),
 
                 // Horizontal rule — section divider
                 hr: () => <hr className="border-white/10 my-3" />,
 
                 // Inline code — for docket numbers
                 code: ({ children }) => (
-                  <code className="bg-white/5 text-slate-300 text-xs px-1.5 py-0.5 rounded font-mono">{children}</code>
+                  <code className="bg-white/5 text-slate-300 text-xs px-1.5 py-0.5 rounded font-mono break-all">
+                    {children}
+                  </code>
                 ),
               }}
             >
               {alert.summary}
             </ReactMarkdown>
           </div>
+
+          {/* Citation disclaimer */}
+          <p className="text-[10px] text-slate-700 mb-4">
+            Links are AI-generated and may not resolve — verify before relying
+            on them.
+          </p>
 
           {/* Actions */}
           {isUnread && (
@@ -402,11 +516,18 @@ const AlertCard = ({ alert, onMarkRead }: AlertCardProps) => {
         </div>
       </div>
     </div>
+    
   );
 };
 
 function formatRelativeTime(isoString: string): string {
-  const date = new Date(isoString);
+  // Python datetime.utcnow() creates naive timestamps that lack 'Z'
+  // Append 'Z' to force the browser to parse it as UTC instead of local time
+  const isNaive =
+    !isoString.endsWith("Z") &&
+    !isoString.includes("+") &&
+    !isoString.match(/-\d{2}:\d{2}$/);
+  const date = new Date(isNaive ? `${isoString}Z` : isoString);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffMins = Math.floor(diffMs / 60000);

@@ -4,11 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useBriefingStore } from "@/store/briefingStore";
+import { toast } from "sonner";
 
 export const Urls = () => {
   const { urls, addUrl, removeUrl } = useBriefingStore();
   const [input, setInput] = useState("");
-  const [error, setError] = useState("");
 
   const isValid = (value: string) => {
     try {
@@ -23,12 +23,11 @@ export const Urls = () => {
     const trimmed = input.trim();
     if (!trimmed) return;
     if (!isValid(trimmed)) {
-      setError("Please enter a valid URL including https://");
+      toast.error("Please enter a valid URL including https://");
       return;
     }
     addUrl(trimmed);
     setInput("");
-    setError("");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -44,7 +43,7 @@ export const Urls = () => {
           </div>
           <Input
             value={input}
-            onChange={(e) => { setInput(e.target.value); setError(""); }}
+            onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Enter case-related URLs (pacer.gov, news archives, corporate registries)..."
             className="bg-white/3 border-white/10 pl-11 h-14 text-slate-200 placeholder:text-slate-600 focus:border-purple-500/40 focus:ring-purple-500/5 transition-all rounded-2xl backdrop-blur-sm text-sm shadow-lg"
@@ -58,10 +57,6 @@ export const Urls = () => {
           Add
         </Button>
       </div>
-
-      {error && (
-        <p className="text-red-400 text-sm px-2">{error}</p>
-      )}
 
       {urls.length > 0 && (
         <div className="flex flex-wrap gap-2">

@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useCasesStore } from "@/store/casesStore";
 import { CaseListCard } from "./CaseListCard";
 import { CaseModal } from "./CaseModal";
+import { CallModal } from "./CallModal";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 
@@ -59,6 +60,9 @@ const CasesPage = () => {
     <div className="h-screen bg-black flex flex-col text-slate-200 font-sans selection:bg-purple-500/30 overflow-hidden">
       {/* Case detail modal — renders as a dialog overlay */}
       <CaseModal />
+
+      {/* Call session modal — renders as a dialog overlay */}
+      <CallModal />
 
       {/* ── Fixed header ── */}
       <div className="shrink-0 px-6 pt-5 pb-4 md:px-10 bg-transparent">

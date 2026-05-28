@@ -3,7 +3,12 @@ import axios from "axios";
 
 // --- Types ---
 
-export type CaseStatus = "active" | "archived" | "closed" | "success" | "abandoned";
+export type CaseStatus =
+  | "active"
+  | "archived"
+  | "closed"
+  | "success"
+  | "abandoned";
 
 const API_BASE = import.meta.env.VITE_API_URL;
 
@@ -53,10 +58,14 @@ export interface Case {
 interface CasesStore {
   cases: Case[];
   activeCaseId: string | null;
+  activeCallCaseId: string | null;
   isLoading: boolean;
 
   // True while the AI is generating a response for the active case
   isAiTyping: boolean;
+
+  // Current pipeline stage label shown in the typing indicator (analyst/researcher/strategist)
+  researchStage: string | null;
 
   fetchCases: () => Promise<void>;
 
@@ -65,23 +74,35 @@ interface CasesStore {
 
   openCase: (caseId: string) => void;
   closeCase: () => void;
+  startCall: (caseId: string) => void;
+  endCall: () => void;
 
-  addMessage: (caseId: string, message: Omit<ChatMessage, "id" | "timestamp">) => void;
+  addMessage: (
+    caseId: string,
+    message: Omit<ChatMessage, "id" | "timestamp">,
+  ) => void;
 
   // Called when the socket pushes an ai_response event
   addAiMessage: (caseId: string, message: ChatMessage) => void;
 
   setAiTyping: (isTyping: boolean) => void;
+  setResearchStage: (stage: string | null) => void;
 
   addPdfsToVault: (caseId: string, files: File[]) => void;
   addImagesToVault: (caseId: string, files: File[]) => void;
   addUrlToVault: (caseId: string, url: string) => void;
+  addContextToVault: (caseId: string, text: string) => Promise<void>;
   removeFromVault: (caseId: string, evidenceId: string) => void;
-  updateCaseStatus: (caseId: string, status: CaseStatus, reason?: string) => void;
+  updateCaseStatus: (
+    caseId: string,
+    status: CaseStatus,
+    reason?: string,
+  ) => void;
 }
 
 // Helper: generate a simple unique ID
-const generateId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+const generateId = () =>
+  `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 
 // Helper: get current timestamp string
 const getTimestamp = () => {
@@ -101,8 +122,10 @@ const getTimestamp = () => {
 export const useCasesStore = create<CasesStore>((set, get) => ({
   cases: [],
   activeCaseId: null,
+  activeCallCaseId: null,
   isLoading: false,
   isAiTyping: false,
+  researchStage: null,
 
   fetchCases: async () => {
     // Only show loading state if we have no cases yet to prevent flicker on revisit
@@ -121,9 +144,7 @@ export const useCasesStore = create<CasesStore>((set, get) => ({
 
   loadMessages: async (caseId: string) => {
     try {
-      const response = await axios.get(
-        `${API_BASE}/cases/${caseId}/messages`
-      );
+      const response = await axios.get(`${API_BASE}/cases/${caseId}/messages`);
       const messages: ChatMessage[] = response.data;
       set((state) => ({
         cases: state.cases.map((c) => {
@@ -141,11 +162,28 @@ export const useCasesStore = create<CasesStore>((set, get) => ({
   },
 
   closeCase: () => {
-    set({ activeCaseId: null, isAiTyping: false });
+    set({ activeCaseId: null, isAiTyping: false, researchStage: null });
+  },
+
+  startCall: (caseId) => {
+    set({
+      activeCaseId: null,
+      activeCallCaseId: caseId,
+      isAiTyping: false,
+      researchStage: null,
+    });
+  },
+
+  endCall: () => {
+    set({ activeCallCaseId: null });
   },
 
   setAiTyping: (isTyping: boolean) => {
     set({ isAiTyping: isTyping });
+  },
+
+  setResearchStage: (stage: string | null) => {
+    set({ researchStage: stage });
   },
 
   addMessage: (caseId, messageData) => {
@@ -202,6 +240,18 @@ export const useCasesStore = create<CasesStore>((set, get) => ({
       await fetchCases();
     } catch (error) {
       console.error("Failed to add URL to vault:", error);
+    }
+  },
+
+  addContextToVault: async (caseId, text) => {
+    try {
+      await axios.post(`${API_BASE}/cases/${caseId}/add-context`, {
+        context: text,
+      });
+      const { fetchCases } = useCasesStore.getState();
+      await fetchCases();
+    } catch (error) {
+      console.error("Failed to add context to vault:", error);
     }
   },
 

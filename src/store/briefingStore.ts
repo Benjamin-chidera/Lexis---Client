@@ -14,6 +14,7 @@ interface BriefingStore {
   addImages: (files: File[]) => void;
   removeImage: (index: number) => void;
   setContext: (text: string) => void;
+  clearAll: () => void;
 }
 
 export const useBriefingStore = create<BriefingStore>((set) => ({
@@ -53,4 +54,6 @@ export const useBriefingStore = create<BriefingStore>((set) => ({
     set((state) => ({ images: state.images.filter((_, i) => i !== index) })),
 
   setContext: (text) => set({ context: text }),
+
+  clearAll: () => set({ pdfs: [], urls: [], images: [], context: "" }),
 }));

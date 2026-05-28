@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import ReactMarkdown from "react-markdown";
 import { Brain, Terminal, FileText, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useCasesStore } from "@/store/casesStore";
@@ -9,7 +10,7 @@ interface CaseChatPanelProps {
   messages: ChatMessage[];
 }
 
-export const CaseChatPanel = ({ messages }: CaseChatPanelProps) => {
+export const CaseChatPanel = ({ caseId, messages }: CaseChatPanelProps) => {
   const isAiTyping = useCasesStore((state) => state.isAiTyping);
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -58,7 +59,7 @@ export const CaseChatPanel = ({ messages }: CaseChatPanelProps) => {
           if (message.role === "user") {
             return <UserMessage key={message.id} message={message} />;
           }
-          return <AiMessage key={message.id} message={message} />;
+          return <AiMessage key={message.id} message={message} caseId={caseId} />;
         })}
 
         {/* Typing indicator — shown while the AI is generating a response */}
@@ -86,7 +87,19 @@ const UserMessage = ({ message }: { message: ChatMessage }) => {
   );
 };
 
-const AiMessage = ({ message }: { message: ChatMessage }) => {
+const AiMessage = ({ message, caseId }: { message: ChatMessage; caseId: string }) => {
+  const vault = useCasesStore((state) => state.cases.find((c) => c.id === caseId)?.vault ?? []);
+
+  const handleCitationClick = () => {
+    if (!message.citation) return;
+    const match = vault.find(
+      (v) => v.name === message.citation!.filename || v.name.includes(message.citation!.filename)
+    );
+    if (match?.url) {
+      window.open(match.url, "_blank", "noopener,noreferrer");
+    }
+  };
+
   return (
     <div className="flex flex-col items-start gap-3 max-w-[92%]">
       {/* AI avatar + name */}
@@ -102,12 +115,70 @@ const AiMessage = ({ message }: { message: ChatMessage }) => {
       {/* Message bubble */}
       <div className="bg-white/2 border border-white/5 rounded-2xl p-5 relative overflow-hidden shadow-xl w-full">
         <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-purple-500 rounded-l" />
-        <p className="text-slate-200 text-sm leading-relaxed mb-0 pl-3">{message.content}</p>
+        <div className="pl-3 text-sm leading-relaxed prose prose-invert prose-sm max-w-none overflow-x-hidden">
+          <ReactMarkdown
+            components={{
+              h1: ({ children }) => (
+                <h1 className="text-white font-bold text-base mt-4 mb-2">{children}</h1>
+              ),
+              h2: ({ children }) => (
+                <h2 className="text-white font-bold text-sm mt-4 mb-1.5">{children}</h2>
+              ),
+              h3: ({ children }) => (
+                <h3 className="text-slate-200 font-semibold text-sm mt-3 mb-1">{children}</h3>
+              ),
+              h4: ({ children }) => (
+                <h4 className="text-slate-300 font-semibold text-xs mt-2 mb-1 uppercase tracking-wide">{children}</h4>
+              ),
+              p: ({ children }) => (
+                <p className="text-slate-300 mb-2">{children}</p>
+              ),
+              strong: ({ children }) => (
+                <strong className="text-white font-semibold">{children}</strong>
+              ),
+              em: ({ children }) => (
+                <em className="text-slate-300 italic">{children}</em>
+              ),
+              a: ({ href, children }) => (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-purple-400 hover:text-purple-300 underline underline-offset-2 transition-colors break-all"
+                >
+                  {children}
+                </a>
+              ),
+              ul: ({ children }) => (
+                <ul className="list-disc list-inside space-y-1 text-slate-300 mb-2">{children}</ul>
+              ),
+              ol: ({ children }) => (
+                <ol className="list-decimal list-inside space-y-1 text-slate-300 mb-2">{children}</ol>
+              ),
+              li: ({ children }) => (
+                <li className="text-slate-300">{children}</li>
+              ),
+              hr: () => <hr className="border-white/10 my-4" />,
+              code: ({ children }) => (
+                <code className="bg-white/5 text-slate-300 text-xs px-1.5 py-0.5 rounded font-mono break-all">
+                  {children}
+                </code>
+              ),
+              blockquote: ({ children }) => (
+                <blockquote className="border-l-2 border-purple-500/50 pl-3 text-slate-400 italic">
+                  {children}
+                </blockquote>
+              ),
+            }}
+          >
+            {message.content}
+          </ReactMarkdown>
+        </div>
 
         {/* Optional citation card */}
         {message.citation && (
           <div className="mt-4 pl-3">
-            <div className="bg-white/3 border border-white/10 rounded-xl p-3 flex items-center justify-between hover:border-white/20 transition-all cursor-pointer group/card">
+            <div onClick={handleCitationClick} className="bg-white/3 border border-white/10 rounded-xl p-3 flex items-center justify-between hover:border-white/20 transition-all cursor-pointer group/card">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10">
                   <FileText className="w-4 h-4 text-slate-400" />
@@ -133,8 +204,11 @@ const AiMessage = ({ message }: { message: ChatMessage }) => {
   );
 };
 
-// Three bouncing dots shown while the AI is thinking
+// Typing indicator shown while the AI is generating a response.
+// Displays the active pipeline stage label when available.
 const TypingIndicator = () => {
+  const researchStage = useCasesStore((state) => state.researchStage);
+
   return (
     <div className="flex flex-col items-start gap-3 max-w-[92%]">
       {/* AI avatar */}
@@ -147,13 +221,22 @@ const TypingIndicator = () => {
         </span>
       </div>
 
-      {/* Bubble with bouncing dots */}
+      {/* Bubble: stage label if available, otherwise bouncing dots */}
       <div className="bg-white/2 border border-white/5 rounded-2xl px-5 py-4 relative overflow-hidden shadow-xl">
         <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-purple-500 rounded-l" />
-        <div className="flex items-center gap-1.5 pl-3">
-          <span className="w-2 h-2 bg-purple-400 rounded-full animate-bounce [animation-delay:0ms]" />
-          <span className="w-2 h-2 bg-purple-400 rounded-full animate-bounce [animation-delay:150ms]" />
-          <span className="w-2 h-2 bg-purple-400 rounded-full animate-bounce [animation-delay:300ms]" />
+        <div className="flex items-center gap-2 pl-3">
+          {researchStage ? (
+            <>
+              <span className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse shrink-0" />
+              <span className="text-xs text-purple-300 font-medium animate-pulse">{researchStage}</span>
+            </>
+          ) : (
+            <>
+              <span className="w-2 h-2 bg-purple-400 rounded-full animate-bounce [animation-delay:0ms]" />
+              <span className="w-2 h-2 bg-purple-400 rounded-full animate-bounce [animation-delay:150ms]" />
+              <span className="w-2 h-2 bg-purple-400 rounded-full animate-bounce [animation-delay:300ms]" />
+            </>
+          )}
         </div>
       </div>
     </div>

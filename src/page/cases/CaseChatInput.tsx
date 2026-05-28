@@ -8,11 +8,12 @@ import {
   Globe,
   Paperclip,
   PhoneCall,
+  NotebookPen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCasesStore } from "@/store/casesStore";
-import { CallModal } from "./CallModal";
+import { toast } from "sonner";
 
 interface CaseChatInputProps {
   caseId: string;
@@ -22,7 +23,7 @@ interface CaseChatInputProps {
 const IMAGE_ACCEPT = "image/png,image/jpeg,image/jpg,image/webp,image/gif";
 
 export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
-  const { addMessage, addPdfsToVault, addImagesToVault, addUrlToVault } =
+  const { addMessage, addPdfsToVault, addImagesToVault, addUrlToVault, addContextToVault, startCall } =
     useCasesStore();
 
   // Text input for the chat message
@@ -30,13 +31,13 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
 
   // URL input state
   const [urlInput, setUrlInput] = useState("");
-  const [urlError, setUrlError] = useState("");
+
+  // Context notes state
+  const [contextInput, setContextInput] = useState("");
+  const [contextSaving, setContextSaving] = useState(false);
 
   // Whether the attachment panel is expanded
   const [attachmentPanelOpen, setAttachmentPanelOpen] = useState(false);
-
-  // Whether the Call modal is open
-  const [callModalOpen, setCallModalOpen] = useState(false);
 
   // File input refs
   const pdfInputRef = useRef<HTMLInputElement>(null);
@@ -103,18 +104,26 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
     }
   };
 
+  const handleAddContext = async () => {
+    const trimmed = contextInput.trim();
+    if (!trimmed) return;
+    setContextSaving(true);
+    await addContextToVault(caseId, trimmed);
+    setContextInput("");
+    setContextSaving(false);
+  };
+
   const handleAddUrl = () => {
     const trimmed = urlInput.trim();
     if (!trimmed) return;
 
     if (!isValidUrl(trimmed)) {
-      setUrlError("Please enter a valid URL including https://");
+      toast.error("Please enter a valid URL including https://");
       return;
     }
 
     addUrlToVault(caseId, trimmed);
     setUrlInput("");
-    setUrlError("");
   };
 
   const handleUrlKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -126,11 +135,6 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
 
   return (
     <>
-      {/* Call session modal — opens on top of the case modal */}
-      <CallModal
-        isOpen={callModalOpen}
-        onClose={() => setCallModalOpen(false)}
-      />
 
       <div className="border-t border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl px-5 py-4 space-y-3">
         {/* Attachment panel (PDF, Image, URL) */}
@@ -224,10 +228,7 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
                   <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500" />
                   <Input
                     value={urlInput}
-                    onChange={(e) => {
-                      setUrlInput(e.target.value);
-                      setUrlError("");
-                    }}
+                    onChange={(e) => setUrlInput(e.target.value)}
                     onKeyDown={handleUrlKeyDown}
                     placeholder="https://..."
                     className="bg-white/5 border-white/10 pl-9 h-9 text-xs text-slate-200 placeholder:text-slate-600 rounded-xl focus:border-purple-500/40 focus:ring-0"
@@ -237,14 +238,46 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
                   type="button"
                   size="sm"
                   onClick={handleAddUrl}
-                  className="h-9 px-4 bg-purple-600/80 hover:bg-white text-black hover:bg-zinc-200 shadow-xl shadow-white/10 border border-white/20 rounded-xl text-xs font-bold shrink-0"
+                  className="h-9 px-4 bg-purple-600/80 hover:bg-white text-black shadow-xl shadow-white/10 border border-white/20 rounded-xl text-xs font-bold shrink-0"
                 >
                   Add
                 </Button>
               </div>
-              {urlError && (
-                <p className="text-red-400 text-[11px] pl-11">{urlError}</p>
-              )}
+            </div>
+
+            {/* Context Notes Row */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center shrink-0">
+                  <NotebookPen className="w-4 h-4 text-green-400" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-xs font-semibold text-slate-300 mb-0.5">
+                    Context Notes
+                  </p>
+                  <p className="text-[11px] text-slate-600">
+                    Additional facts, timeline, or instructions for the agent
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2 pl-11">
+                <textarea
+                  value={contextInput}
+                  onChange={(e) => setContextInput(e.target.value)}
+                  placeholder="Add more context for the AI agent..."
+                  rows={3}
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-200 placeholder:text-slate-600 resize-none focus:outline-none focus:border-green-500/40"
+                />
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={handleAddContext}
+                  disabled={!contextInput.trim() || contextSaving}
+                  className="h-9 self-start px-4 bg-green-700/80 hover:bg-green-600 text-white rounded-xl text-xs font-bold shrink-0 disabled:opacity-40"
+                >
+                  {contextSaving ? "Saving..." : "Add"}
+                </Button>
+              </div>
             </div>
           </div>
         )}
@@ -276,7 +309,7 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
             type="button"
             size="icon"
             variant="ghost"
-            onClick={() => setCallModalOpen(true)}
+            onClick={() => startCall(caseId)}
             className="w-10 h-10 rounded-xl border border-white/10 text-slate-500 hover:text-emerald-400 hover:border-emerald-500/30 hover:bg-emerald-500/10 transition-all duration-200 shrink-0"
             title="Open call session"
           >
@@ -300,7 +333,7 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
             size="icon"
             onClick={handleSendMessage}
             disabled={!chatText.trim()}
-            className="w-10 h-10 rounded-xl bg-white hover:bg-zinc-200 text-black border border-white/20 border border-purple-400/20 shadow-lg shadow-purple-500/20 disabled:opacity-40 disabled:cursor-not-allowed transition-all shrink-0"
+            className="w-10 h-10 rounded-xl bg-white hover:bg-zinc-200 text-black border border-purple-400/20 shadow-lg shadow-purple-500/20 disabled:opacity-40 disabled:cursor-not-allowed transition-all shrink-0"
           >
             <Send className="w-4 h-4" />
           </Button>
