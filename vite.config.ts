@@ -22,4 +22,19 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    proxy: {
+      // REST API — proxied so cookies are same-origin (localhost:5173)
+      "/api": {
+        target: "http://localhost:8000",
+        changeOrigin: true,
+      },
+      // Socket.IO — includes WebSocket upgrade
+      "/socket.io": {
+        target: "http://localhost:8000",
+        changeOrigin: true,
+        ws: true,
+      },
+    },
+  },
 })
