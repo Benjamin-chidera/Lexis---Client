@@ -13,6 +13,7 @@ export interface AuthUser {
 interface AuthStore {
   user: AuthUser | null;
   isLoading: boolean;
+  sessionChecked: boolean;
   checkEmail: (email: string) => Promise<{ name: string; has_password: boolean }>;
   login: (email: string, password: string) => Promise<void>;
   setPassword: (email: string, password: string, confirmPassword: string) => Promise<void>;
@@ -27,6 +28,7 @@ export const useAuthStore = create<AuthStore>()(
     (set, get) => ({
       user: null,
       isLoading: false,
+      sessionChecked: false,
 
       checkEmail: async (email: string) => {
         const response = await fetch(`${API_BASE}/auth/check-email`, {
@@ -128,7 +130,7 @@ export const useAuthStore = create<AuthStore>()(
             credentials: "include",
           });
           if (!response.ok) {
-            set({ user: null });
+            set({ user: null, sessionChecked: true });
             return;
           }
           const data = await response.json();
@@ -139,9 +141,10 @@ export const useAuthStore = create<AuthStore>()(
               email: data.email,
               role: data.role,
             },
+            sessionChecked: true,
           });
         } catch {
-          set({ user: null });
+          set({ user: null, sessionChecked: true });
         }
       },
 

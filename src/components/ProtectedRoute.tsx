@@ -7,6 +7,11 @@ interface Props {
 
 export const ProtectedRoute = ({ children }: Props) => {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated());
+  const sessionChecked = useAuthStore((s) => s.sessionChecked);
+
+  if (!sessionChecked) {
+    return null;
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
