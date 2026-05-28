@@ -26,46 +26,66 @@ export function useVoiceCall(caseId: string | null) {
   const workletNodeRef = useRef<AudioWorkletNode | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const sourceNodeRef = useRef<MediaStreamAudioSourceNode | null>(null);
-  const aiAudioRef = useRef<HTMLAudioElement | null>(null);
+  const audioSourceRef = useRef<AudioBufferSourceNode | null>(null);
   const isMutedRef = useRef(false);
 
-  // Helper to play AI audio response (base64 encoded mp3)
-  const playAiAudio = useCallback((base64Mp3: string) => {
+  // Helper to play AI audio response (base64 encoded mp3) using Web Audio API to bypass Brave/Chrome data-url and autoplay blocks
+  const playAiAudio = useCallback(async (base64Mp3: string) => {
     // Stop any currently playing audio
-    if (aiAudioRef.current) {
-      aiAudioRef.current.pause();
-      aiAudioRef.current = null;
+    try {
+      audioSourceRef.current?.stop();
+    } catch {}
+    audioSourceRef.current = null;
+
+    try {
+      // Decode base64 to ArrayBuffer
+      const binaryString = atob(base64Mp3);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      const arrayBuffer = bytes.buffer;
+
+      // Reuse the existing AudioContext or create a new one if not ready
+      if (!audioContextRef.current || audioContextRef.current.state === "closed") {
+        audioContextRef.current = new AudioContext({ sampleRate: 48000 });
+      }
+      const ctx = audioContextRef.current;
+      await ctx.resume();
+
+      // Decode the audio data array buffer into an AudioBuffer
+      const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+
+      // Create a buffer source node
+      const source = ctx.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(ctx.destination);
+      audioSourceRef.current = source;
+      
+      setAiSpeaking(true);
+
+      source.onended = () => {
+        // Only trigger done signal if this source was not interrupted by a newer one
+        if (audioSourceRef.current === source) {
+          setAiSpeaking(false);
+          socket.emit("call_ai_speaking_done");
+        }
+      };
+
+      source.start();
+    } catch (err) {
+      console.error("[useVoiceCall] Web Audio playback error:", err);
+      setAiSpeaking(false);
+      socket.emit("call_ai_speaking_done");
     }
-
-    const audioUrl = `data:audio/mp3;base64,${base64Mp3}`;
-    const audio = new Audio(audioUrl);
-    aiAudioRef.current = audio;
-    
-    setAiSpeaking(true);
-
-    audio.onended = () => {
-      setAiSpeaking(false);
-      socket.emit("call_ai_speaking_done");
-    };
-
-    audio.onerror = (e) => {
-      console.error("[useVoiceCall] Audio playback error:", e);
-      setAiSpeaking(false);
-      socket.emit("call_ai_speaking_done");
-    };
-
-    audio.play().catch((err) => {
-      console.error("[useVoiceCall] Audio play failed:", err);
-      setAiSpeaking(false);
-      socket.emit("call_ai_speaking_done");
-    });
   }, []);
 
   const stopAiAudio = useCallback(() => {
-    if (aiAudioRef.current) {
-      aiAudioRef.current.pause();
-      aiAudioRef.current = null;
-    }
+    try {
+      audioSourceRef.current?.stop();
+    } catch {}
+    audioSourceRef.current = null;
     setAiSpeaking(false);
   }, []);
 
@@ -198,7 +218,7 @@ export function useVoiceCall(caseId: string | null) {
       setTranscript(data.text);
       
       // Stop AI voice playback if user interrupts
-      if (aiAudioRef.current) {
+      if (audioSourceRef.current) {
         stopAiAudio();
         if (socket.connected) {
           socket.emit("call_user_speaking");
