@@ -26,7 +26,7 @@ export const InAppNotification = () => {
 
   return (
     // Fixed position at the bottom-right corner
-    <div className="fixed bottom-32 right-6 z-[200] pointer-events-none">
+    <div className="fixed bottom-32 right-6 z-200 pointer-events-none">
       <div
         className="pointer-events-auto animate-in slide-in-from-bottom-4 fade-in duration-300"
       >
