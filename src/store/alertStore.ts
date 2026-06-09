@@ -5,6 +5,7 @@ const API_BASE = import.meta.env.VITE_API_URL;
 
 export type AlertSeverity = "urgent" | "strategic" | "routine";
 export type AlertStatus = "unread" | "read" | "archived";
+export type AlertReviewStatus = "pending" | "accepted" | "rejected";
 
 export interface AlertItem {
   id: number;
@@ -15,6 +16,7 @@ export interface AlertItem {
   ai_reasoning: string | null;
   severity: AlertSeverity;
   status: AlertStatus;
+  review_status: AlertReviewStatus;
   created_at: string;
 }
 
@@ -35,6 +37,12 @@ interface AlertStore {
 
   markAsRead: (alertId: number) => Promise<void>;
   archiveAll: () => Promise<void>;
+
+  // Attorney accepts the research result — persists in DB, hides buttons
+  acceptAlert: (alertId: number) => Promise<void>;
+
+  // Attorney rejects the research result — persists reason, re-queues research
+  rejectAlert: (alertId: number, reason: string) => Promise<void>;
 }
 
 export const useAlertStore = create<AlertStore>((set, get) => ({
@@ -91,6 +99,34 @@ export const useAlertStore = create<AlertStore>((set, get) => ({
       }));
     } catch (error) {
       console.error("Failed to archive alerts:", error);
+    }
+  },
+
+  acceptAlert: async (alertId: number) => {
+    try {
+      await axios.patch(`${API_BASE}/alerts/${alertId}/accept`);
+      set((state) => ({
+        alerts: state.alerts.map((a) => {
+          if (a.id !== alertId) return a;
+          return { ...a, review_status: "accepted" };
+        }),
+      }));
+    } catch (error) {
+      console.error("Failed to accept alert:", error);
+    }
+  },
+
+  rejectAlert: async (alertId: number, reason: string) => {
+    try {
+      await axios.patch(`${API_BASE}/alerts/${alertId}/reject`, { reason });
+      set((state) => ({
+        alerts: state.alerts.map((a) => {
+          if (a.id !== alertId) return a;
+          return { ...a, review_status: "rejected", status: "archived" };
+        }),
+      }));
+    } catch (error) {
+      console.error("Failed to reject alert:", error);
     }
   },
 }));
