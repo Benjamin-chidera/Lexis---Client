@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export type CaseStatus = "success" | "canceled" | "failed";
+export type CaseStatus = "success" | "closed" | "abandoned";
 
 export interface CaseCardProps {
   caseName: string;
@@ -41,21 +41,21 @@ const statusStyles: Record<
     reasonAccent: "text-emerald-400/70 hover:text-emerald-400",
     tooltipBorder: "border-emerald-500/20",
   },
-  canceled: {
+  closed: {
     border: "border-amber-500/30 hover:border-amber-500/50",
     iconBg: "bg-amber-500/10 border border-amber-500/20",
     badge: "bg-amber-500/10 text-amber-400 border border-amber-500/20",
-    badgeText: "CANCELED",
+    badgeText: "CLOSED",
     btnBg: "bg-amber-600 hover:bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.25)]",
     label: "View Details",
     reasonAccent: "text-amber-400/70 hover:text-amber-400",
     tooltipBorder: "border-amber-500/20",
   },
-  failed: {
+  abandoned: {
     border: "border-red-500/30 hover:border-red-500/50",
     iconBg: "bg-red-500/10 border border-red-500/20",
     badge: "bg-red-500/10 text-red-400 border border-red-500/20",
-    badgeText: "FAILED",
+    badgeText: "ABANDONED",
     btnBg: "bg-red-600 hover:bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.25)]",
     label: "View Report",
     reasonAccent: "text-red-400/70 hover:text-red-400",
@@ -65,8 +65,8 @@ const statusStyles: Record<
 
 const reasonLabel: Record<CaseStatus, string> = {
   success: "Resolution Reason",
-  canceled: "Cancellation Reason",
-  failed: "Failure Reason",
+  closed: "Closure Reason",
+  abandoned: "Abandonment Reason",
 };
 
 export const CaseCard = ({

@@ -71,15 +71,13 @@ const BriefingPage = () => {
   return (
     <div className="min-h-screen bg-black text-slate-200 flex flex-col items-center pt-5 pb-28 px-4 font-sans overflow-x-hidden relative">
       <div className="w-full max-w-3xl mb-4 relative z-10">
-        <h1 className="text-4xl font-bold text-white tracking-tight mb-3">
-          New Case Intelligence
+        <h1 className="text-2xl font-bold text-white tracking-tight mb-1">
+          Upload Case Evidence
         </h1>
-        <p className="text-slate-400 text-lg font-medium">
-          Ingest case documentation and establish strategic parameters.
-        </p>
+      
       </div>
 
-      <div className="w-full max-w-3xl space-y-6 relative z-10">
+      <div className="w-full max-w-3xl space-y-4 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
            <PdfSelectors />
            <ImageSelectors />
@@ -87,14 +85,14 @@ const BriefingPage = () => {
         <Urls />
         <TextMicInput />
 
-        <div className="flex justify-center pt-4">
+        <div className="flex justify-center">
           <Button
             onClick={handleStart}
             disabled={isLoading || !hasContent}
-            className="h-16 px-14 bg-white hover:bg-slate-200 text-black font-black rounded-2xl shadow-[0_0_50px_rgba(255,255,255,0.15)] border border-white/40 flex items-center gap-4 text-xl uppercase tracking-[0.15em] transition-all hover:scale-105 active:scale-95 group relative overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed"
+            className="h-14 px-10 bg-white hover:bg-slate-200 text-black font-black rounded-2xl shadow-[0_0_50px_rgba(255,255,255,0.15)] border border-white/40 flex items-center gap-4 text-xl uppercase tracking-[0.15em] transition-all hover:scale-105 active:scale-95 group relative overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <span className="relative z-10">
-              {isLoading ? "Starting..." : "Start Case Strategy"}
+              {isLoading ? "Starting..." : "Start Case"}
             </span>
             <Zap className="w-6 h-6 fill-current text-black animate-pulse group-hover:scale-125 transition-transform relative z-10" />
             <div className="absolute inset-0 bg-linear-to-r from-transparent via-black/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />

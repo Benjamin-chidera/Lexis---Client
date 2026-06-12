@@ -1,4 +1,4 @@
-import { Scale, Gavel, Users, FileText, ArrowRight, MessageSquare, FolderOpen } from "lucide-react";
+import { Scale, Gavel, Users, FileText, ArrowRight, FolderOpen } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { Case } from "@/store/casesStore";
 
@@ -26,9 +26,9 @@ interface CaseListCardProps {
 
 export const CaseListCard = ({ caseData, onClick }: CaseListCardProps) => {
   const icon = CASE_TYPE_ICONS[caseData.caseType] ?? DEFAULT_ICON;
-  const statusStyle = STATUS_STYLES[caseData.status] ?? STATUS_STYLES.active;
+  const statusStyle = STATUS_STYLES[caseData.case_result_status] ?? STATUS_STYLES.active;
 
-  const messageCount = caseData.messages.length;
+  // const messageCount = caseData.messages.length;
   const vaultCount = caseData.vault.length;
 
   return (
@@ -58,10 +58,10 @@ export const CaseListCard = ({ caseData, onClick }: CaseListCardProps) => {
 
             {/* Stats row */}
             <div className="flex items-center gap-4">
-              <span className="flex items-center gap-1.5 text-[11px] text-slate-500">
+              {/* <span className="flex items-center gap-1.5 text-[11px] text-slate-500">
                 <MessageSquare className="w-3 h-3" />
                 {messageCount} {messageCount === 1 ? "message" : "messages"}
-              </span>
+              </span> */}
               <span className="flex items-center gap-1.5 text-[11px] text-slate-500">
                 <FolderOpen className="w-3 h-3" />
                 {vaultCount} {vaultCount === 1 ? "file" : "files"} in vault
@@ -79,7 +79,7 @@ export const CaseListCard = ({ caseData, onClick }: CaseListCardProps) => {
             <Badge
               className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider border rounded-lg ${statusStyle}`}
             >
-              {caseData.status}
+              {caseData.case_result_status}
             </Badge>
             <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-purple-500/40 group-hover:bg-purple-500/10 transition-all duration-300">
               <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-purple-400 group-hover:translate-x-0.5 transition-all duration-300" />

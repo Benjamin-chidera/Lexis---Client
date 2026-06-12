@@ -96,8 +96,8 @@ const App = () => {
 
             {/* Protected */}
             <Route path="/" element={<ProtectedRoute><BriefingPage /></ProtectedRoute>} />
-            <Route path="/chat" element={<ProtectedRoute><ChatRoomPage /></ProtectedRoute>} />
             <Route path="/cases" element={<ProtectedRoute><CasesPage /></ProtectedRoute>} />
+            <Route path="/chat" element={<ProtectedRoute><ChatRoomPage /></ProtectedRoute>} />
             <Route path="/alerts" element={<ProtectedRoute><CaseAlertPage /></ProtectedRoute>} />
             {/* <Route path="/archive" element={<ProtectedRoute><MeetingHistoryPage /></ProtectedRoute>} /> */}
             <Route path="/history" element={<ProtectedRoute><CaseHistoryPage /></ProtectedRoute>} />

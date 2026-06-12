@@ -39,20 +39,23 @@ export interface VaultEvidence {
 }
 
 export interface Case {
+  status: string;
   id: string;
   name: string;
   caseType: string;
   attorney: string;
   openedDate: string;
-  status: CaseStatus;
+  case_result_status: CaseStatus;
   // Chat messages for this case
   messages: ChatMessage[];
   // Vault evidence for this case
   vault: VaultEvidence[];
   // Optional reason when a case status changes
-  statusReason?: string;
+  case_result_reason?: string;
   // Raw status of the AI research (e.g. pending, processing)
   researchStatus?: string;
+  // Whether the case has at least one accepted alert (allows status changes)
+  canResolve?: boolean;
 }
 
 interface CasesStore {
@@ -97,7 +100,7 @@ interface CasesStore {
     caseId: string,
     status: CaseStatus,
     reason?: string,
-  ) => void;
+  ) => Promise<void>;
 }
 
 // Helper: generate a simple unique ID
@@ -264,15 +267,26 @@ export const useCasesStore = create<CasesStore>((set, get) => ({
     }));
   },
 
-  updateCaseStatus: (caseId, status, reason) => {
+  updateCaseStatus: async (caseId, status, reason) => {
+    // Optimistically update local state
     set((state) => ({
       cases: state.cases.map((c) => {
         if (c.id !== caseId) return c;
-        // Optionally you could store the reason in a new field if needed,
-        // but the core requirement is to update the status.
-        return { ...c, status, statusReason: reason };
+        return { ...c, case_result_status: status, case_result_reason: reason };
       }),
     }));
+
+    try {
+      await axios.patch(`${API_BASE}/cases/${caseId}/status`, {
+        case_result_status: status,
+        case_result_reason: reason ?? "",
+      });
+    } catch (error) {
+      console.error("Failed to update case status:", error);
+      // Re-fetch to revert optimistic update on failure
+      const { fetchCases } = useCasesStore.getState();
+      await fetchCases();
+    }
   },
 }));
 

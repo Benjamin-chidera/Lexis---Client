@@ -3,34 +3,34 @@ import { cn } from "@/lib/utils";
 
 interface StatsOverviewProps {
   successCount: number;
-  canceledCount: number;
-  failedCount: number;
+  closedCount: number;
+  abandonedCount: number;
   total: number;
 }
 
-const stats = (successCount: number, canceledCount: number, failedCount: number, total: number) => [
+const stats = (successCount: number, closedCount: number, abandonedCount: number, total: number) => [
   {
     label: "Successful",
     count: successCount,
-    percent: Math.round((successCount / total) * 100),
+    percent: total > 0 ? Math.round((successCount / total) * 100) : 0,
     icon: <CheckCircle2 className="w-5 h-5 text-emerald-400" />,
     iconBg: "bg-emerald-500/10 border border-emerald-500/20",
     barColor: "bg-emerald-500",
     textColor: "text-emerald-400",
   },
   {
-    label: "Canceled",
-    count: canceledCount,
-    percent: Math.round((canceledCount / total) * 100),
+    label: "Closed",
+    count: closedCount,
+    percent: total > 0 ? Math.round((closedCount / total) * 100) : 0,
     icon: <Ban className="w-5 h-5 text-amber-400" />,
     iconBg: "bg-amber-500/10 border border-amber-500/20",
     barColor: "bg-amber-500",
     textColor: "text-amber-400",
   },
   {
-    label: "Failed",
-    count: failedCount,
-    percent: Math.round((failedCount / total) * 100),
+    label: "Abandoned",
+    count: abandonedCount,
+    percent: total > 0 ? Math.round((abandonedCount / total) * 100) : 0,
     icon: <XCircle className="w-5 h-5 text-red-400" />,
     iconBg: "bg-red-500/10 border border-red-500/20",
     barColor: "bg-red-500",
@@ -38,10 +38,10 @@ const stats = (successCount: number, canceledCount: number, failedCount: number,
   },
 ];
 
-export const StatsOverview = ({ successCount, canceledCount, failedCount, total }: StatsOverviewProps) => {
+export const StatsOverview = ({ successCount, closedCount, abandonedCount, total }: StatsOverviewProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-      {stats(successCount, canceledCount, failedCount, total).map((s) => (
+      {stats(successCount, closedCount, abandonedCount, total).map((s) => (
         <div key={s.label} className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-6">
           <div className="flex items-center justify-between mb-4">
             <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{s.label}</span>

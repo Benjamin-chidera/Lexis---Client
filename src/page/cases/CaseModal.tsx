@@ -62,19 +62,20 @@ export const CaseModal = () => {
           {/* Status badge */}
           <Badge
             className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider border rounded-lg shrink-0 ${
-              activeCase.status === "active"
+              activeCase.case_result_status === "active"
                 ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                : activeCase.status === "success"
+                : activeCase.case_result_status === "success"
                 ? "bg-purple-500/10 text-purple-400 border-purple-500/30"
-                : activeCase.status === "abandoned"
+                : activeCase.case_result_status === "abandoned"
                 ? "bg-amber-500/10 text-amber-400 border-amber-500/30"
                 : "bg-red-500/10 text-red-400 border-red-500/30"
             }`}
           >
-            {activeCase.status}
+            {activeCase.case_result_status}
           </Badge>
 
-          {/* Status Update Menu */}
+          {/* Status Update Menu — only shown for active cases with accepted alerts */}
+          {activeCase.case_result_status === "active" && activeCase.canResolve && (
           <div className="relative shrink-0 ml-2 mr-2">
             <Button
               variant="ghost"
@@ -122,6 +123,7 @@ export const CaseModal = () => {
               </>
             )}
           </div>
+          )}
 
           {/* Close button */}
           <Button
@@ -186,7 +188,7 @@ export const CaseModal = () => {
                   className="bg-white hover:bg-zinc-200 text-black border border-white/20"
                   onClick={() => {
                     updateCaseStatus(activeCase.id, statusToChange, reason);
-                    if (statusToChange === "success") {
+                    if (statusToChange === "success" && activeCase.canResolve) {
                       confetti({
                         particleCount: 150,
                         spread: 70,

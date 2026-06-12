@@ -45,7 +45,7 @@ export const PdfSelectors = () => {
 
       <div className="absolute inset-0 bg-linear-to-b from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-      <div className="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-4 border border-purple-500/20 shadow-[0_0_20px_rgba(168,85,247,0.15)] group-hover:scale-110 transition-transform duration-300">
+      <div className="w-10 h-10 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-4 border border-purple-500/20 shadow-[0_0_20px_rgba(168,85,247,0.15)] group-hover:scale-110 transition-transform duration-300">
         <FilePlus className="w-6 h-6 text-purple-400" />
       </div>
       <h2 className="text-xl font-bold text-white mb-1">
