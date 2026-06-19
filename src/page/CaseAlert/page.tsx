@@ -83,7 +83,7 @@ export const CaseAlertPage = () => {
         <Button
           variant="outline"
           onClick={archiveAll}
-          className="bg-[#0a0a0a] border-white/10 text-slate-300 hover:text-white hover:bg-white/5 rounded-xl h-10 px-5 text-xs font-semibold tracking-wide"
+          className="bg-[#0a0a0a] border-white/10 text-slate-300 hover:text-white hover:bg-white/5 rounded-xl h-0.625rem-5 text-xs font-semibold tracking-wide"
         >
           <Archive className="w-4 h-4 mr-2" />
           Archive All
@@ -96,7 +96,7 @@ export const CaseAlertPage = () => {
           {/* Active Vigilance card */}
           <div className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-6 shadow-xl">
             <div className="flex items-center justify-between mb-6">
-              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+              <span className="text-[0.625rem] font-black text-slate-500 uppercase tracking-widest">
                 Active Vigilance
               </span>
               <Eye className="w-4 h-4 text-cyan-500" />
@@ -105,19 +105,19 @@ export const CaseAlertPage = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-slate-300">Urgent</span>
-                <Badge className="bg-red-500/20 text-red-400 hover:bg-red-500/20 px-2 rounded-md font-bold">
+                <Badge className="bg-red-500/20 text-red-400 hover:bg-red-500/1.25rem-2 rounded-md font-bold">
                   {String(urgentCount).padStart(2, "0")}
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-slate-300">Strategic</span>
-                <Badge className="bg-purple-500/20 text-purple-400 hover:bg-purple-500/20 px-2 rounded-md font-bold">
+                <Badge className="bg-purple-500/20 text-purple-400 hover:bg-purple-500/1.25rem-2 rounded-md font-bold">
                   {String(strategicCount).padStart(2, "0")}
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-slate-300">Routine</span>
-                <Badge className="bg-slate-500/20 text-slate-400 hover:bg-slate-500/20 px-2 rounded-md font-bold">
+                <Badge className="bg-slate-500/20 text-slate-400 hover:bg-slate-500/1.25rem-2 rounded-md font-bold">
                   {String(routineCount).padStart(2, "0")}
                 </Badge>
               </div>
@@ -126,7 +126,7 @@ export const CaseAlertPage = () => {
 
           {/* Deep Dig Status card */}
           <div className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-6 shadow-xl">
-            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-5">
+            <span className="text-[0.625rem] font-black text-slate-500 uppercase tracking-widest block mb-5">
               Deep Dig Status
             </span>
             <div className="flex items-center gap-3 mb-4">
@@ -270,13 +270,13 @@ const CaseGroupSection = ({ group, onMarkRead }: CaseGroupSectionProps) => {
 
         {/* Unread count badge */}
         {unreadCount > 0 && (
-          <Badge className="bg-purple-500/15 text-purple-400 hover:bg-purple-500/15 px-2 py-0 h-5 text-[10px] font-bold rounded-md">
+          <Badge className="bg-purple-500/15 text-purple-400 hover:bg-purple-500/0.9375rem-2 py-0 h-5 text-[0.625rem] font-bold rounded-md">
             {unreadCount} new
           </Badge>
         )}
 
         {/* Alert count */}
-        <span className="text-[11px] text-slate-600 font-medium">
+        <span className="text-[0.6875rem] text-slate-600 font-medium">
           {group.alerts.length} {group.alerts.length === 1 ? "alert" : "alerts"}
         </span>
 

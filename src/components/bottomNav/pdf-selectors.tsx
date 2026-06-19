@@ -45,7 +45,7 @@ export const PdfSelectors = () => {
 
       <div className="absolute inset-0 bg-linear-to-b from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-      <div className="w-10 h-10 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-4 border border-purple-500/20 shadow-[0_0_20px_rgba(168,85,247,0.15)] group-hover:scale-110 transition-transform duration-300">
+      <div className="w-10 h-10 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-4 border border-purple-500/20 shadow-[0_0_1.25rem_rgba(168,85,247,0.15)] group-hover:scale-110 transition-transform duration-300">
         <FilePlus className="w-6 h-6 text-purple-400" />
       </div>
       <h2 className="text-xl font-bold text-white mb-1">
@@ -66,10 +66,10 @@ export const PdfSelectors = () => {
             <Badge
               key={`${file.name}-${i}`}
               variant="secondary"
-              className="bg-white/5 text-slate-300 border-white/10 px-3 py-1.5 flex items-center gap-2 hover:bg-white/10 transition-all rounded-lg backdrop-blur-sm"
+              className="bg-white/5 text-slate-300 border-white/0.625rem-3 py-1.5 flex items-center gap-2 hover:bg-white/10 transition-all rounded-lg backdrop-blur-sm"
             >
               <FileText className="w-3.5 h-3.5 text-purple-400/80 shrink-0" />
-              <span className="text-[11px] font-medium max-w-[120px] truncate">
+              <span className="text-[0.6875rem] font-medium max-w-30 truncate">
                 {file.name}
               </span>
               <button

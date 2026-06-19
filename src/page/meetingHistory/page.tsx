@@ -136,7 +136,7 @@ export const MeetingHistoryPage = () => {
             Meeting Archive
           </h1>
           <div className="flex items-center gap-3">
-            <Badge className="bg-purple-500/20 text-purple-300 border border-purple-500/30 font-black text-[10px] tracking-widest uppercase px-3 py-1 rounded-full">
+            <Badge className="bg-purple-500/20 text-purple-300 border border-purple-500/30 font-black text-[0.625rem] tracking-widest uppercase px-3 py-1 rounded-full">
               128 Sessions Found
             </Badge>
             <span className="flex items-center gap-1.5 text-slate-500 text-sm">
@@ -174,7 +174,7 @@ export const MeetingHistoryPage = () => {
       <div className="flex justify-center mt-10">
         <Button
           variant="outline"
-          className="bg-[#0a0a0a] border-white/10 text-slate-300 hover:text-white hover:bg-white/5 rounded-2xl h-11 px-8 text-sm font-bold tracking-wide gap-2"
+          className="bg-[#0a0a0a] border-white/10 text-slate-300 hover:text-white hover:bg-white/5 rounded-2xl h-0.6875rem-8 text-sm font-bold tracking-wide gap-2"
         >
           Load More Archives
           <ChevronDown className="w-4 h-4" />

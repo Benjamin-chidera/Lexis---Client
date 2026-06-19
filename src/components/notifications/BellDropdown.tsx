@@ -51,7 +51,7 @@ export const BellDropdown = () => {
 
         {/* Unread count badge */}
         {unreadCount > 0 && (
-          <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center px-1 shadow-lg shadow-red-500/40 animate-pulse">
+          <span className="absolute -top-1.5 -right-1.5 min-w-[1.125rem] h-[1.125rem] bg-red-500 text-white text-[0.625rem] font-black rounded-full flex items-center justify-center px-1 shadow-lg shadow-red-500/40 animate-pulse">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
@@ -68,7 +68,7 @@ export const BellDropdown = () => {
                 Alerts
               </p>
               {unreadCount > 0 && (
-                <p className="text-[10px] text-slate-500 mt-0.5">
+                <p className="text-[0.625rem] text-slate-500 mt-0.5">
                   {unreadCount} unread
                 </p>
               )}
@@ -87,7 +87,7 @@ export const BellDropdown = () => {
               <div className="flex flex-col items-center justify-center py-10 text-center px-4">
                 <Bell className="w-8 h-8 text-slate-700 mb-2" />
                 <p className="text-slate-600 text-xs font-medium">No alerts yet</p>
-                <p className="text-slate-700 text-[11px] mt-1">
+                <p className="text-slate-700 text-[0.6875rem] mt-1">
                   AI research alerts will appear here
                 </p>
               </div>
@@ -110,10 +110,10 @@ export const BellDropdown = () => {
                       <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0" />
                     )}
                   </div>
-                  <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed">
+                  <p className="text-[0.6875rem] text-slate-500 line-clamp-2 leading-relaxed">
                     {alert.summary}
                   </p>
-                  <p className="text-[10px] text-slate-700 mt-1">
+                  <p className="text-[0.625rem] text-slate-700 mt-1">
                     {formatTime(alert.created_at)}
                   </p>
                 </div>

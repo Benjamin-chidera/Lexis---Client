@@ -20,9 +20,9 @@ interface SessionCardProps {
 }
 
 const accentBorderMap = {
-  red: "border-l-[3px] border-l-red-500",
-  blue: "border-l-[3px] border-l-blue-500",
-  purple: "border-l-[3px] border-l-purple-500",
+  red: "border-l-[0.1875rem] border-l-red-500",
+  blue: "border-l-[0.1875rem] border-l-blue-500",
+  purple: "border-l-[0.1875rem] border-l-purple-500",
 };
 
 export const SessionCard = ({
@@ -52,7 +52,7 @@ export const SessionCard = ({
       </div>
 
       <div className="flex-1 min-w-0">
-        <h3 className="text-white font-bold text-[15px] truncate mb-1">{caseName}</h3>
+        <h3 className="text-white font-bold text-[0.9375rem] truncate mb-1">{caseName}</h3>
         <div className="flex items-center gap-2 flex-wrap">
           <Clock className="w-3 h-3 text-slate-500 shrink-0" />
           <span className="text-slate-500 text-xs">
@@ -60,7 +60,7 @@ export const SessionCard = ({
           </span>
           <Badge
             className={cn(
-              "text-[9px] font-black uppercase tracking-widest px-2 py-0 h-4 rounded border-0",
+              "text-[0.5625rem] font-black uppercase tracking-widest px-2 py-0 h-4 rounded border-0",
               caseTypeBg,
               caseTypeColor
             )}
@@ -80,7 +80,7 @@ export const SessionCard = ({
         ))}
       </div>
 
-      <div className="flex items-center gap-3 shrink-0 min-w-[210px] justify-center">
+      <div className="flex items-center gap-3 shrink-0 min-w-[13.125rem] justify-center">
         {status === "processing" ? (
           <span className="text-slate-400 text-xs font-medium px-3 py-1 bg-white/5 rounded-full border border-white/5">
             Processing...
@@ -89,7 +89,7 @@ export const SessionCard = ({
           <>
             {hasTranscript && (
               <span className="flex items-center gap-1.5 text-emerald-400 text-xs font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.6)]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_0.375rem_rgba(52,211,153,0.6)]" />
                 Transcript Ready
               </span>
             )}
@@ -108,7 +108,7 @@ export const SessionCard = ({
           <Button
             variant="outline"
             disabled
-            className="bg-[#0a0a0a] border-white/5 text-slate-600 rounded-xl h-9 px-5 text-xs font-bold tracking-wide cursor-default"
+            className="bg-[#0a0a0a] border-white/5 text-slate-600 rounded-xl h-0.5625rem-5 text-xs font-bold tracking-wide cursor-default"
           >
             Pending
           </Button>
@@ -116,12 +116,12 @@ export const SessionCard = ({
           <>
             <Button
               variant="outline"
-              className="bg-transparent border-white/10 text-slate-300 hover:text-white hover:bg-white/5 rounded-xl h-9 px-4 text-xs font-bold tracking-wide"
+              className="bg-transparent border-white/10 text-slate-300 hover:text-white hover:bg-white/5 rounded-xl h-0.5625rem-4 text-xs font-bold tracking-wide"
             >
               View Transcript
             </Button>
             {hasInsights ? (
-              <Button className="bg-white hover:bg-zinc-200 text-black border border-white/20 rounded-xl h-9 px-4 text-xs font-bold tracking-wide shadow-[0_0_15px_rgba(147,51,234,0.25)]">
+              <Button className="bg-white hover:bg-zinc-200 text-black border border-white/20 rounded-xl h-0.5625rem-4 text-xs font-bold tracking-wide shadow-[0_0_0.9375rem_rgba(147,51,234,0.25)]">
                 See Insights
               </Button>
             ) : (

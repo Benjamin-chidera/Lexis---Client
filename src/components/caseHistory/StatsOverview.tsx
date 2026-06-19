@@ -44,7 +44,7 @@ export const StatsOverview = ({ successCount, closedCount, abandonedCount, total
       {stats(successCount, closedCount, abandonedCount, total).map((s) => (
         <div key={s.label} className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-6">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{s.label}</span>
+            <span className="text-[0.625rem] font-black text-slate-500 uppercase tracking-widest">{s.label}</span>
             <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center", s.iconBg)}>
               {s.icon}
             </div>

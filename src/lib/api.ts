@@ -52,5 +52,7 @@ export async function uploadImages(files: File[], caseId?: number): Promise<stri
   }
 
   const result = await response.json();
+  console.log(result);
+  
   return result.saved_paths as string[];
 }

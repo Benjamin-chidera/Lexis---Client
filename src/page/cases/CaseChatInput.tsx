@@ -140,7 +140,7 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
         {/* Attachment panel (PDF, Image, URL) */}
         {attachmentPanelOpen && (
           <div className="bg-white/2 border border-white/10 rounded-2xl p-4 space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-200">
-            <p className="text-[10px] uppercase tracking-widest font-bold text-slate-500">
+            <p className="text-[0.625rem] uppercase tracking-widest font-bold text-slate-500">
               Add to Vault
             </p>
 
@@ -153,7 +153,7 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
                 <p className="text-xs font-semibold text-slate-300 mb-0.5">
                   PDF Documents
                 </p>
-                <p className="text-[11px] text-slate-600">
+                <p className="text-[0.6875rem] text-slate-600">
                   Depositions, contracts, exhibits
                 </p>
               </div>
@@ -185,7 +185,7 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
                 <p className="text-xs font-semibold text-slate-300 mb-0.5">
                   Images
                 </p>
-                <p className="text-[11px] text-slate-600">
+                <p className="text-[0.6875rem] text-slate-600">
                   Photos, screenshots, scanned docs
                 </p>
               </div>
@@ -218,7 +218,7 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
                   <p className="text-xs font-semibold text-slate-300 mb-0.5">
                     Web URLs
                   </p>
-                  <p className="text-[11px] text-slate-600">
+                  <p className="text-[0.6875rem] text-slate-600">
                     Legal databases, news archives, PACER
                   </p>
                 </div>
@@ -238,7 +238,7 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
                   type="button"
                   size="sm"
                   onClick={handleAddUrl}
-                  className="h-9 px-4 bg-purple-600/80 hover:bg-white text-black shadow-xl shadow-white/10 border border-white/20 rounded-xl text-xs font-bold shrink-0"
+                  className="h-0.5625rem-4 bg-purple-600/80 hover:bg-white text-black shadow-xl shadow-white/10 border border-white/20 rounded-xl text-xs font-bold shrink-0"
                 >
                   Add
                 </Button>
@@ -255,7 +255,7 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
                   <p className="text-xs font-semibold text-slate-300 mb-0.5">
                     Context Notes
                   </p>
-                  <p className="text-[11px] text-slate-600">
+                  <p className="text-[0.6875rem] text-slate-600">
                     Additional facts, timeline, or instructions for the agent
                   </p>
                 </div>
@@ -323,7 +323,7 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
               onChange={(e) => setChatText(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Ask Lexis AI about this case..."
-              className="bg-white/3 border-white/10 h-10 px-4 rounded-xl text-sm text-slate-200 placeholder:text-slate-600 focus:border-purple-500/40 focus:ring-0 transition-all"
+              className="bg-white/3 border-white/10 h-0.625rem-4 rounded-xl text-sm text-slate-200 placeholder:text-slate-600 focus:border-purple-500/40 focus:ring-0 transition-all"
             />
           </div>
 

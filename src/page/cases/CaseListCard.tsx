@@ -58,15 +58,15 @@ export const CaseListCard = ({ caseData, onClick }: CaseListCardProps) => {
 
             {/* Stats row */}
             <div className="flex items-center gap-4">
-              {/* <span className="flex items-center gap-1.5 text-[11px] text-slate-500">
+              {/* <span className="flex items-center gap-1.5 text-[0.6875rem] text-slate-500">
                 <MessageSquare className="w-3 h-3" />
                 {messageCount} {messageCount === 1 ? "message" : "messages"}
               </span> */}
-              <span className="flex items-center gap-1.5 text-[11px] text-slate-500">
+              <span className="flex items-center gap-1.5 text-[0.6875rem] text-slate-500">
                 <FolderOpen className="w-3 h-3" />
                 {vaultCount} {vaultCount === 1 ? "file" : "files"} in vault
               </span>
-              <span className="text-[11px] text-slate-600">
+              <span className="text-[0.6875rem] text-slate-600">
                 Opened {caseData.openedDate}
               </span>
             </div>
@@ -77,7 +77,7 @@ export const CaseListCard = ({ caseData, onClick }: CaseListCardProps) => {
         <div className="flex flex-col items-end justify-between shrink-0">
           <div className="flex items-center gap-3">
             <Badge
-              className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider border rounded-lg ${statusStyle}`}
+              className={`px-3 py-1 text-[0.625rem] font-bold uppercase tracking-wider border rounded-lg ${statusStyle}`}
             >
               {caseData.case_result_status}
             </Badge>
@@ -88,7 +88,7 @@ export const CaseListCard = ({ caseData, onClick }: CaseListCardProps) => {
           {caseData.researchStatus && (
             <div className="flex items-center gap-1.5 mt-2 mr-1">
               <div className={`w-1.5 h-1.5 rounded-full ${caseData.researchStatus === 'processing' ? 'bg-amber-400 animate-pulse' : caseData.researchStatus === 'success' || caseData.researchStatus === 'completed' ? 'bg-emerald-400' : 'bg-slate-400'}`} />
-              <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">
+              <span className="text-[0.625rem] text-slate-400 uppercase tracking-wider font-semibold">
                 {caseData.researchStatus === 'processing' ? 'In Progress' 
                  : (caseData.researchStatus === 'success' || caseData.researchStatus === 'completed') ? 'Completed' 
                  : caseData.researchStatus === 'pending' ? 'Pending' 

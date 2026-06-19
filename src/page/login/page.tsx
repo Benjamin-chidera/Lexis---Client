@@ -103,7 +103,7 @@ const LoginPage = () => {
           </div>
           <div>
             <h1 className="text-xl font-bold text-white tracking-tight">Lexis AI</h1>
-            <p className="text-[10px] text-slate-500 uppercase tracking-widest">
+            <p className="text-[0.625rem] text-slate-500 uppercase tracking-widest">
               Legal Intelligence Platform
             </p>
           </div>
@@ -122,7 +122,7 @@ const LoginPage = () => {
                 <div className="space-y-2">
                   <label
                     htmlFor="email"
-                    className="text-[10px] font-semibold uppercase tracking-widest text-slate-400"
+                    className="text-[0.625rem] font-semibold uppercase tracking-widest text-slate-400"
                   >
                     Corporate Email
                   </label>
@@ -144,7 +144,7 @@ const LoginPage = () => {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-12 bg-white hover:bg-zinc-200 text-black border border-purple-400/30 font-bold rounded-xl shadow-[0_0_30px_rgba(147,51,234,0.3)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed mt-2 flex items-center justify-center gap-2"
+                  className="w-full h-12 bg-white hover:bg-zinc-200 text-black border border-purple-400/30 font-bold rounded-xl shadow-[0_0_1.875rem_rgba(147,51,234,0.3)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed mt-2 flex items-center justify-center gap-2"
                 >
                   {isLoading ? "Checking..." : (
                     <>
@@ -169,7 +169,7 @@ const LoginPage = () => {
                 <div className="space-y-2">
                   <label
                     htmlFor="password"
-                    className="text-[10px] font-semibold uppercase tracking-widest text-slate-400"
+                    className="text-[0.625rem] font-semibold uppercase tracking-widest text-slate-400"
                   >
                     Password
                   </label>
@@ -191,7 +191,7 @@ const LoginPage = () => {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-12 bg-white hover:bg-zinc-200 text-black border border-purple-400/30 font-bold rounded-xl shadow-[0_0_30px_rgba(147,51,234,0.3)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+                  className="w-full h-12 bg-white hover:bg-zinc-200 text-black border border-purple-400/30 font-bold rounded-xl shadow-[0_0_1.875rem_rgba(147,51,234,0.3)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed mt-2"
                 >
                   {isLoading ? "Signing in..." : "Sign In"}
                 </Button>
@@ -222,7 +222,7 @@ const LoginPage = () => {
                 <div className="space-y-2">
                   <label
                     htmlFor="new-password"
-                    className="text-[10px] font-semibold uppercase tracking-widest text-slate-400"
+                    className="text-[0.625rem] font-semibold uppercase tracking-widest text-slate-400"
                   >
                     Password
                   </label>
@@ -244,7 +244,7 @@ const LoginPage = () => {
                 <div className="space-y-2">
                   <label
                     htmlFor="confirm-password"
-                    className="text-[10px] font-semibold uppercase tracking-widest text-slate-400"
+                    className="text-[0.625rem] font-semibold uppercase tracking-widest text-slate-400"
                   >
                     Confirm Password
                   </label>
@@ -265,7 +265,7 @@ const LoginPage = () => {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-12 bg-white hover:bg-zinc-200 text-black border border-purple-400/30 font-bold rounded-xl shadow-[0_0_30px_rgba(147,51,234,0.3)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+                  className="w-full h-12 bg-white hover:bg-zinc-200 text-black border border-purple-400/30 font-bold rounded-xl shadow-[0_0_1.875rem_rgba(147,51,234,0.3)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed mt-2"
                 >
                   {isLoading ? "Setting password..." : "Set Password & Sign In"}
                 </Button>

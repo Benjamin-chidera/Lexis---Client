@@ -46,7 +46,7 @@ export const CaseVaultPanel = ({ caseId, vault }: CaseVaultPanelProps) => {
   // --- Empty state ---
   if (vault.length === 0) {
     return (
-      <div className="flex flex-col h-full bg-[#0a0a0a] border border-white/5 rounded-[24px] overflow-hidden shadow-2xl">
+      <div className="flex flex-col h-full bg-[#0a0a0a] border border-white/5 rounded-[1.5rem] overflow-hidden shadow-2xl">
         <VaultHeader count={0} />
         <div className="flex-1 flex flex-col items-center justify-center py-16 text-center px-4">
           <div className="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-4">
@@ -62,50 +62,50 @@ export const CaseVaultPanel = ({ caseId, vault }: CaseVaultPanelProps) => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-[#0a0a0a] border border-white/5 rounded-[24px] overflow-hidden shadow-2xl">
+    <div className="flex flex-col h-full bg-[#0a0a0a] border border-white/5 rounded-[1.5rem] overflow-hidden shadow-2xl">
       <VaultHeader count={vault.length} />
 
       {/* Categories */}
       <div className="px-4 py-3 flex items-center gap-3 border-b border-white/5 bg-[#0a0a0a]/30 shrink-0">
         <button
           onClick={() => setActiveCategory("pdf")}
-          className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center gap-0.125rem-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
             activeCategory === "pdf"
-              ? "bg-orange-500/20 text-orange-400 border border-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)]"
+              ? "bg-orange-500/20 text-orange-400 border border-orange-500/30 shadow-[0_0_0.9375rem_rgba(249,115,22,0.15)]"
               : "bg-white/5 text-slate-400 border border-transparent hover:bg-white/10 hover:text-white"
           }`}
         >
           <FileText className="w-3.5 h-3.5" />
           PDF
-          <Badge className="ml-1 bg-black/40 text-current border-0 px-1.5 py-0 rounded-md">
+          <Badge className="ml-1 bg-black/40 text-current border-0-1.5 py-0 rounded-md">
             {vault.filter((v) => v.type === "pdf").length}
           </Badge>
         </button>
         <button
           onClick={() => setActiveCategory("url")}
-          className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center gap-0.125rem-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
             activeCategory === "url"
-              ? "bg-purple-500/20 text-purple-400 border border-purple-500/30 shadow-[0_0_15px_rgba(168,85,247,0.15)]"
+              ? "bg-purple-500/20 text-purple-400 border border-purple-500/30 shadow-[0_0_0.9375rem_rgba(168,85,247,0.15)]"
               : "bg-white/5 text-slate-400 border border-transparent hover:bg-white/10 hover:text-white"
           }`}
         >
           <Globe className="w-3.5 h-3.5" />
           URL
-          <Badge className="ml-1 bg-black/40 text-current border-0 px-1.5 py-0 rounded-md">
+          <Badge className="ml-1 bg-black/40 text-current border-0-1.5 py-0 rounded-md">
             {vault.filter((v) => v.type === "url").length}
           </Badge>
         </button>
         <button
           onClick={() => setActiveCategory("image")}
-          className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+          className={`flex items-center gap-0.125rem-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
             activeCategory === "image"
-              ? "bg-blue-500/20 text-blue-400 border border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.15)]"
+              ? "bg-blue-500/20 text-blue-400 border border-blue-500/30 shadow-[0_0_0.9375rem_rgba(59,130,246,0.15)]"
               : "bg-white/5 text-slate-400 border border-transparent hover:bg-white/10 hover:text-white"
           }`}
         >
           <ImageIcon className="w-3.5 h-3.5" />
           Image
-          <Badge className="ml-1 bg-black/40 text-current border-0 px-1.5 py-0 rounded-md">
+          <Badge className="ml-1 bg-black/40 text-current border-0-1.5 py-0 rounded-md">
             {vault.filter((v) => v.type === "image").length}
           </Badge>
         </button>
@@ -174,7 +174,7 @@ const VaultHeader = ({ count }: { count: number }) => (
       <Briefcase className="w-5 h-5 text-blue-400" />
       <h2 className="text-lg font-bold text-white tracking-tight">Vault</h2>
     </div>
-    <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/20 px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest">
+    <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/1.25rem-3 py-1 rounded-md text-[0.625rem] font-bold uppercase tracking-widest">
       {count} {count === 1 ? "item" : "items"}
     </Badge>
   </div>
@@ -201,7 +201,7 @@ const VaultTab = ({ item, isSelected, onClick, onRemove }: VaultTabProps) => {
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-1.5 px-3 py-2 rounded-t-xl text-[11px] font-semibold transition-all border-t border-x whitespace-nowrap mb-0 ${
+      className={`flex items-center gap-0.09375rem-3 py-2 rounded-t-xl text-[0.6875rem] font-semibold transition-all border-t border-x whitespace-nowrap mb-0 ${
         isSelected ? activeStyle : inactiveStyle
       }`}
     >
@@ -210,7 +210,7 @@ const VaultTab = ({ item, isSelected, onClick, onRemove }: VaultTabProps) => {
       {item.type === "image" && <ImageIcon className="w-3.5 h-3.5 shrink-0" />}
 
       {/* Truncate long filenames */}
-      <span className="max-w-[110px] truncate">{item.name}</span>
+      <span className="max-w-[6.875rem] truncate">{item.name}</span>
 
       {/* Remove button — stop propagation so click doesn't also trigger onClick */}
       <span

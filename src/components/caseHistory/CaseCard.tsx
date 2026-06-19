@@ -36,7 +36,7 @@ const statusStyles: Record<
     iconBg: "bg-emerald-500/10 border border-emerald-500/20",
     badge: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
     badgeText: "RESOLVED",
-    btnBg: "bg-emerald-600 hover:bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.25)]",
+    btnBg: "bg-emerald-600 hover:bg-emerald-500 shadow-[0_0_0.75rem_rgba(16,185,129,0.25)]",
     label: "View Case",
     reasonAccent: "text-emerald-400/70 hover:text-emerald-400",
     tooltipBorder: "border-emerald-500/20",
@@ -46,7 +46,7 @@ const statusStyles: Record<
     iconBg: "bg-amber-500/10 border border-amber-500/20",
     badge: "bg-amber-500/10 text-amber-400 border border-amber-500/20",
     badgeText: "CLOSED",
-    btnBg: "bg-amber-600 hover:bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.25)]",
+    btnBg: "bg-amber-600 hover:bg-amber-500 shadow-[0_0_0.75rem_rgba(245,158,11,0.25)]",
     label: "View Details",
     reasonAccent: "text-amber-400/70 hover:text-amber-400",
     tooltipBorder: "border-amber-500/20",
@@ -56,7 +56,7 @@ const statusStyles: Record<
     iconBg: "bg-red-500/10 border border-red-500/20",
     badge: "bg-red-500/10 text-red-400 border border-red-500/20",
     badgeText: "ABANDONED",
-    btnBg: "bg-red-600 hover:bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.25)]",
+    btnBg: "bg-red-600 hover:bg-red-500 shadow-[0_0_0.75rem_rgba(239,68,68,0.25)]",
     label: "View Report",
     reasonAccent: "text-red-400/70 hover:text-red-400",
     tooltipBorder: "border-red-500/20",
@@ -137,14 +137,14 @@ export const CaseCard = ({
                   "translate-y-1 group-hover/reason:translate-y-0"
                 )}
               >
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">
+                <p className="text-[0.625rem] font-black uppercase tracking-widest text-slate-500 mb-2">
                   {reasonLabel[status]}
                 </p>
                 <p className="text-slate-300 text-xs leading-relaxed">{reason}</p>
                 {/* Arrow */}
                 <div
                   className={cn(
-                    "absolute top-full left-5 w-2.5 h-2.5 bg-[#13161f] border-r border-b rotate-45 mt-[-5px]",
+                    "absolute top-full left-5 w-2.5 h-2.5 bg-[#13161f] border-r border-b rotate-45 mt-[-0.3125rem]",
                     s.tooltipBorder
                   )}
                 />
@@ -155,7 +155,7 @@ export const CaseCard = ({
 
         <Button
           className={cn(
-            "text-white rounded-xl h-9 px-5 text-xs font-bold tracking-wide shrink-0 mt-0.5",
+            "text-white rounded-xl h-0.5625rem-5 text-xs font-bold tracking-wide shrink-0 mt-0.5",
             s.btnBg
           )}
         >
@@ -165,7 +165,7 @@ export const CaseCard = ({
 
       {/* Status badge — bottom right */}
       <div className="absolute bottom-4 right-6">
-        <Badge className={cn("px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase tracking-widest", s.badge)}>
+        <Badge className={cn("px-2.5 py-0.5 rounded-md text-[0.625rem] font-black uppercase tracking-widest", s.badge)}>
           {s.badgeText}
         </Badge>
       </div>

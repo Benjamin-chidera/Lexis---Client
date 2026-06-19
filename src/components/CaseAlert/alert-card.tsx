@@ -24,7 +24,7 @@ const SEVERITY_STYLES = {
     badgeLabel: "Urgent",
     icon: <AlertTriangle className="w-6 h-6 text-red-400" />,
     actionBg:
-      "bg-red-600 hover:bg-red-500 shadow-[0_0_15px_rgba(220,38,38,0.3)]",
+      "bg-red-600 hover:bg-red-500 shadow-[0_0_0.9375rem_rgba(220,38,38,0.3)]",
   },
   strategic: {
     border: "border-white/5 hover:border-purple-500/30",
@@ -33,7 +33,7 @@ const SEVERITY_STYLES = {
     badgeLabel: "Strategic",
     icon: <Search className="w-6 h-6 text-purple-400" />,
     actionBg:
-      "bg-white hover:bg-zinc-200 text-black border border-white/20 shadow-[0_0_15px_rgba(147,51,234,0.3)]",
+      "bg-white hover:bg-zinc-200 text-black border border-white/20 shadow-[0_0_0.9375rem_rgba(147,51,234,0.3)]",
   },
   routine: {
     border: "border-white/5 hover:border-cyan-500/30",
@@ -78,7 +78,7 @@ export const AlertCard = ({ alert, onMarkRead }: AlertCardProps) => {
   return (
     <>
       <div
-        className={`bg-[#0a0a0a] border rounded-2xl p-6 shadow-xl relative group transition-all overflow-hidden ${style.border} ${isUnread ? "shadow-[0_0_0_1px_rgba(168,85,247,0.05)]" : ""} `}
+        className={`bg-[#0a0a0a] border rounded-2xl p-6 shadow-xl relative group transition-all overflow-hidden ${style.border} ${isUnread ? "shadow-[0_0_0_0.0625rem_rgba(168,85,247,0.05)]" : ""} `}
       >
         {/* Unread dot */}
         {isUnread && (
@@ -112,7 +112,7 @@ export const AlertCard = ({ alert, onMarkRead }: AlertCardProps) => {
 
                   {showReasoning && alert.ai_reasoning && (
                     <div className="absolute right-0 top-6 z-50 w-80 bg-[#111] border border-white/10 rounded-xl shadow-2xl p-4">
-                      <p className="text-[10px] font-black text-purple-400 uppercase tracking-widest mb-2">
+                      <p className="text-[0.625rem] font-black text-purple-400 uppercase tracking-widest mb-2">
                         Why this matters
                       </p>
                       <p className="text-slate-300 text-xs leading-relaxed">
@@ -123,12 +123,12 @@ export const AlertCard = ({ alert, onMarkRead }: AlertCardProps) => {
                 </div>
 
                 <Badge
-                  className={`px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase tracking-widest ${style.badge}`}
+                  className={`px-2.5 py-0.5 rounded-md text-[0.625rem] font-black uppercase tracking-widest ${style.badge}`}
                 >
                   {style.badgeLabel}
                 </Badge>
 
-                <span className="text-[11px] font-medium text-slate-500">
+                <span className="text-[0.6875rem] font-medium text-slate-500">
                   {formatRelativeTime(alert.created_at)}
                 </span>
               </div>
@@ -158,14 +158,14 @@ export const AlertCard = ({ alert, onMarkRead }: AlertCardProps) => {
             {/* Review status badge — shown after the attorney has decided */}
             {isAccepted && (
               <div className="flex justify-end mb-2">
-                <Badge className="bg-green-500/10 text-green-400 border border-green-500/20 px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase tracking-widest">
+                <Badge className="bg-green-500/10 text-green-400 border border-green-500/1.25rem-2.5 py-0.5 rounded-md text-[0.625rem] font-black uppercase tracking-widest">
                   Accepted
                 </Badge>
               </div>
             )}
             {isRejected && (
               <div className="flex justify-end mb-2">
-                <Badge className="bg-red-500/10 text-red-400 border border-red-500/20 px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase tracking-widest">
+                <Badge className="bg-red-500/10 text-red-400 border border-red-500/1.25rem-2.5 py-0.5 rounded-md text-[0.625rem] font-black uppercase tracking-widest">
                   Rejected
                 </Badge>
               </div>
@@ -241,7 +241,7 @@ export const AlertCard = ({ alert, onMarkRead }: AlertCardProps) => {
             </div>
 
             {/* Citation disclaimer */}
-            <p className="text-[10px] text-slate-700 mb-4">
+            <p className="text-[0.625rem] text-slate-700 mb-4">
               Links are AI-generated and may not resolve — verify before relying
               on them.
             </p>
@@ -251,7 +251,7 @@ export const AlertCard = ({ alert, onMarkRead }: AlertCardProps) => {
               <div className="flex items-center gap-3">
                 <Button
                   onClick={onMarkRead}
-                  className={`text-white rounded-lg h-9 px-5 text-xs font-bold tracking-wide ${style.actionBg}`}
+                  className={`text-white rounded-lg h-12 w-30 text-xs font-bold tracking-wide ${style.actionBg}`}
                 >
                   MARK AS READ
                 </Button>

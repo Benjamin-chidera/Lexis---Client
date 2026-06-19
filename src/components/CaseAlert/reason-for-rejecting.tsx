@@ -55,13 +55,13 @@ export function ReasonForRejectingModal({
           </div>
 
           <AlertDialogFooter className="flex justify-end gap-3 pt-2">
-            <AlertDialogCancel onClick={onClose} className="bg-[#0a0a0a] border border-white/5 text-slate-300 hover:text-white hover:bg-white/5 rounded-xl h-10 px-5 text-xs font-semibold tracking-wide">
+            <AlertDialogCancel onClick={onClose} className="bg-[#0a0a0a] border border-white/5 text-slate-300 hover:text-white hover:bg-white/5 rounded-xl h-10 w-20 text-xs font-semibold tracking-wide">
               Cancel
             </AlertDialogCancel>
             <Button
               type="submit"
               disabled={!reason.trim()}
-              className="bg-red-600 hover:bg-red-500 text-white shadow-[0_0_15px_rgba(220,38,38,0.3)] rounded-lg h-9 px-4 text-xs font-semibold disabled:opacity-50"
+              className="bg-red-600 hover:bg-red-500 text-white shadow-[0_0_15px_rgba(220,38,38,0.3)] rounded-lg h-10 w-40 text-xs font-semibold disabled:opacity-50"
             >
               Reject & Re-research
             </Button>

@@ -6,7 +6,7 @@ export const LeftSplitSection = () => {
   return (
     <main className="">
       {" "}
-      <div className="flex-1 flex flex-col bg-[#0a0a0a] border border-white/5 rounded-[32px] overflow-hidden relative shadow-2xl">
+      <div className="flex-1 flex flex-col bg-[#0a0a0a] border border-white/5 rounded-[2rem] overflow-hidden relative shadow-2xl">
         {/* Header */}
         <div className="px-8 py-6 flex items-center justify-between border-b border-white/5 bg-[#0a0a0a]/50 backdrop-blur-sm z-20">
           <div className="flex items-center gap-3">
@@ -15,7 +15,7 @@ export const LeftSplitSection = () => {
               Intelligence Stream
             </h2>
           </div>
-          <Badge className="bg-purple-500/10 text-purple-400 border-purple-500/20 px-3 py-1 rounded-[6px] text-[10px] font-bold uppercase tracking-widest backdrop-blur-xl">
+          <Badge className="bg-purple-500/10 text-purple-400 border-purple-500/1.25rem-3 py-1 rounded-[0.375rem] text-[0.625rem] font-bold uppercase tracking-widest backdrop-blur-xl">
             AI Active
           </Badge>
         </div>
@@ -23,7 +23,7 @@ export const LeftSplitSection = () => {
         {/* Chat Area */}
         <div className="flex-1 overflow-y-auto p-8 space-y-10 custom-scrollbar scroll-smooth">
           <div className="flex flex-col items-center">
-            <span className="text-[10px] uppercase tracking-[0.4em] font-black text-slate-600 mb-8 px-4 py-1.5 rounded-full">
+            <span className="text-[0.625rem] uppercase tracking-[0.4em] font-black text-slate-600 mb-0.5rem-4 py-1.5 rounded-full">
               SESSION START: 14:02 UTC
             </span>
           </div>
@@ -35,7 +35,7 @@ export const LeftSplitSection = () => {
               timeline.
             </div>
             <div className="flex items-center mr-2">
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+              <span className="text-[0.625rem] font-bold text-slate-500 uppercase tracking-widest">
                 You • 14:15
               </span>
             </div>
@@ -48,7 +48,7 @@ export const LeftSplitSection = () => {
                 <Terminal className="w-4 h-4 text-white" />
               </div>
               <div className="flex flex-col">
-                <span className="text-[10px] font-black text-purple-400 uppercase tracking-[0.25em]">
+                <span className="text-[0.625rem] font-black text-purple-400 uppercase tracking-[0.25em]">
                   Lexis AI
                 </span>
               </div>
@@ -56,7 +56,7 @@ export const LeftSplitSection = () => {
 
             <div className="bg-white/2 border border-white/5 rounded-3xl p-6 relative overflow-hidden group shadow-xl">
               <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-500" />
-              <p className="text-slate-200 text-[17px] font-medium leading-relaxed mb-6">
+              <p className="text-slate-200 text-[1.0625rem] font-medium leading-relaxed mb-6">
                 Wait, the deposition on Page 14 says he was at the office,{" "}
                 <span className="text-white font-bold underline decoration-purple-500/50 underline-offset-4 decoration-2">
                   not the bar
@@ -74,7 +74,7 @@ export const LeftSplitSection = () => {
                     <h4 className="text-sm font-bold text-slate-200 mb-0.5">
                       Deposition_Witness_J.pdf
                     </h4>
-                    <span className="text-[10px] text-slate-500 font-medium tracking-wide">
+                    <span className="text-[0.625rem] text-slate-500 font-medium tracking-wide">
                       Exhibit B-12 • Page 14
                     </span>
                   </div>
@@ -82,7 +82,7 @@ export const LeftSplitSection = () => {
                 <ExternalLink className="w-4 h-4 text-slate-600 group-hover/card:text-slate-400" />
               </div>
             </div>
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">
+            <span className="text-[0.625rem] font-bold text-slate-500 uppercase tracking-widest ml-1">
               Lexis AI • 14:16
             </span>
           </div>

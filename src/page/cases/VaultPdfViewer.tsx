@@ -80,7 +80,7 @@ export const VaultPdfViewer = ({ evidence }: VaultPdfViewerProps) => {
           >
             Prev
           </button>
-          <span className="text-[10px] font-bold text-slate-400">
+          <span className="text-[0.625rem] font-bold text-slate-400">
             {pageNumber} / {numPages}
           </span>
           <button

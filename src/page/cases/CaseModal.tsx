@@ -39,9 +39,9 @@ export const CaseModal = () => {
 
   return (
     <AlertDialog open={!!activeCase} onOpenChange={(open) => { if (!open) closeCase(); }}>
-      <AlertDialogContent className="w-full max-w-6xl! h-[85vh] bg-[#0a0a0a] border-white/10 rounded-[28px] shadow-[0_40px_120px_rgba(0,0,0,0.9)] flex flex-col overflow-hidden p-0 gap-0">
+      <AlertDialogContent className="w-full max-w-6xl! h-[85vh] bg-[#0a0a0a] border-white/10 rounded-[1.75rem] shadow-[0_2.5rem_7.5rem_rgba(0,0,0,0.9)] flex flex-col overflow-hidden p-0 gap-0">
         {/* ── Modal header ── */}
-        <div className="relative z-10 flex items-center gap-4 px-6 py-4 border-b border-white/6 bg-[#0a0a0a]/80 backdrop-blur-xl shrink-0">
+        <div className="relative z-10 flex items-center gap-0.25rem-6 py-4 border-b border-white/6 bg-[#0a0a0a]/80 backdrop-blur-xl shrink-0">
           {/* Case icon + info */}
           <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
             <Scale className="w-4 h-4 text-purple-400" />
@@ -54,14 +54,14 @@ export const CaseModal = () => {
             <AlertDialogDescription className="sr-only">
               Case details and active evidence vault for {activeCase.name}
             </AlertDialogDescription>
-            <p className="text-[11px] text-slate-500 mt-0.5">
+            <p className="text-[0.6875rem] text-slate-500 mt-0.5">
               {activeCase.caseType} · {activeCase.attorney}
             </p>
           </div>
 
           {/* Status badge */}
           <Badge
-            className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider border rounded-lg shrink-0 ${
+            className={`px-3 py-1 text-[0.625rem] font-bold uppercase tracking-wider border rounded-lg shrink-0 ${
               activeCase.case_result_status === "active"
                 ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
                 : activeCase.case_result_status === "success"
@@ -150,7 +150,7 @@ export const CaseModal = () => {
 
             {/* Input row — pinned below chat */}
             <div className="shrink-0">
-              <div className="bg-[#0a0a0a] border border-white/5 rounded-[20px] overflow-hidden shadow-xl">
+              <div className="bg-[#0a0a0a] border border-white/5 rounded-[1.25rem] overflow-hidden shadow-xl">
                 <CaseChatInput caseId={activeCase.id} />
               </div>
             </div>
@@ -209,9 +209,9 @@ export const CaseModal = () => {
 
         {/* Scrollbar styles */}
         <style>{`
-          .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+          .custom-scrollbar::-webkit-scrollbar { width: 0.3125rem; }
           .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-          .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 10px; }
+          .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 0.625rem; }
           .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.12); }
         `}</style>
       </AlertDialogContent>

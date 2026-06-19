@@ -113,7 +113,7 @@ export const CaseHistoryPage = () => {
             variant="outline"
             onClick={() => setActiveTab(tab.key)}
             className={cn(
-              "h-9 px-4 rounded-xl text-xs font-bold tracking-wide border gap-1.5 transition-all",
+              "h-0.5625rem-4 rounded-xl text-xs font-bold tracking-wide border gap-1.5 transition-all",
               activeTab === tab.key
                 ? tab.activeClass
                 : "bg-[#0a0a0a] border-white/10 text-slate-400 hover:text-white hover:bg-white/5"
@@ -123,7 +123,7 @@ export const CaseHistoryPage = () => {
             {tab.label}
             <Badge
               className={cn(
-                "ml-1 px-1.5 py-0 h-4 text-[9px] font-black rounded border-0",
+                "ml-0.0625rem-1.5 py-0 h-4 text-[0.5625rem] font-black rounded border-0",
                 activeTab === tab.key ? "bg-white/20 text-current" : "bg-white/5 text-slate-500"
               )}
             >

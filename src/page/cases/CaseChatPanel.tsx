@@ -20,14 +20,14 @@ export const CaseChatPanel = ({ caseId, messages }: CaseChatPanelProps) => {
   }, [messages, isAiTyping]);
 
   return (
-    <div className="flex flex-col h-full bg-[#0a0a0a] border border-white/5 rounded-[24px] overflow-hidden shadow-2xl">
+    <div className="flex flex-col h-full bg-[#0a0a0a] border border-white/5 rounded-[1.5rem] overflow-hidden shadow-2xl">
       {/* Header */}
       <div className="px-6 py-5 flex items-center justify-between border-b border-white/5 bg-[#0a0a0a]/50 backdrop-blur-sm shrink-0">
         <div className="flex items-center gap-3">
           <Brain className="w-5 h-5 text-purple-400" />
           <h2 className="text-lg font-bold text-white tracking-tight">Intelligence Stream</h2>
         </div>
-        <Badge className="bg-purple-500/10 text-purple-400 border-purple-500/20 px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest">
+        <Badge className="bg-purple-500/10 text-purple-400 border-purple-500/1.25rem-3 py-1 rounded-md text-[0.625rem] font-bold uppercase tracking-widest">
           AI Active
         </Badge>
       </div>
@@ -36,7 +36,7 @@ export const CaseChatPanel = ({ caseId, messages }: CaseChatPanelProps) => {
       <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar scroll-smooth">
         {/* Session start label */}
         <div className="flex flex-col items-center">
-          <span className="text-[10px] uppercase tracking-[0.4em] font-black text-slate-600 mb-4 px-4 py-1.5 rounded-full">
+          <span className="text-[0.625rem] uppercase tracking-[0.4em] font-black text-slate-600 mb-0.25rem-4 py-1.5 rounded-full">
             Session Start
           </span>
         </div>
@@ -80,7 +80,7 @@ const UserMessage = ({ message }: { message: ChatMessage }) => {
       <div className="bg-white/4 border border-white/10 rounded-2xl p-4 text-slate-300 text-sm leading-relaxed shadow-xl">
         {message.content}
       </div>
-      <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mr-2">
+      <span className="text-[0.625rem] font-bold text-slate-600 uppercase tracking-widest mr-2">
         You · {message.timestamp}
       </span>
     </div>
@@ -107,7 +107,7 @@ const AiMessage = ({ message, caseId }: { message: ChatMessage; caseId: string }
         <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/20">
           <Terminal className="w-4 h-4 text-white" />
         </div>
-        <span className="text-[10px] font-black text-purple-400 uppercase tracking-[0.25em]">
+        <span className="text-[0.625rem] font-black text-purple-400 uppercase tracking-[0.25em]">
           Lexis AI
         </span>
       </div>
@@ -185,7 +185,7 @@ const AiMessage = ({ message, caseId }: { message: ChatMessage; caseId: string }
                 </div>
                 <div>
                   <p className="text-xs font-bold text-slate-200">{message.citation.filename}</p>
-                  <p className="text-[10px] text-slate-500 font-medium">
+                  <p className="text-[0.625rem] text-slate-500 font-medium">
                     {message.citation.exhibit}
                     {message.citation.page ? ` · Page ${message.citation.page}` : ""}
                   </p>
@@ -197,7 +197,7 @@ const AiMessage = ({ message, caseId }: { message: ChatMessage; caseId: string }
         )}
       </div>
 
-      <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest ml-1">
+      <span className="text-[0.625rem] font-bold text-slate-600 uppercase tracking-widest ml-1">
         Lexis AI · {message.timestamp}
       </span>
     </div>
@@ -216,7 +216,7 @@ const TypingIndicator = () => {
         <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/20">
           <Terminal className="w-4 h-4 text-white" />
         </div>
-        <span className="text-[10px] font-black text-purple-400 uppercase tracking-[0.25em]">
+        <span className="text-[0.625rem] font-black text-purple-400 uppercase tracking-[0.25em]">
           Lexis AI
         </span>
       </div>

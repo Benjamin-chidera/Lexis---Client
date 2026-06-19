@@ -65,7 +65,7 @@ const CasesPage = () => {
       <CallModal />
 
       {/* ── Fixed header ── */}
-      <div className="shrink-0 px-6 pt-5 pb-4 md:px-10 bg-transparent">
+      <div className="shrink-0-6 pt-5 pb-4 md:px-10 bg-transparent">
         {/* Page title row */}
         <div className="flex items-start justify-between mb-6">
           <div>
@@ -103,7 +103,7 @@ const CasesPage = () => {
                 size="sm"
                 onClick={() => setActiveFilter(tab.key)}
                 className={cn(
-                  "h-9 px-4 rounded-xl text-xs font-bold tracking-wide border gap-2 transition-all",
+                  "h-0.5625rem-4 rounded-xl text-xs font-bold tracking-wide border gap-2 transition-all",
                   activeFilter === tab.key
                     ? "bg-purple-500/10 text-purple-300 border-purple-500/30"
                     : "bg-[#0a0a0a] border-white/10 text-slate-400 hover:text-white hover:bg-white/5"
@@ -112,7 +112,7 @@ const CasesPage = () => {
                 {tab.label}
                 <Badge
                   className={cn(
-                    "ml-0 px-1.5 py-0 h-4 text-[9px] font-black rounded border-0",
+                    "ml-0-1.5 py-0 h-4 text-[0.5625rem] font-black rounded border-0",
                     activeFilter === tab.key
                       ? "bg-purple-500/20 text-purple-300"
                       : "bg-white/5 text-slate-500"
@@ -193,9 +193,9 @@ const CasesPage = () => {
 
       {/* Custom scrollbar styles scoped to this page */}
       <style>{`
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 0.3125rem; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 0.625rem; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.12); }
       `}</style>
     </div>

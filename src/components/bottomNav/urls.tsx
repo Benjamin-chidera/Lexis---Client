@@ -52,7 +52,7 @@ export const Urls = () => {
         <Button
           type="button"
           onClick={handleAdd}
-          className="h-14 px-6 bg-white hover:bg-zinc-200 text-black border border-white/20 rounded-2xl font-bold shrink-0"
+          className="h-15 w-20   bg-white hover:bg-zinc-200 text-black border border-white/20 rounded-2xl font-bold shrink-0"
         >
           Add
         </Button>
@@ -63,10 +63,10 @@ export const Urls = () => {
           {urls.map((url, i) => (
             <Badge
               key={`${url}-${i}`}
-              className="bg-purple-500/10 text-purple-300 border-purple-500/20 px-4 py-2 flex items-center gap-2.5 rounded-full text-xs font-bold tracking-wider backdrop-blur-md max-w-full"
+              className="bg-purple-500/10 text-purple-300 border-purple-500/1.25rem-4 py-2 flex items-center gap-2.5 rounded-full text-xs font-bold tracking-wider backdrop-blur-md max-w-full"
             >
               <Globe className="w-3.5 h-3.5 shrink-0" />
-              <span className="truncate max-w-[260px]">{url}</span>
+              <span className="truncate max-w-65">{url}</span>
               <button
                 type="button"
                 onClick={() => removeUrl(i)}

@@ -80,7 +80,7 @@ export const VaultUrlCard = ({ evidence }: VaultUrlCardProps) => {
           
           <div className="px-3 py-1.5 bg-white/5 rounded-lg border border-white/10 flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-purple-400" />
-            <span className="text-[10px] text-slate-300 font-bold uppercase tracking-widest">AI Extracted</span>
+            <span className="text-[0.625rem] text-slate-300 font-bold uppercase tracking-widest">AI Extracted</span>
           </div>
         </div>
       </div>

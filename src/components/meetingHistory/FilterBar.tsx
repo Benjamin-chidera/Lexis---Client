@@ -26,9 +26,9 @@ export const FilterBar = ({ activeFilter, onFilterChange }: FilterBarProps) => {
           variant="outline"
           onClick={() => onFilterChange(f.key)}
           className={cn(
-            "h-9 px-4 rounded-xl text-xs font-bold tracking-wide border gap-1.5 transition-all",
+            "h-0.5625rem-4 rounded-xl text-xs font-bold tracking-wide border gap-1.5 transition-all",
             activeFilter === f.key
-              ? "bg-purple-600 border-purple-500 text-white hover:bg-purple-500 shadow-[0_0_12px_rgba(147,51,234,0.3)]"
+              ? "bg-purple-600 border-purple-500 text-white hover:bg-purple-500 shadow-[0_0_0.75rem_rgba(147,51,234,0.3)]"
               : "bg-[#0a0a0a] border-white/10 text-slate-400 hover:text-white hover:bg-white/5"
           )}
         >

@@ -53,7 +53,7 @@ const NotificationCard = ({ alert, onDismiss }: NotificationCardProps) => {
   return (
     <div
       className={`w-80 bg-[#0a0a0a] border rounded-2xl shadow-2xl overflow-hidden ${colors.border}`}
-      style={{ boxShadow: `0 20px 60px rgba(0,0,0,0.8), ${colors.glow}` }}
+      style={{ boxShadow: `0 1.25rem 3.75rem rgba(0,0,0,0.8), ${colors.glow}` }}
     >
       {/* Top accent bar */}
       <div className={`h-0.5 w-full ${colors.bar}`} />
@@ -70,7 +70,7 @@ const NotificationCard = ({ alert, onDismiss }: NotificationCardProps) => {
         <div className="flex-1 min-w-0">
           {/* Label row */}
           <div className="flex items-center gap-2 mb-1">
-            <span className={`text-[9px] font-black uppercase tracking-widest ${colors.label}`}>
+            <span className={`text-[0.5625rem] font-black uppercase tracking-widest ${colors.label}`}>
               {alert.severity} alert
             </span>
           </div>
@@ -81,7 +81,7 @@ const NotificationCard = ({ alert, onDismiss }: NotificationCardProps) => {
           </p>
 
           {/* Summary preview */}
-          <p className="text-[11px] text-slate-400 leading-relaxed line-clamp-2">
+          <p className="text-[0.6875rem] text-slate-400 leading-relaxed line-clamp-2">
             {alert.summary}
           </p>
         </div>
@@ -137,7 +137,7 @@ function getSeverityColors(severity: AlertItem["severity"]) {
       bar: "bg-red-500",
       iconBg: "bg-red-500/10 border-red-500/20",
       label: "text-red-400",
-      glow: "0 0 30px rgba(239,68,68,0.15)",
+      glow: "0 0 1.875rem rgba(239,68,68,0.15)",
       progress: "bg-red-500",
     };
   }
@@ -147,7 +147,7 @@ function getSeverityColors(severity: AlertItem["severity"]) {
       bar: "bg-purple-500",
       iconBg: "bg-purple-500/10 border-purple-500/20",
       label: "text-purple-400",
-      glow: "0 0 30px rgba(147,51,234,0.15)",
+      glow: "0 0 1.875rem rgba(147,51,234,0.15)",
       progress: "bg-purple-500",
     };
   }
@@ -156,7 +156,7 @@ function getSeverityColors(severity: AlertItem["severity"]) {
     bar: "bg-cyan-500",
     iconBg: "bg-cyan-500/10 border-cyan-500/20",
     label: "text-cyan-400",
-    glow: "0 0 30px rgba(6,182,212,0.10)",
+    glow: "0 0 1.875rem rgba(6,182,212,0.10)",
     progress: "bg-cyan-500",
   };
 }

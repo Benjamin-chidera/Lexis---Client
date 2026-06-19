@@ -43,28 +43,28 @@ export const LeftCall = ({
 
   // Dynamic orb styling based on state
   let orbGradient = "from-[#b5e0ff] to-[#a3a3ff]";
-  let orbShadow = "shadow-[0_0_30px_rgba(168,85,247,0.3)]";
+  let orbShadow = "shadow-[0_0_1.875rem_rgba(168,85,247,0.3)]";
 
   if (isAiSpeaking) {
     orbGradient = "from-[#c084fc] to-[#7c3aed]";
-    orbShadow = "shadow-[0_0_40px_rgba(168,85,247,0.5)]";
+    orbShadow = "shadow-[0_0_2.5rem_rgba(168,85,247,0.5)]";
   } else if (callStatus === "connecting") {
     orbGradient = "from-[#fbbf24] to-[#f59e0b]";
-    orbShadow = "shadow-[0_0_20px_rgba(245,158,11,0.3)]";
+    orbShadow = "shadow-[0_0_1.25rem_rgba(245,158,11,0.3)]";
   }
 
 
 
   return (
-    <div className="flex-1 rounded-[32px] overflow-hidden relative flex flex-col items-center py-12 px-6 shadow-2xl bg-[#0a0a0a] border border-white/5">
+    <div className="flex-1 rounded-[2rem] overflow-hidden relative flex flex-col items-center py-0.75rem-6 shadow-2xl bg-[#0a0a0a] border border-white/5">
       {/* Background glows - Removed heavy blurs for performance */}
 
       {/* Top Status Badge */}
       <div className="flex flex-col items-center gap-6 relative z-10 w-full">
-        <div className="bg-white/5 border border-white/10 px-6 py-2 rounded-full flex items-center gap-3 backdrop-blur-md">
+        <div className="bg-white/5 border border-white/0.625rem-6 py-2 rounded-full flex items-center gap-3 backdrop-blur-md">
           <div className={`w-2 h-2 rounded-full ${statusDotClass}`} />
           <span
-            className={`text-[11px] font-bold tracking-[0.15em] uppercase ${statusColor}`}
+            className={`text-[0.6875rem] font-bold tracking-[0.15em] uppercase ${statusColor}`}
           >
             {statusLabel}
           </span>
@@ -73,7 +73,7 @@ export const LeftCall = ({
         {/* Live transcript display — shows what the user is saying */}
         {transcript && callStatus === "active" && (
           <div className="bg-white/5 border border-white/8 rounded-2xl px-5 py-3 max-w-md text-center backdrop-blur-md">
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">
+            <p className="text-[0.625rem] font-bold text-slate-500 uppercase tracking-widest mb-1">
               You said
             </p>
             <p className="text-slate-200 text-sm font-medium leading-relaxed">
@@ -86,9 +86,9 @@ export const LeftCall = ({
       {/* Center Orb Area */}
       <div className="flex-1 flex flex-col items-center justify-center w-full relative z-10">
         {/* Concentric Rings */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full border border-white/3" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-white/5" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full border border-white/8" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[31.25rem] h-[31.25rem] rounded-full border border-white/3" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[25rem] h-[25rem] rounded-full border border-white/5" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[18.75rem] h-[18.75rem] rounded-full border border-white/8" />
 
         {/* Main glowing orb */}
         <div
@@ -115,7 +115,7 @@ export const LeftCall = ({
         {/* AI Response text — shows below the orb */}
         {aiResponse && callStatus === "active" && (
           <div className="mt-8 bg-white/3 border border-white/8 rounded-2xl px-6 py-4 max-w-lg text-center backdrop-blur-md">
-            <p className="text-[10px] font-bold text-purple-400 uppercase tracking-widest mb-2">
+            <p className="text-[0.625rem] font-bold text-purple-400 uppercase tracking-widest mb-2">
               Lexis AI
             </p>
             <p className="text-slate-300 text-sm leading-relaxed">
@@ -158,7 +158,7 @@ export const LeftCall = ({
         {/* End call button */}
         <Button
           onClick={onEnd}
-          className="h-14 px-10 rounded-full bg-[#b91c1c] hover:bg-red-600 text-white font-bold text-lg shadow-[0_0_30px_rgba(185,28,28,0.3)] border border-red-500/30 flex items-center gap-3 transition-all"
+          className="h-0.875rem-10 rounded-full bg-[#b91c1c] hover:bg-red-600 text-white font-bold text-lg shadow-[0_0_1.875rem_rgba(185,28,28,0.3)] border border-red-500/30 flex items-center gap-3 transition-all"
         >
           <PhoneOff className="w-5 h-5" />
           End Session

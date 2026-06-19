@@ -69,7 +69,7 @@ const BriefingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-slate-200 flex flex-col items-center pt-5 pb-28 px-4 font-sans overflow-x-hidden relative">
+    <div className="min-h-screen bg-black text-slate-200 flex flex-col items-center pt-5 pb-1.75rem-4 font-sans overflow-x-hidden relative">
       <div className="w-full max-w-3xl mb-4 relative z-10">
         <h1 className="text-2xl font-bold text-white tracking-tight mb-1">
           Upload Case Evidence
@@ -89,7 +89,7 @@ const BriefingPage = () => {
           <Button
             onClick={handleStart}
             disabled={isLoading || !hasContent}
-            className="h-14 px-10 bg-white hover:bg-slate-200 text-black font-black rounded-2xl shadow-[0_0_50px_rgba(255,255,255,0.15)] border border-white/40 flex items-center gap-4 text-xl uppercase tracking-[0.15em] transition-all hover:scale-105 active:scale-95 group relative overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed"
+            className="h-15 w-60 bg-white hover:bg-slate-200 text-black font-black rounded-2xl shadow-[0_0_3.125rem_rgba(255,255,255,0.15)] border border-white/40 flex items-center gap-4 text-xl uppercase tracking-[0.15em] transition-all hover:scale-105 active:scale-95 group relative overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <span className="relative z-10">
               {isLoading ? "Starting..." : "Start Case"}
