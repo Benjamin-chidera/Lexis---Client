@@ -13,10 +13,8 @@ export const VaultUrlCard = ({ evidence }: VaultUrlCardProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    // If the backend has already generated and provided the summary, use it instantly.
+    // If the backend has already generated and provided the summary, do nothing.
     if (evidence.summary) {
-      setSummary(evidence.summary);
-      setIsLoading(false);
       return;
     }
 
@@ -96,17 +94,24 @@ export const VaultUrlCard = ({ evidence }: VaultUrlCardProps) => {
           <div className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-8 shadow-2xl">
             <ReactMarkdown
               components={{
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 h1: ({node, ...props}) => <h1 className="text-2xl font-bold text-white mb-6 border-b border-white/10 pb-4" {...props} />,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 h2: ({node, ...props}) => <h2 className="text-lg font-semibold text-purple-300 mt-8 mb-4 flex items-center gap-2 before:content-[''] before:block before:w-1.5 before:h-1.5 before:bg-purple-500 before:rounded-full" {...props} />,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 h3: ({node, ...props}) => <h3 className="text-md font-medium text-slate-200 mt-6 mb-3" {...props} />,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 p: ({node, ...props}) => <p className="text-slate-300 leading-relaxed mb-4 text-sm" {...props} />,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 ul: ({node, ...props}) => <ul className="space-y-2 mb-6" {...props} />,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 li: ({node, ...props}) => (
                   <li className="flex gap-3 text-slate-300 text-sm">
                     <span className="text-purple-500 mt-0.5 shrink-0">•</span>
                     <span {...props} />
                   </li>
                 ),
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 strong: ({node, ...props}) => <strong className="font-bold text-white" {...props} />,
               }}
             >

@@ -27,8 +27,8 @@ export const BottomNav = () => {
               <span className="text-[0.5rem] uppercase tracking-[0.15em] font-black">
                 Upload
               </span>
-              {path === "/" && <div className="w-4 h-0.5 bg-purple-500 rounded-full mt-1" />}
-            </Button>
+               {path === "/" && <div className="w-4 h-0.5 bg-purple-500 rounded-full mt-1" />}
+            </Button> 
           </Link>
           
           <Link to="/cases">

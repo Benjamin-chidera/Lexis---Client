@@ -2,8 +2,8 @@ import { describe, test, expect, vi, beforeEach } from "vitest";
 import { useAuthStore } from "../authStore";
 
 // Helper to mock a successful JSON response from fetch
-const mockFetchResponse = (data: any, ok = true) => {
-  (globalThis.fetch as any).mockResolvedValueOnce({
+const mockFetchResponse = (data: unknown, ok = true) => {
+  (globalThis.fetch as unknown as { mockResolvedValueOnce: (val: unknown) => void }).mockResolvedValueOnce({
     ok,
     json: async () => data,
     status: ok ? 200 : 400,
@@ -12,7 +12,7 @@ const mockFetchResponse = (data: any, ok = true) => {
 
 // Helper to mock a failed response with a detail message
 const mockFetchError = (detail: string, status = 400) => {
-  (globalThis.fetch as any).mockResolvedValueOnce({
+  (globalThis.fetch as unknown as { mockResolvedValueOnce: (val: unknown) => void }).mockResolvedValueOnce({
     ok: false,
     json: async () => ({ detail }),
     status,

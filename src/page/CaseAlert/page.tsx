@@ -163,10 +163,10 @@ export const CaseAlertPage = () => {
               {(caseGroups.length > 0
                 ? caseGroups
                 : [
-                    { caseId: "loading1", alerts: [1] },
-                    { caseId: "loading2", alerts: [1, 2] },
+                    { caseId: "loading1", alerts: [{ id: 1 } as unknown as AlertItem] },
+                    { caseId: "loading2", alerts: [{ id: 1 } as unknown as AlertItem, { id: 2 } as unknown as AlertItem] },
                   ]
-              ).map((group: any) => (
+              ).map((group) => (
                 <div key={group.caseId} className="flex flex-col gap-4">
                   {/* Skeleton case header — matches CaseGroupSection button layout */}
                   <div className="flex items-center gap-3">
@@ -176,7 +176,7 @@ export const CaseAlertPage = () => {
                     <Skeleton className="h-3 w-16 rounded-md bg-white/5" />
                   </div>
                   {/* Skeleton alert cards — matches AlertCard layout exactly */}
-                  {group.alerts.map((alert: any, idx: number) => (
+                  {group.alerts.map((alert, idx) => (
                     <div
                       key={alert.id || idx}
                       className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-6"

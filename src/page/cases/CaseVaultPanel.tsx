@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Briefcase, FileText, Globe, Image as ImageIcon, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useCasesStore } from "@/store/casesStore";
@@ -16,31 +16,26 @@ export const CaseVaultPanel = ({ caseId, vault }: CaseVaultPanelProps) => {
 
   // Which category is active
   const [activeCategory, setActiveCategory] = useState<"pdf" | "image" | "url">("pdf");
-  // Which vault item the user is currently viewing
+  // Which vault item the user has manually selected
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  // Auto-select the first item in the category whenever the category or vault changes
-  useEffect(() => {
-    const itemsInCategory = vault.filter((v) => v.type === activeCategory);
-    if (itemsInCategory.length === 0) {
-      setSelectedId(null);
-      return;
-    }
-
+  // Derive the actual selected ID based on category and availability
+  const itemsInCategory = vault.filter((v) => v.type === activeCategory);
+  let activeSelectedId = selectedId;
+  if (itemsInCategory.length > 0) {
     const selectedStillExists = itemsInCategory.some((item) => item.id === selectedId);
-
     if (!selectedStillExists) {
-      // Default to first item if nothing valid is selected in this category
-      setSelectedId(itemsInCategory[0].id);
+      activeSelectedId = itemsInCategory[0].id;
     }
-  }, [vault, activeCategory, selectedId]);
+  } else {
+    activeSelectedId = null;
+  }
 
   // Find the full evidence object for whatever is selected
-  const selectedEvidence = vault.find((item) => item.id === selectedId) ?? null;
+  const selectedEvidence = vault.find((item) => item.id === activeSelectedId) ?? null;
 
   const handleRemove = (evidenceId: string) => {
     removeFromVault(caseId, evidenceId);
-    // The useEffect above will handle re-selecting after vault updates
   };
 
   // --- Empty state ---
@@ -119,7 +114,7 @@ export const CaseVaultPanel = ({ caseId, vault }: CaseVaultPanelProps) => {
             <VaultTab
               key={item.id}
               item={item}
-              isSelected={item.id === selectedId}
+              isSelected={item.id === activeSelectedId}
               onClick={() => setSelectedId(item.id)}
               onRemove={() => handleRemove(item.id)}
             />
@@ -135,11 +130,11 @@ export const CaseVaultPanel = ({ caseId, vault }: CaseVaultPanelProps) => {
         )}
 
         {selectedEvidence !== null && selectedEvidence.type === "pdf" && (
-          <VaultPdfViewer evidence={selectedEvidence} />
+          <VaultPdfViewer key={selectedEvidence.id} evidence={selectedEvidence} />
         )}
 
         {selectedEvidence !== null && selectedEvidence.type === "url" && (
-          <VaultUrlCard evidence={selectedEvidence} />
+          <VaultUrlCard key={selectedEvidence.id} evidence={selectedEvidence} />
         )}
 
         {selectedEvidence !== null && selectedEvidence.type === "image" && (

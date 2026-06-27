@@ -3,35 +3,70 @@ import { Mic, MicOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useBriefingStore } from "@/store/briefingStore";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnySpeechRecognition = any;
+interface SpeechRecognitionResult {
+  readonly isFinal: boolean;
+  [index: number]: {
+    readonly transcript: string;
+  };
+}
+
+interface SpeechRecognitionResults {
+  readonly length: number;
+  [index: number]: SpeechRecognitionResult;
+}
+
+interface SpeechRecognitionEvent {
+  readonly resultIndex: number;
+  readonly results: SpeechRecognitionResults;
+}
+
+interface SpeechRecognitionErrorEvent {
+  readonly error: string;
+}
+
+interface ISpeechRecognition {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((this: ISpeechRecognition, ev: SpeechRecognitionEvent) => void) | null;
+  onend: ((this: ISpeechRecognition, ev: Event) => void) | null;
+  onerror: ((this: ISpeechRecognition, ev: SpeechRecognitionErrorEvent) => void) | null;
+  start(): void;
+  stop(): void;
+}
 
 export const TextMicInput = () => {
   const { context, setContext } = useBriefingStore();
   const [listening, setListening] = useState(false);
-  const [supported, setSupported] = useState(true);
+  const [supported] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const windowWithSpeech = window as unknown as {
+      SpeechRecognition?: new () => ISpeechRecognition;
+      webkitSpeechRecognition?: new () => ISpeechRecognition;
+    };
+    return !!(windowWithSpeech.SpeechRecognition ?? windowWithSpeech.webkitSpeechRecognition);
+  });
   const [interimResult, setInterimResult] = useState("");
   
-  const recognitionRef = useRef<AnySpeechRecognition>(null);
+  const recognitionRef = useRef<ISpeechRecognition | null>(null);
   const isIntendedListeningRef = useRef(false);
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const SR: any =
-      (window as any).SpeechRecognition ??
-      (window as any).webkitSpeechRecognition;
-      
-    if (!SR) {
-      setSupported(false);
-      return;
-    }
+    if (!supported) return;
+
+    const windowWithSpeech = window as unknown as {
+      SpeechRecognition?: new () => ISpeechRecognition;
+      webkitSpeechRecognition?: new () => ISpeechRecognition;
+    };
+    const SR = windowWithSpeech.SpeechRecognition ?? windowWithSpeech.webkitSpeechRecognition;
+    if (!SR) return;
     
     const recognition = new SR();
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = "en-US";
 
-    recognition.onresult = (e: any) => {
+    recognition.onresult = (e: SpeechRecognitionEvent) => {
       let finalChunk = "";
       let interimChunk = "";
 
@@ -72,7 +107,7 @@ export const TextMicInput = () => {
       }
     };
 
-    recognition.onerror = (e: any) => {
+    recognition.onerror = (e: SpeechRecognitionErrorEvent) => {
       console.error("Speech recognition error:", e.error);
       if (e.error === 'not-allowed' || e.error === 'audio-capture') {
         isIntendedListeningRef.current = false;
@@ -86,7 +121,7 @@ export const TextMicInput = () => {
     return () => {
       recognition.stop();
     };
-  }, [setContext]);
+  }, [supported, setContext]);
 
   const toggleMic = () => {
     const recognition = recognitionRef.current;

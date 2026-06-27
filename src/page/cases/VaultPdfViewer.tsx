@@ -15,26 +15,22 @@ interface VaultPdfViewerProps {
 }
 
 export const VaultPdfViewer = ({ evidence }: VaultPdfViewerProps) => {
-  const [objectUrl, setObjectUrl] = useState<string | null>(null);
+  const [objectUrl] = useState<string | null>(() => {
+    if (evidence.file) {
+      return URL.createObjectURL(evidence.file);
+    }
+    return evidence.url ?? null;
+  });
   const [numPages, setNumPages] = useState<number>();
   const [pageNumber, setPageNumber] = useState<number>(1);
 
   useEffect(() => {
-    if (evidence.file) {
-      // It's a local file upload
-      const url = URL.createObjectURL(evidence.file);
-      setObjectUrl(url);
-      return () => {
-        URL.revokeObjectURL(url);
-      };
-    } else if (evidence.url) {
-      // It's a URL fetched from the backend
-      setObjectUrl(evidence.url);
-    } else {
-      // Fallback
-      setObjectUrl(null);
-    }
-  }, [evidence]);
+    return () => {
+      if (evidence.file && objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
+    };
+  }, [evidence.file, objectUrl]);
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
     setNumPages(numPages);

@@ -34,7 +34,9 @@ export function useVoiceCall(caseId: string | null) {
     // Stop any currently playing audio
     try {
       audioSourceRef.current?.stop();
-    } catch {}
+    } catch {
+      // Ignore if already stopped or not playing
+    }
     audioSourceRef.current = null;
 
     try {
@@ -84,7 +86,9 @@ export function useVoiceCall(caseId: string | null) {
   const stopAiAudio = useCallback(() => {
     try {
       audioSourceRef.current?.stop();
-    } catch {}
+    } catch {
+      // Ignore if already stopped or not playing
+    }
     audioSourceRef.current = null;
     setAiSpeaking(false);
   }, []);
