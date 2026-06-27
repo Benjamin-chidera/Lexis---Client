@@ -39,9 +39,9 @@ export const CaseModal = () => {
 
   return (
     <AlertDialog open={!!activeCase} onOpenChange={(open) => { if (!open) closeCase(); }}>
-      <AlertDialogContent className="w-full max-w-6xl! h-[85vh] bg-[#0a0a0a] border-white/10 rounded-[1.75rem] shadow-[0_2.5rem_7.5rem_rgba(0,0,0,0.9)] flex flex-col overflow-hidden p-0 gap-0">
+      <AlertDialogContent className="w-full max-w-6xl! h-[85vh] bg-[#0a0a0a] border-white/10 rounded-[1.75rem] shadow-[0_2.5rem_7.5rem_rgba(0,0,0,0.9)] flex flex-col overflow-hidden px-3 gap-0">
         {/* ── Modal header ── */}
-        <div className="relative z-10 flex items-center gap-0.25rem-6 py-4 border-b border-white/6 bg-[#0a0a0a]/80 backdrop-blur-xl shrink-0">
+        <div className="relative z-10 flex items-center gap-6 py-4 border-b border-white/6 bg-[#0a0a0a]/80 backdrop-blur-xl shrink-0">
           {/* Case icon + info */}
           <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
             <Scale className="w-4 h-4 text-purple-400" />
@@ -180,12 +180,12 @@ export const CaseModal = () => {
                 <Button 
                   variant="ghost" 
                   onClick={() => { setReasonModalOpen(false); setReason(""); }}
-                  className="text-slate-300 hover:text-white hover:bg-white/5"
+                  className="text-slate-300 h-10 w-30 rounded-xl cursor-pointer bg-transparent border border-white/20 hover:text-white hover:bg-white/5"
                 >
                   Cancel
                 </Button>
                 <Button
-                  className="bg-white hover:bg-zinc-200 text-black border border-white/20"
+                  className="bg-white h-10 w-30 rounded-xl cursor-pointer hover:bg-zinc-200 text-black border border-white/20"
                   onClick={() => {
                     updateCaseStatus(activeCase.id, statusToChange, reason);
                     if (statusToChange === "success" && activeCase.canResolve) {

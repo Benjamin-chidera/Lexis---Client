@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
 
 import BriefingPage from "./page/briefing/page";
 import ChatRoomPage from "./page/chat-room/page";
@@ -23,6 +24,26 @@ import type { AlertItem } from "./store/alertStore";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
 
+const LogoutButton = () => {
+  const logout = useAuthStore((state) => state.logout);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login", { replace: true });
+  };
+
+  return (
+    <button
+      onClick={handleLogout}
+      className="fixed top-5 right-18 z-[100] w-10 h-10 rounded-xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center text-slate-400 hover:text-red-400 hover:border-red-500/40 hover:bg-red-500/10 transition-all duration-200 shadow-xl cursor-pointer"
+      title="Log out"
+    >
+      <LogOut className="w-4 h-4" />
+    </button>
+  );
+};
+
 // Renders chrome (nav bar, bell) only when not on the login page
 const AppChrome = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
@@ -30,7 +51,12 @@ const AppChrome = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="container mx-auto">
-      {!isLoginPage && <BellDropdown />}
+      {!isLoginPage && (
+        <>
+          <LogoutButton />
+          <BellDropdown />
+        </>
+      )}
       {!isLoginPage && <InAppNotification />}
       {children}
       {!isLoginPage && <BottomNav />}

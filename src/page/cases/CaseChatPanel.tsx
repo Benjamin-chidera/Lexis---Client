@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 import ReactMarkdown from "react-markdown";
 import { Brain, Terminal, FileText, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useCasesStore } from "@/store/casesStore";
+import { useShallow } from "zustand/react/shallow";
 import type { ChatMessage } from "@/store/casesStore";
 
 interface CaseChatPanelProps {
@@ -87,8 +88,12 @@ const UserMessage = ({ message }: { message: ChatMessage }) => {
   );
 };
 
-const AiMessage = ({ message, caseId }: { message: ChatMessage; caseId: string }) => {
-  const vault = useCasesStore((state) => state.cases.find((c) => c.id === caseId)?.vault ?? []);
+const AiMessage = memo(({ message, caseId }: { message: ChatMessage; caseId: string }) => {
+  // useShallow does a shallow-equal check so this only re-renders when vault items actually change,
+  // not on every store write (which would create a new [] reference via the ?? fallback).
+  const vault = useCasesStore(
+    useShallow((state) => state.cases.find((c) => c.id === caseId)?.vault ?? [])
+  );
 
   const handleCitationClick = () => {
     if (!message.citation) return;
@@ -202,7 +207,7 @@ const AiMessage = ({ message, caseId }: { message: ChatMessage; caseId: string }
       </span>
     </div>
   );
-};
+});
 
 // Typing indicator shown while the AI is generating a response.
 // Displays the active pipeline stage label when available.

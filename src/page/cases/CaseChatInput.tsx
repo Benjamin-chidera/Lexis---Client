@@ -23,8 +23,16 @@ interface CaseChatInputProps {
 const IMAGE_ACCEPT = "image/png,image/jpeg,image/jpg,image/webp,image/gif";
 
 export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
-  const { addMessage, addPdfsToVault, addImagesToVault, addUrlToVault, addContextToVault, startCall } =
-    useCasesStore();
+  // Use individual selectors instead of destructuring the whole store.
+  // Zustand action functions are referentially stable, so these will never
+  // trigger a re-render — but they prevent the component from subscribing
+  // to unrelated state changes (e.g. activeCaseId, isAiTyping).
+  const addMessage = useCasesStore((state) => state.addMessage);
+  const addPdfsToVault = useCasesStore((state) => state.addPdfsToVault);
+  const addImagesToVault = useCasesStore((state) => state.addImagesToVault);
+  const addUrlToVault = useCasesStore((state) => state.addUrlToVault);
+  const addContextToVault = useCasesStore((state) => state.addContextToVault);
+  const startCall = useCasesStore((state) => state.startCall);
 
   // Text input for the chat message
   const [chatText, setChatText] = useState("");

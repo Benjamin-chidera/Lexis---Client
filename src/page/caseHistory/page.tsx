@@ -113,7 +113,7 @@ export const CaseHistoryPage = () => {
             variant="outline"
             onClick={() => setActiveTab(tab.key)}
             className={cn(
-              "h-0.5625rem-4 rounded-xl text-xs font-bold tracking-wide border gap-1.5 transition-all",
+              "h-10 w-40 rounded-xl text-xs font-bold tracking-wide border gap-1.5 transition-all",
               activeTab === tab.key
                 ? tab.activeClass
                 : "bg-[#0a0a0a] border-white/10 text-slate-400 hover:text-white hover:bg-white/5"

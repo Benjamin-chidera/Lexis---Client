@@ -144,7 +144,7 @@ export const CaseCard = ({
                 {/* Arrow */}
                 <div
                   className={cn(
-                    "absolute top-full left-5 w-2.5 h-2.5 bg-[#13161f] border-r border-b rotate-45 mt-[-0.3125rem]",
+                    "absolute top-full left-5 w-2.5 h-2.5 bg-[#13161f] border-r border-b rotate-45 -mt-1.25",
                     s.tooltipBorder
                   )}
                 />

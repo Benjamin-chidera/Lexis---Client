@@ -21,7 +21,10 @@ const FILTER_TABS: { key: FilterTab; label: string }[] = [
 ];
 
 const CasesPage = () => {
-  const { cases, openCase, fetchCases, isLoading } = useCasesStore();
+  const cases = useCasesStore((state) => state.cases);
+  const openCase = useCasesStore((state) => state.openCase);
+  const fetchCases = useCasesStore((state) => state.fetchCases);
+  const isLoading = useCasesStore((state) => state.isLoading);
   const [activeFilter, setActiveFilter] = useState<FilterTab>("all");
   const [searchQuery, setSearchQuery] = useState("");
 

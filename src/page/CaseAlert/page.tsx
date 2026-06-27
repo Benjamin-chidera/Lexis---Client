@@ -83,7 +83,7 @@ export const CaseAlertPage = () => {
         <Button
           variant="outline"
           onClick={archiveAll}
-          className="bg-[#0a0a0a] border-white/10 text-slate-300 hover:text-white hover:bg-white/5 rounded-xl h-0.625rem-5 text-xs font-semibold tracking-wide"
+          className="bg-[#0a0a0a] border-white/10 text-slate-300 hover:text-white hover:bg-white/5 rounded-xl h-10 w-40 text-xs font-semibold tracking-wide"
         >
           <Archive className="w-4 h-4 mr-2" />
           Archive All
