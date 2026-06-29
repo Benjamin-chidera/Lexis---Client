@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Zap, PlayCircle, X, Info, ChevronDown, ChevronUp } from "lucide-react";
+import { Zap, PlayCircle, X, Info, ChevronDown, ChevronUp, Copy, Check } from "lucide-react";
 
 // REPLACE THIS URL with your own Loom or YouTube embed link (e.g. https://www.youtube.com/embed/...)
 const DEMO_VIDEO_URL = "https://www.youtube.com/embed/dQw4w9WgXcQ";
@@ -21,6 +21,19 @@ import socket from "@/lib/socket";
 import { uploadPdfs, uploadImages } from "@/lib/api";
 import { toast } from "sonner";
 
+const TEST_KIT_PROMPT = `You are a Legal Scenario Engineer. I am testing an autonomous, multi-modal legal research AI named "Lexis." I need you to generate a "Mock Legal Case Test Kit" to test its ability to synthesize internal documents, visual evidence, and web search results. Please generate a high-stakes corporate or commercial liability scenario (e.g., Corporate Negligence, IP Theft, Breach of Contract, or Employment Dispute). Provide the output strictly in the following format:
+
+1. [PDF FILE CONTENT] Generate the exact text for an internal corporate document (e.g., an Incident Report, Internal Audit, or Confidential Memo). Include case IDs, timestamps, and a specific "hidden" detail or gap that proves liability (e.g., a missing inspection log, a suspicious data transfer, or a signed waiver with a fatal flaw).
+
+2. [IMAGE EVIDENCE GUIDE] Tell me exactly what kind of image I need to search for online to download as visual evidence. Provide 2-3 specific search queries. The image must contain visual proof that contradicts a standard legal defense (e.g., "search for 'wet floor sign missing' to prove lack of hazard notice").
+
+3. [VERIFIED URLs] Provide 3 real, active URLs that are highly relevant to this specific scenario. These should include:
+- 1 official government legislation or statute link.
+- 1 regulatory body guideline or enforcement page.
+- 1 real case precedent (preferably from BAILII or a verified legal database).
+
+4. [CASE CONTEXT INPUT] Write the exact 3-4 sentence paragraph I will paste into the Lexis AI "Case Context" input box. It should outline the dispute, mention the attached evidence, and ask the AI to find a specific legal leverage point based on the opponent's likely defense. Keep the tone highly professional, adversarial, and realistic.`;
+
 const BriefingPage = () => {
   const { pdfs, urls, images, context, clearAll } = useBriefingStore();
   const navigate = useNavigate();
@@ -30,6 +43,14 @@ const BriefingPage = () => {
     return !localStorage.getItem("has_seen_briefing_walkthrough");
   });
   const [isTestKitExpanded, setIsTestKitExpanded] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(TEST_KIT_PROMPT);
+    setCopied(true);
+    toast.success("Prompt copied to clipboard!");
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const closeWalkthrough = () => {
     localStorage.setItem("has_seen_briefing_walkthrough", "true");
@@ -209,37 +230,28 @@ const BriefingPage = () => {
               </button>
               
               {isTestKitExpanded && (
-                <div className="animate-in slide-in-from-top-2 fade-in duration-200 mt-4">
-                  <p className="text-[11px] text-slate-400 bg-black/50 border border-white/5 p-3 rounded-lg select-all leading-relaxed">
-                    You are a Legal Scenario Engineer. I am testing an autonomous,
-                    multi-modal legal research AI named "Lexis." I need you to
-                    generate a "Mock Legal Case Test Kit" to test its ability to
-                    synthesize internal documents, visual evidence, and web search
-                    results. Please generate a high-stakes corporate or commercial
-                    liability scenario (e.g., Corporate Negligence, IP Theft, Breach
-                    of Contract, or Employment Dispute). Provide the output strictly
-                    in the following format: 1. [PDF FILE CONTENT] Generate the
-                    exact text for an internal corporate document (e.g., an Incident
-                    Report, Internal Audit, or Confidential Memo). Include case IDs,
-                    timestamps, and a specific "hidden" detail or gap that proves
-                    liability (e.g., a missing inspection log, a suspicious data
-                    transfer, or a signed waiver with a fatal flaw). 2. [IMAGE
-                    EVIDENCE GUIDE] Tell me exactly what kind of image I need to
-                    search for online to download as visual evidence. Provide 2-3
-                    specific search queries. The image must contain visual proof
-                    that contradicts a standard legal defense (e.g., "search for
-                    'wet floor sign missing' to prove lack of hazard notice"). 3.
-                    [VERIFIED URLs] Provide 3 real, active URLs that are highly
-                    relevant to this specific scenario. These should include: - 1
-                    official government legislation or statute link. - 1 regulatory
-                    body guideline or enforcement page. - 1 real case precedent
-                    (preferably from BAILII or a verified legal database). 4. [CASE
-                    CONTEXT INPUT] Write the exact 3-4 sentence paragraph I will
-                    paste into the Lexis AI "Case Context" input box. It should
-                    outline the dispute, mention the attached evidence, and ask the
-                    AI to find a specific legal leverage point based on the
-                    opponent's likely defense. Keep the tone highly professional,
-                    adversarial, and realistic.
+                <div className="animate-in slide-in-from-top-2 fade-in duration-200 mt-4 relative">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-[11px] text-slate-500 font-medium">Use this prompt in ChatGPT/Claude:</span>
+                    <button
+                      onClick={handleCopy}
+                      className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] text-slate-400 bg-white/5 border border-white/10 rounded-md hover:bg-white/10 hover:text-white transition-all cursor-pointer outline-none"
+                    >
+                      {copied ? (
+                        <>
+                          <Check className="w-3 h-3 text-green-400" />
+                          <span>Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3 h-3" />
+                          <span>Copy Prompt</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-slate-400 bg-black/50 border border-white/5 p-3 rounded-lg select-all leading-relaxed whitespace-pre-wrap">
+                    {TEST_KIT_PROMPT}
                   </p>
                 </div>
               )}
