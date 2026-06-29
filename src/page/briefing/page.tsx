@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Zap, PlayCircle, X, Info, ChevronDown, ChevronUp, Copy, Check } from "lucide-react";
 
 // REPLACE THIS URL with your own Loom or YouTube embed link (e.g. https://www.youtube.com/embed/...)
-const DEMO_VIDEO_URL = "https://www.youtube.com/embed/dQw4w9WgXcQ";
+const DEMO_VIDEO_URL = "https://player.vimeo.com/video/1205495312?badge=0&autopause=0&player_id=0&app_id=58479";
 
 import { Button } from "@/components/ui/button";
 import {
