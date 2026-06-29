@@ -1,9 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Lock, Mail, ShieldCheck, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { Lock, Mail, ShieldCheck, ArrowRight, Eye, EyeOff, Copy, Check, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/authStore";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogDescription,
+} from "@/components/ui/alert-dialog";
 
 type Step = "email" | "login" | "set-password";
 
@@ -22,6 +28,48 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedPassword, setCopiedPassword] = useState(false);
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText("testuser@gmail.com");
+    setCopiedEmail(true);
+    toast.success("Email copied!");
+    setTimeout(() => setCopiedEmail(false), 2000);
+  };
+
+  const handleCopyPassword = () => {
+    navigator.clipboard.writeText("testuser");
+    setCopiedPassword(true);
+    toast.success("Password copied!");
+    setTimeout(() => setCopiedPassword(false), 2000);
+  };
+
+  const handleAutoFill = async () => {
+    setIsLoading(true);
+    setIsModalOpen(false);
+    try {
+      setEmail("testuser@gmail.com");
+      setPasswordValue("testuser");
+      await login("testuser@gmail.com", "testuser");
+      navigate("/", { replace: true });
+    } catch (err) {
+      toast.error("Auto-login failed. Fills applied, please click Continue.");
+      setEmail("testuser@gmail.com");
+      setPasswordValue("testuser");
+      try {
+        const result = await checkEmail("testuser@gmail.com");
+        setUserName(result.name);
+        setStep(result.has_password ? "login" : "set-password");
+      } catch (checkErr) {
+        setStep("email");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleContinue = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -157,6 +205,16 @@ const LoginPage = () => {
                   )}
                 </Button>
               </form>
+
+              <div className="mt-6 pt-5 border-t border-white/5 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(true)}
+                  className="text-xs text-purple-400 hover:text-purple-300 font-semibold uppercase tracking-wider flex items-center gap-1.5 transition-all outline-none"
+                >
+                  <Sparkles className="w-3.5 h-3.5" /> Show Demo Credentials
+                </button>
+              </div>
             </>
           )}
 
@@ -311,6 +369,77 @@ const LoginPage = () => {
           Access is restricted to registered company personnel only.
         </p>
       </div>
+
+      {/* Demo Credentials Modal */}
+      <AlertDialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <AlertDialogContent className="w-full max-w-sm bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(147,51,234,0.15)] flex flex-col p-6 gap-0">
+          <div className="flex items-center gap-2.5 mb-4">
+            <div className="w-8 h-8 rounded-lg bg-purple-600/20 border border-purple-500/30 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-purple-400" />
+            </div>
+            <div>
+              <AlertDialogTitle className="font-bold text-sm text-white">
+                Demo Credentials
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-[10px] text-purple-400 uppercase tracking-widest font-semibold">
+                Testing environment
+              </AlertDialogDescription>
+            </div>
+          </div>
+
+          <p className="text-xs text-slate-400 leading-relaxed mb-5">
+            Use these pre-configured developer credentials to log in and explore the full features of the Lexis AI platform.
+          </p>
+
+          <div className="space-y-3 mb-6">
+            {/* Email Field */}
+            <div className="bg-black/40 border border-white/5 rounded-xl p-3 flex items-center justify-between">
+              <div>
+                <p className="text-[9px] text-slate-500 uppercase tracking-wider font-bold mb-0.5">Corporate Email</p>
+                <p className="text-xs text-slate-300 font-mono select-all">testuser@gmail.com</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleCopyEmail}
+                className="p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-slate-400 hover:text-white transition-all outline-none cursor-pointer"
+              >
+                {copiedEmail ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+              </button>
+            </div>
+
+            {/* Password Field */}
+            <div className="bg-black/40 border border-white/5 rounded-xl p-3 flex items-center justify-between">
+              <div>
+                <p className="text-[9px] text-slate-500 uppercase tracking-wider font-bold mb-0.5">Password</p>
+                <p className="text-xs text-slate-300 font-mono select-all">testuser</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleCopyPassword}
+                className="p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-slate-400 hover:text-white transition-all outline-none cursor-pointer"
+              >
+                {copiedPassword ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Button
+              onClick={handleAutoFill}
+              className="w-full h-11 bg-white hover:bg-zinc-200 text-black border border-purple-400/30 font-bold rounded-xl shadow-[0_0_1.5rem_rgba(147,51,234,0.25)] transition-all flex items-center justify-center gap-2 text-xs"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-purple-600 animate-pulse" />
+              Auto-fill & Log In
+            </Button>
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="w-full h-11 text-xs text-slate-500 hover:text-slate-300 font-medium transition-all outline-none"
+            >
+              Enter Manually
+            </button>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
