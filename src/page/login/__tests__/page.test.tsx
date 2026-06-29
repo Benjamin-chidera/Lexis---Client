@@ -46,6 +46,7 @@ describe("LoginPage Component", () => {
         <LoginPage />
       </BrowserRouter>
     );
+    fireEvent.click(screen.getByText("Enter Manually"));
 
     // Verify initial sign in layout is shown
     expect(screen.getByText("Sign in")).toBeInTheDocument();
@@ -62,6 +63,7 @@ describe("LoginPage Component", () => {
         <LoginPage />
       </BrowserRouter>
     );
+    fireEvent.click(screen.getByText("Enter Manually"));
 
     const emailInput = screen.getByPlaceholderText("you@company.com");
     fireEvent.change(emailInput, { target: { value: "jane@company.com" } });
@@ -90,6 +92,7 @@ describe("LoginPage Component", () => {
         <LoginPage />
       </BrowserRouter>
     );
+    fireEvent.click(screen.getByText("Enter Manually"));
 
     const emailInput = screen.getByPlaceholderText("you@company.com");
     fireEvent.change(emailInput, { target: { value: "bob@company.com" } });
@@ -116,6 +119,7 @@ describe("LoginPage Component", () => {
         <LoginPage />
       </BrowserRouter>
     );
+    fireEvent.click(screen.getByText("Enter Manually"));
 
     const emailInput = screen.getByPlaceholderText("you@company.com");
     fireEvent.change(emailInput, { target: { value: "jane@company.com" } });
