@@ -55,7 +55,7 @@ const LoginPage = () => {
       setPasswordValue("testuser");
       await login("testuser@gmail.com", "testuser");
       navigate("/", { replace: true });
-    } catch (err) {
+    } catch {
       toast.error("Auto-login failed. Fills applied, please click Continue.");
       setEmail("testuser@gmail.com");
       setPasswordValue("testuser");
@@ -63,7 +63,7 @@ const LoginPage = () => {
         const result = await checkEmail("testuser@gmail.com");
         setUserName(result.name);
         setStep(result.has_password ? "login" : "set-password");
-      } catch (checkErr) {
+      } catch {
         setStep("email");
       }
     } finally {
