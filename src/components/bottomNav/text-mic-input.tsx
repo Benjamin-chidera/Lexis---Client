@@ -36,7 +36,8 @@ interface ISpeechRecognition {
 }
 
 export const TextMicInput = () => {
-  const { context, setContext } = useBriefingStore();
+  const context = useBriefingStore((state) => state.context);
+  const setContext = useBriefingStore((state) => state.setContext);
   const [listening, setListening] = useState(false);
   const [supported] = useState(() => {
     if (typeof window === "undefined") return false;
@@ -78,29 +79,34 @@ export const TextMicInput = () => {
         }
       }
 
-      // Update the interim result immediately so you see words as you speak
       setInterimResult(interimChunk);
 
       if (finalChunk) {
         // Read latest context from Zustand directly to avoid stale closures
-        const currentContext = useBriefingStore.getState().context;
+        const store = useBriefingStore.getState();
+        const currentContext = store.context;
         const newContext = currentContext 
           ? currentContext + " " + finalChunk.trim() 
           : finalChunk.trim();
-        setContext(newContext);
+        store.setContext(newContext);
       }
     };
 
     recognition.onend = () => {
       if (isIntendedListeningRef.current) {
-        try {
-          recognition.start();
-        } catch (error) {
-          console.error("Error restarting speech recognition:", error);
-          setListening(false);
-          setInterimResult("");
-          isIntendedListeningRef.current = false;
-        }
+        // Delay restarting to prevent rapid loop errors or browser blockages
+        setTimeout(() => {
+          if (isIntendedListeningRef.current) {
+            try {
+              recognition.start();
+            } catch (error) {
+              console.error("Error restarting speech recognition:", error);
+              setListening(false);
+              setInterimResult("");
+              isIntendedListeningRef.current = false;
+            }
+          }
+        }, 150);
       } else {
         setListening(false);
         setInterimResult("");
@@ -121,7 +127,7 @@ export const TextMicInput = () => {
     return () => {
       recognition.stop();
     };
-  }, [supported, setContext]);
+  }, [supported]);
 
   const toggleMic = () => {
     const recognition = recognitionRef.current;
@@ -146,7 +152,7 @@ export const TextMicInput = () => {
   const displayedText = context + (interimResult ? (context ? " " : "") + interimResult : "");
 
   return (
-    <div className="relative group">
+    <div className="w-full border border-white/10 rounded-[1.5rem] bg-white/3 focus-within:border-purple-500/40 focus-within:ring-8 focus-within:ring-purple-500/5 transition-all duration-300 shadow-2xl backdrop-blur-md flex flex-col group">
       <textarea
         value={displayedText}
         onChange={(e) => {
@@ -154,24 +160,44 @@ export const TextMicInput = () => {
           setInterimResult("");
         }}
         placeholder="Describe the strategic context, desired outcomes, and key legal theories to explore..."
-        className="w-full min-h-50 md:min-h-50 bg-white/3 border border-white/10 rounded-[1.5rem] p-6 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-purple-500/40 focus:ring-8 focus:ring-purple-500/5 transition-all resize-none shadow-2xl backdrop-blur-md text-base leading-relaxed"
+        className="w-full min-h-[180px] bg-transparent border-0 p-5 pb-2 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-0 resize-none text-base leading-relaxed"
       />
-      {/* <div className="absolute bottom-6 right-6">
+      
+      <div className="flex items-center justify-between px-5 pb-4 pt-2 bg-transparent shrink-0">
+        <div className="flex items-center gap-2">
+          {supported ? (
+            listening ? (
+              <div className="flex items-center gap-2 text-red-400 text-xs font-semibold animate-pulse">
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                <span>Listening...</span>
+              </div>
+            ) : (
+              <span className="text-xs text-slate-500 group-focus-within:text-slate-400 transition-colors">
+                Click mic to speak case notes
+              </span>
+            )
+          ) : (
+            <span className="text-xs text-slate-600">
+              Speech not supported in this browser
+            </span>
+          )}
+        </div>
+
         {supported ? (
           <Button
             type="button"
             size="icon"
             onClick={toggleMic}
-            className={`rounded-2xl w-14 h-14 text-white shadow-2xl border transition-all duration-300 active:scale-90 ${
+            className={`rounded-xl w-10 h-10 text-white shadow-lg border transition-all duration-300 active:scale-95 cursor-pointer ${
               listening
-                ? "bg-red-500 hover:bg-red-400 border-red-400/30 shadow-red-500/40 animate-pulse"
-                : "bg-white hover:bg-zinc-200 text-black border border-white/20 shadow-purple-500/40"
+                ? "bg-red-500 hover:bg-red-400 border-red-400/30 shadow-red-500/20 animate-pulse"
+                : "bg-white hover:bg-zinc-200 text-black border border-white/20 shadow-purple-500/10"
             }`}
           >
             {listening ? (
-              <MicOff className="w-6 h-6" />
+              <MicOff className="w-4.5 h-4.5" />
             ) : (
-              <Mic className="w-6 h-6 group-hover:scale-110 transition-transform" />
+              <Mic className="w-4.5 h-4.5 transition-transform" />
             )}
           </Button>
         ) : (
@@ -180,12 +206,12 @@ export const TextMicInput = () => {
             size="icon"
             disabled
             title="Speech recognition not supported in this browser"
-            className="rounded-2xl w-14 h-14 bg-white/5 text-slate-600 border border-white/10 cursor-not-allowed"
+            className="rounded-xl w-10 h-10 bg-white/5 text-slate-600 border border-white/10 cursor-not-allowed"
           >
-            <MicOff className="w-6 h-6" />
+            <MicOff className="w-4.5 h-4.5" />
           </Button>
         )}
-      </div> */}
+      </div>
     </div>
   );
 };
