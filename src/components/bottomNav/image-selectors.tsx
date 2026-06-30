@@ -29,7 +29,7 @@ export const ImageSelectors = () => {
       onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
       onDragLeave={() => setDragging(false)}
       onDrop={handleDrop}
-      className={`bg-white/3 border-white/10 p-8 flex flex-col items-center justify-center text-center backdrop-blur-md shadow-2xl relative overflow-hidden group rounded-3xl cursor-pointer transition-all duration-300 ${
+      className={`bg-white/3 border-white/10 p-3 md:p-8 flex flex-col items-center justify-center text-center backdrop-blur-md shadow-2xl relative overflow-hidden group rounded-3xl cursor-pointer transition-all duration-300 ${
         dragging ? "border-blue-500/50 bg-blue-500/5" : ""
       }`}
     >
@@ -45,13 +45,13 @@ export const ImageSelectors = () => {
 
       <div className="absolute inset-0 bg-linear-to-b from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-      <div className="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-4 border border-blue-500/20 shadow-[0_0_1.25rem_rgba(59,130,246,0.15)] group-hover:scale-110 transition-transform duration-300">
-        <ImagePlus className="w-6 h-6 text-blue-400" />
+      <div className="w-10 md:w-12 h-10 md:h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-2 md:mb-4 border border-blue-500/20 shadow-[0_0_1.25rem_rgba(59,130,246,0.15)] group-hover:scale-110 transition-transform duration-300">
+        <ImagePlus className="w-5 md:w-6 h-5 md:h-6 text-blue-400" />
       </div>
-      <h2 className="text-xl font-bold text-white mb-1">
+      <h2 className="text-lg md:text-xl font-bold text-white mb-1">
         Visual Evidence
       </h2>
-      <p className="text-slate-400 text-xs mb-6 max-w-md leading-relaxed">
+      <p className="text-slate-400 text-xs mb-3 md:mb-6 max-w-md leading-relaxed">
         {dragging
           ? "Drop your images here..."
           : "Add court exhibits, diagrams, or site photographs for multimodal analysis."}
@@ -69,7 +69,7 @@ export const ImageSelectors = () => {
               className="bg-white/5 text-slate-300 border-white/0.625rem-3 py-1.5 flex items-center gap-2 hover:bg-white/10 transition-all rounded-lg backdrop-blur-sm"
             >
               <FileImage className="w-3.5 h-3.5 text-blue-400/80 shrink-0" />
-              <span className="text-[0.6875rem] font-medium max-w-[7.5rem] truncate">
+              <span className="text-[0.6875rem] font-medium max-w-30 truncate">
                 {file.name}
               </span>
               <button

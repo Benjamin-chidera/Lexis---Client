@@ -7,13 +7,13 @@ export const BottomNav = () => {
   const path = location.pathname;
 
   return (
-    <div className="fixed bottom-0 z-50 left-0 right-0 pointer-events-none">
-      <div className="pb-8 pt-2 flex justify-center relative">
-        <nav className="bg-white/[0.04] border border-white/[0.1] px-4 py-3 rounded-full flex items-center gap-4 backdrop-blur-3xl shadow-[0_0.5rem_2rem_rgba(0,0,0,0.7),inset_0_0.0625rem_0_rgba(255,255,255,0.07)] pointer-events-auto">
-          <Link to="/">
+    <div className="fixed bottom-0 z-50 left-0 right-0 pointer-events-none px-5 md:px-0">
+      <div className="pb-4 md:pb-8 pt-2 flex justify-center relative w-full">
+        <nav className="w-full md:w-auto bg-white/4 border border-white/10 px-2 md:px-4 py-3 rounded-[1.5rem] md:rounded-full flex justify-between md:justify-center items-center gap-1 md:gap-4 backdrop-blur-3xl shadow-[0_0.5rem_2rem_rgba(0,0,0,0.7),inset_0_0.0625rem_0_rgba(255,255,255,0.07)] pointer-events-auto">
+          <Link to="/" className="flex-1 md:flex-none">
             <Button
               variant="ghost"
-              className={`flex flex-col h-[3.25rem] w-20 gap-1 rounded-[0.875rem] transition-all group ${
+              className={`flex flex-col h-13 w-full md:w-20 gap-1 rounded-[0.875rem] transition-all group px-0 ${
                 path === "/"
                   ? "text-white bg-purple-500/10 hover:bg-purple-500/20"
                   : "text-slate-500 hover:text-slate-200 hover:bg-white/5"
@@ -31,10 +31,10 @@ export const BottomNav = () => {
             </Button> 
           </Link>
           
-          <Link to="/cases">
+          <Link to="/cases" className="flex-1 md:flex-none">
             <Button
               variant="ghost"
-              className={`flex flex-col h-[3.25rem] w-20 gap-1 rounded-[0.875rem] transition-all group ${
+              className={`flex flex-col h-13 w-full md:w-20 gap-1 rounded-[0.875rem] transition-all group px-0 ${
                 path === "/cases"
                   ? "text-white bg-purple-500/10 hover:bg-purple-500/20"
                   : "text-slate-500 hover:text-slate-200 hover:bg-white/5"
@@ -52,10 +52,10 @@ export const BottomNav = () => {
             </Button>
           </Link>
 
-          <Link to="/alerts">
+          <Link to="/alerts" className="flex-1 md:flex-none">
             <Button
               variant="ghost"
-              className={`flex flex-col h-[3.25rem] w-20 gap-1 rounded-[0.875rem] transition-all group ${
+              className={`flex flex-col h-13 w-full md:w-20 gap-1 rounded-[0.875rem] transition-all group px-0 ${
                 path === "/alerts"
                   ? "text-white bg-purple-500/10 hover:bg-purple-500/20"
                   : "text-slate-500 hover:text-slate-200 hover:bg-white/5"
@@ -76,7 +76,7 @@ export const BottomNav = () => {
           {/* <Link to="/archive">
             <Button
               variant="ghost"
-              className={`flex flex-col h-[3.25rem] w-20 gap-1 rounded-[0.875rem] transition-all group ${
+              className={`flex flex-col h-[3.25rem] w-full md:w-20 gap-1 rounded-[0.875rem] transition-all group px-0 ${
                 path === "/archive"
                   ? "text-white bg-purple-500/10 hover:bg-purple-500/20"
                   : "text-slate-500 hover:text-slate-200 hover:bg-white/5"
@@ -94,10 +94,10 @@ export const BottomNav = () => {
             </Button>
           </Link> */}
 
-          <Link to="/history">
+          <Link to="/history" className="flex-1 md:flex-none">
             <Button
               variant="ghost"
-              className={`flex flex-col h-[3.25rem] w-20 gap-1 rounded-[0.875rem] transition-all group ${
+              className={`flex flex-col h-13 w-full md:w-20 gap-1 rounded-[0.875rem] transition-all group px-0 ${
                 path === "/history"
                   ? "text-white bg-purple-500/10 hover:bg-purple-500/20"
                   : "text-slate-500 hover:text-slate-200 hover:bg-white/5"

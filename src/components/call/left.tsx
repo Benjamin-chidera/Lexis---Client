@@ -56,12 +56,12 @@ export const LeftCall = ({
 
 
   return (
-    <div className="flex-1 rounded-[2rem] overflow-hidden relative flex flex-col items-center py-0.75rem-6 shadow-2xl bg-[#0a0a0a] border border-white/5">
+    <div className="flex-1 rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden relative flex flex-col items-center py-4 sm:py-6 px-4 shadow-2xl bg-[#0a0a0a] border border-white/5 w-full">
       {/* Background glows - Removed heavy blurs for performance */}
 
       {/* Top Status Badge */}
-      <div className="flex flex-col items-center gap-6 relative z-10 w-full">
-        <div className="bg-white/5 border border-white/0.625rem-6 py-2 rounded-full flex items-center gap-3 backdrop-blur-md">
+      <div className="flex flex-col items-center gap-4 sm:gap-6 relative z-10 w-full">
+        <div className="bg-white/5 border border-white/10 px-4 py-2 rounded-full flex items-center gap-3 backdrop-blur-md">
           <div className={`w-2 h-2 rounded-full ${statusDotClass}`} />
           <span
             className={`text-[0.6875rem] font-bold tracking-[0.15em] uppercase ${statusColor}`}
@@ -72,7 +72,7 @@ export const LeftCall = ({
 
         {/* Live transcript display — shows what the user is saying */}
         {transcript && callStatus === "active" && (
-          <div className="bg-white/5 border border-white/8 rounded-2xl px-5 py-3 max-w-md text-center backdrop-blur-md">
+          <div className="bg-white/5 border border-white/10 rounded-2xl px-4 py-2 sm:px-5 sm:py-3 max-w-md text-center backdrop-blur-md mx-2">
             <p className="text-[0.625rem] font-bold text-slate-500 uppercase tracking-widest mb-1">
               You said
             </p>
@@ -86,20 +86,20 @@ export const LeftCall = ({
       {/* Center Orb Area */}
       <div className="flex-1 flex flex-col items-center justify-center w-full relative z-10">
         {/* Concentric Rings */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[31.25rem] h-[31.25rem] rounded-full border border-white/3" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[25rem] h-[25rem] rounded-full border border-white/5" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[18.75rem] h-[18.75rem] rounded-full border border-white/8" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-125 aspect-square rounded-full border border-white/3" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[75vw] max-w-100 aspect-square rounded-full border border-white/5" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] max-w-75 aspect-square rounded-full border border-white/8" />
 
         {/* Main glowing orb */}
         <div
-          className={`w-56 h-56 rounded-full bg-linear-to-b ${orbGradient} ${orbShadow} flex items-center justify-center relative overflow-hidden transition-all duration-300`}
+          className={`w-40 h-40 sm:w-56 sm:h-56 rounded-full bg-linear-to-b ${orbGradient} ${orbShadow} flex items-center justify-center relative overflow-hidden transition-all duration-300`}
         >
           {/* Audio waveform inside orb */}
           <div
             className={`flex items-center gap-1.5 z-10 ${isAiSpeaking ? "animate-pulse" : ""}`}
           >
             {isAiSpeaking ? (
-              <Volume2 className="w-10 h-10 text-white/90" />
+              <Volume2 className="w-8 h-8 sm:w-10 sm:h-10 text-white/90" />
             ) : (
               <>
                 <div className="w-1 h-3 bg-white/80 rounded-full" />
@@ -114,7 +114,7 @@ export const LeftCall = ({
 
         {/* AI Response text — shows below the orb */}
         {aiResponse && callStatus === "active" && (
-          <div className="mt-8 bg-white/3 border border-white/8 rounded-2xl px-6 py-4 max-w-lg text-center backdrop-blur-md">
+          <div className="mt-4 sm:mt-8 bg-white/3 border border-white/10 rounded-2xl px-4 py-3 sm:px-6 sm:py-4 max-w-lg text-center backdrop-blur-md mx-2">
             <p className="text-[0.625rem] font-bold text-purple-400 uppercase tracking-widest mb-2">
               Lexis AI
             </p>
@@ -123,26 +123,15 @@ export const LeftCall = ({
             </p>
           </div>
         )}
-
-        {/* Bottom Audio Visualizer */}
-        {/* <div className="absolute bottom-8 flex items-end justify-center gap-2 h-16 w-full opacity-80">
-          {barHeights.map((h, i) => (
-            <div
-              key={i}
-              className={`w-2.5 rounded-full bg-gradient-to-t from-purple-500 via-indigo-400 to-[#b5e0ff] transition-all duration-300`}
-              style={{ height: `${h}%` }}
-            />
-          ))}
-        </div> */}
       </div>
 
       {/* Bottom Controls */}
-      <div className="flex items-center justify-center gap-8 relative z-10 mt-8">
+      <div className="flex items-center justify-center gap-4 sm:gap-8 relative z-10 mt-4 sm:mt-8">
         {/* Mute/Unmute toggle */}
         <Button
           size="icon"
           onClick={onToggleMute}
-          className={`w-14 h-14 rounded-full border transition-all shadow-xl ${
+          className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full border transition-all shadow-xl ${
             isMuted
               ? "bg-red-900/30 border-red-500/30 text-red-400 hover:bg-red-900/50"
               : "bg-[#0a0a0a] border-white/5 text-slate-400 hover:text-white hover:bg-white/10"
@@ -158,7 +147,7 @@ export const LeftCall = ({
         {/* End call button */}
         <Button
           onClick={onEnd}
-          className="h-0.875rem-10 rounded-full bg-[#b91c1c] hover:bg-red-600 text-white font-bold text-lg shadow-[0_0_1.875rem_rgba(185,28,28,0.3)] border border-red-500/30 flex items-center gap-3 transition-all"
+          className="h-12 sm:h-14 px-6 sm:px-8 rounded-full bg-[#b91c1c] hover:bg-red-600 text-white font-bold text-base sm:text-lg shadow-[0_0_1.875rem_rgba(185,28,28,0.3)] border border-red-500/30 flex items-center gap-2 sm:gap-3 transition-all"
         >
           <PhoneOff className="w-5 h-5" />
           End Session

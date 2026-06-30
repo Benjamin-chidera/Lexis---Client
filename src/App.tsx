@@ -36,7 +36,7 @@ const LogoutButton = () => {
   return (
     <button
       onClick={handleLogout}
-      className="fixed top-5 right-18 z-[100] w-10 h-10 rounded-xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center text-slate-400 hover:text-red-400 hover:border-red-500/40 hover:bg-red-500/10 transition-all duration-200 shadow-xl cursor-pointer"
+      className="fixed top-5 right-18 z-40 w-10 h-10 rounded-xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center text-slate-400 hover:text-red-400 hover:border-red-500/40 hover:bg-red-500/10 transition-all duration-200 shadow-xl cursor-pointer"
       title="Log out"
     >
       <LogOut className="w-4 h-4" />
@@ -113,7 +113,7 @@ const App = () => {
   }, [user, addIncomingAlert, fetchCases, fetchAlerts]);
 
   return (
-    <main className="w-full min-h-screen bg-black">
+    <main className="w-full min-h-screen bg-black px-5 md:px-0">
       <BrowserRouter>
         <AppChrome>
           <Routes>

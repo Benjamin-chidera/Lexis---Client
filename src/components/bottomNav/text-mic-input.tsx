@@ -154,9 +154,9 @@ export const TextMicInput = () => {
           setInterimResult("");
         }}
         placeholder="Describe the strategic context, desired outcomes, and key legal theories to explore..."
-        className="w-full min-h-[10rem] bg-white/3 border border-white/10 rounded-[1.5rem] p-6 pr-24 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-purple-500/40 focus:ring-8 focus:ring-purple-500/5 transition-all resize-none shadow-2xl backdrop-blur-md text-base leading-relaxed"
+        className="w-full min-h-50 md:min-h-50 bg-white/3 border border-white/10 rounded-[1.5rem] p-6 pr-24 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-purple-500/40 focus:ring-8 focus:ring-purple-500/5 transition-all resize-none shadow-2xl backdrop-blur-md text-base leading-relaxed"
       />
-      <div className="absolute bottom-6 right-6">
+      {/* <div className="absolute bottom-6 right-6">
         {supported ? (
           <Button
             type="button"
@@ -165,7 +165,7 @@ export const TextMicInput = () => {
             className={`rounded-2xl w-14 h-14 text-white shadow-2xl border transition-all duration-300 active:scale-90 ${
               listening
                 ? "bg-red-500 hover:bg-red-400 border-red-400/30 shadow-red-500/40 animate-pulse"
-                : "bg-white hover:bg-zinc-200 text-black border border-white/20 border-purple-400/30 shadow-purple-500/40"
+                : "bg-white hover:bg-zinc-200 text-black border border-white/20 shadow-purple-500/40"
             }`}
           >
             {listening ? (
@@ -185,7 +185,7 @@ export const TextMicInput = () => {
             <MicOff className="w-6 h-6" />
           </Button>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

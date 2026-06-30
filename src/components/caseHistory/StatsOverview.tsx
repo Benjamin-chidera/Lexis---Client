@@ -40,22 +40,33 @@ const stats = (successCount: number, closedCount: number, abandonedCount: number
 
 export const StatsOverview = ({ successCount, closedCount, abandonedCount, total }: StatsOverviewProps) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-      {stats(successCount, closedCount, abandonedCount, total).map((s) => (
-        <div key={s.label} className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-6">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-[0.625rem] font-black text-slate-500 uppercase tracking-widest">{s.label}</span>
-            <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center", s.iconBg)}>
-              {s.icon}
+    <>
+      <style>{`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+      <div className="flex flex-row md:grid md:grid-cols-3 gap-4 mb-2 md:mb-10 overflow-x-auto no-scrollbar flex-nowrap pb-2 md:pb-0 snap-x snap-mandatory">
+        {stats(successCount, closedCount, abandonedCount, total).map((s) => (
+          <div key={s.label} className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-6 shrink-0 w-full sm:w-[280px] md:w-auto snap-start">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-[0.625rem] font-black text-slate-500 uppercase tracking-widest">{s.label}</span>
+              <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center", s.iconBg)}>
+                {s.icon}
+              </div>
             </div>
+            <p className={cn("text-3xl font-bold mb-1", s.textColor)}>{s.count}</p>
+            <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mt-3">
+              <div className={cn("h-full rounded-full", s.barColor)} style={{ width: `${s.percent}%` }} />
+            </div>
+            <span className="text-xs text-slate-500 mt-2 block">{s.percent}% of total cases</span>
           </div>
-          <p className={cn("text-3xl font-bold mb-1", s.textColor)}>{s.count}</p>
-          <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mt-3">
-            <div className={cn("h-full rounded-full", s.barColor)} style={{ width: `${s.percent}%` }} />
-          </div>
-          <span className="text-xs text-slate-500 mt-2 block">{s.percent}% of total cases</span>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </>
   );
 };

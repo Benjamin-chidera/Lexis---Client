@@ -112,13 +112,13 @@ const BriefingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-slate-200 flex flex-col items-center pt-5 pb-1.75rem-4 font-sans overflow-x-hidden relative">
+    <div className="min-h-screen bg-black text-slate-200 flex flex-col items-center pt-17 pb-28 font-sans overflow-x-hidden relative">
       <div className="w-full max-w-3xl mb-4 relative z-10 flex justify-between items-end">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight mb-1">
+          <h1 className="text-lg md:text-2xl font-bold text-white tracking-tight mb-1">
             Upload Case Evidence
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className=" text-xs md:text-sm text-slate-400">
             Brief the AI with case facts and evidence to start.
           </p>
         </div>
@@ -128,12 +128,12 @@ const BriefingPage = () => {
           className="bg-purple-950/20 hover:bg-purple-900/30 text-purple-300 hover:text-purple-200 border border-purple-500/30 hover:border-purple-500/50 rounded-xl px-4 py-2 text-xs flex items-center gap-2 transition-all active:scale-95 cursor-pointer"
         >
           <PlayCircle className="w-4 h-4" />
-          <span>Watch Walkthrough</span>
+          <span className="">Watch Walkthrough</span>
         </Button>
       </div>
 
       <div className="w-full max-w-3xl space-y-4 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <PdfSelectors />
           <ImageSelectors />
         </div>
@@ -163,14 +163,14 @@ const BriefingPage = () => {
           else setIsWalkthroughOpen(true);
         }}
       >
-        <AlertDialogContent className="w-full max-w-2xl! h-[80vh] bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(147,51,234,0.15)] flex flex-col p-0 gap-0">
+        <AlertDialogContent className="w-[calc(100%-2rem)] sm:w-full max-w-2xl! h-[80vh] bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(147,51,234,0.15)] flex flex-col p-0 gap-0">
           {/* Header */}
-          <div className="flex justify-between items-center px-6 py-4 border-b border-white/5 bg-zinc-950/40 shrink-0">
+          <div className="flex justify-between items-center px-4 py-3 sm:px-6 sm:py-4 border-b border-white/5 bg-zinc-950/40 shrink-0">
             <div>
-              <AlertDialogTitle className="font-bold text-lg text-white">
+              <AlertDialogTitle className="font-bold text-base sm:text-lg text-white">
                 Lexis AI Walkthrough
               </AlertDialogTitle>
-              <AlertDialogDescription className="text-xs text-purple-400 font-medium">
+              <AlertDialogDescription className="text-[10px] sm:text-xs text-purple-400 font-medium">
                 How to test this feature
               </AlertDialogDescription>
             </div>
@@ -183,7 +183,7 @@ const BriefingPage = () => {
           </div>
 
           {/* Video & Info Container */}
-          <div className="p-6 space-y-4 flex-1 overflow-y-auto custom-scrollbar">
+          <div className="p-4 sm:p-6 space-y-4 flex-1 overflow-y-auto custom-scrollbar">
             <div className="aspect-video w-full rounded-xl overflow-hidden border border-white/5 bg-black relative shrink-0">
               <iframe
                 src={DEMO_VIDEO_URL}
@@ -195,8 +195,8 @@ const BriefingPage = () => {
             </div>
 
             {/* Guide steps */}
-            <div className="space-y-3 bg-white/[0.01] border border-white/[0.05] p-4 rounded-xl text-sm">
-              <h4 className="font-semibold text-slate-200 flex items-center gap-2 text-xs uppercase tracking-wider text-purple-300">
+            <div className="space-y-3 bg-white/1 border border-white/5 p-3.5 sm:p-4 rounded-xl text-sm">
+              <h4 className="font-semibold flex items-center gap-2 text-xs uppercase tracking-wider text-purple-300">
                 <Info className="w-3.5 h-3.5" /> Quick Testing Guide
               </h4>
               <ul className="space-y-2 text-xs text-slate-400 list-disc list-inside">
@@ -214,12 +214,12 @@ const BriefingPage = () => {
             </div>
 
             {/* Case Generation Test Kit */}
-            <div className="bg-white/[0.01] border border-white/[0.05] p-4 rounded-xl text-sm transition-all duration-300">
+            <div className="bg-white/1 border border-white/5 p-3.5 sm:p-4 rounded-xl text-sm transition-all duration-300">
               <button 
                 onClick={() => setIsTestKitExpanded(!isTestKitExpanded)}
                 className="w-full flex items-center justify-between text-left group cursor-pointer outline-none"
               >
-                <h4 className="font-semibold text-slate-200 flex items-center gap-2 text-xs uppercase tracking-wider text-purple-300 group-hover:text-purple-200 transition-colors">
+                <h4 className="font-semibold flex items-center gap-2 text-xs uppercase tracking-wider text-purple-300 group-hover:text-purple-200 transition-colors">
                   <Zap className="w-3.5 h-3.5" /> Case Generation Test Kit
                 </h4>
                 {isTestKitExpanded ? (
@@ -259,10 +259,10 @@ const BriefingPage = () => {
           </div>
 
           {/* Footer */}
-          <div className="flex justify-end gap-3 px-6 py-4 border-t border-white/5 bg-zinc-950/40 shrink-0">
+          <div className="flex justify-end gap-3 px-4 py-3 sm:px-6 sm:py-4 border-t border-white/5 bg-zinc-950/40 shrink-0">
             <Button
               onClick={closeWalkthrough}
-              className="bg-white hover:bg-zinc-200 text-black font-semibold rounded-xl px-5 h-10 transition-all text-xs"
+              className="bg-white hover:bg-zinc-200 text-black font-semibold rounded-xl w-full sm:w-auto px-5 h-10 transition-all text-xs"
             >
               Let's Get Started
             </Button>

@@ -22,7 +22,7 @@ const SEVERITY_STYLES = {
     iconBg: "bg-red-500/20 border-red-500/30",
     badge: "bg-red-500/10 text-red-400 border border-red-500/20",
     badgeLabel: "Urgent",
-    icon: <AlertTriangle className="w-6 h-6 text-red-400" />,
+    icon: <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6 text-red-400" />,
     actionBg:
       "bg-red-600 hover:bg-red-500 shadow-[0_0_0.9375rem_rgba(220,38,38,0.3)]",
   },
@@ -31,7 +31,7 @@ const SEVERITY_STYLES = {
     iconBg: "bg-purple-500/10 border-purple-500/20",
     badge: "bg-purple-500/10 text-purple-400 border border-purple-500/20",
     badgeLabel: "Strategic",
-    icon: <Search className="w-6 h-6 text-purple-400" />,
+    icon: <Search className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400" />,
     actionBg:
       "bg-white hover:bg-zinc-200 text-black border border-white/20 shadow-[0_0_0.9375rem_rgba(147,51,234,0.3)]",
   },
@@ -40,7 +40,7 @@ const SEVERITY_STYLES = {
     iconBg: "bg-cyan-500/10 border-cyan-500/20",
     badge: "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20",
     badgeLabel: "Routine",
-    icon: <Activity className="w-6 h-6 text-cyan-400" />,
+    icon: <Activity className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400" />,
     actionBg: "bg-cyan-700 hover:bg-cyan-600",
   },
 };
@@ -78,62 +78,64 @@ export const AlertCard = ({ alert, onMarkRead }: AlertCardProps) => {
   return (
     <>
       <div
-        className={`bg-[#0a0a0a] border rounded-2xl p-6 shadow-xl relative group transition-all overflow-hidden ${style.border} ${isUnread ? "shadow-[0_0_0_0.0625rem_rgba(168,85,247,0.05)]" : ""} `}
+        className={`bg-[#0a0a0a] border rounded-2xl p-4 sm:p-6 shadow-xl relative group transition-all overflow-hidden ${style.border} ${isUnread ? "shadow-[0_0_0_0.0625rem_rgba(168,85,247,0.05)]" : ""} `}
       >
         {/* Unread dot */}
         {isUnread && (
           <span className="absolute top-4 right-4 w-2 h-2 bg-purple-500 rounded-full animate-pulse" />
         )}
 
-        <div className="flex items-start gap-5">
+        <div className="grid grid-cols-[auto_1fr] gap-x-3 sm:gap-x-5 gap-y-3 sm:gap-y-0 relative z-10">
           {/* Icon */}
           <div
-            className={`w-12 h-12 shrink-0 rounded-xl flex items-center justify-center border mt-1 ${style.iconBg}`}
+            className={`w-9 h-9 sm:w-12 sm:h-12 shrink-0 rounded-xl flex items-center justify-center border mt-0.5 sm:mt-1 ${style.iconBg}`}
           >
             {style.icon}
           </div>
 
-          <div className="flex-1 min-w-0">
-            {/* Title + badge row */}
-            <div className="flex items-start justify-between gap-4 mb-2">
-              <h3 className="text-xl font-bold text-white truncate">
-                {alert.title}
-              </h3>
-              <div className="flex items-center gap-3 shrink-0">
-                {/* Brain icon — hover shows AI reasoning popup */}
-                <div
-                  className="relative"
-                  onMouseEnter={() => setShowReasoning(true)}
-                  onMouseLeave={() => setShowReasoning(false)}
-                >
-                  <Brain
-                    className={`w-4 h-4 cursor-pointer transition-opacity ${alert.ai_reasoning ? "opacity-100" : "opacity-30"} ${style.badge} border-none`}
-                  />
+          {/* Title + badge row */}
+          <div className="min-w-0 flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4 mb-2">
+            <h3 className="text-base sm:text-xl font-bold text-white leading-snug">
+              {alert.title}
+            </h3>
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0 flex-wrap">
+              {/* Brain icon — hover/tap shows AI reasoning popup */}
+              <div
+                className="relative"
+                onMouseEnter={() => setShowReasoning(true)}
+                onMouseLeave={() => setShowReasoning(false)}
+                onClick={() => setShowReasoning(!showReasoning)}
+              >
+                <Brain
+                  className={`w-3.5 h-3.5 sm:w-4 sm:h-4 cursor-pointer transition-opacity ${alert.ai_reasoning ? "opacity-100" : "opacity-30"} ${style.badge} border-none`}
+                />
 
-                  {showReasoning && alert.ai_reasoning && (
-                    <div className="absolute right-0 top-6 z-50 w-80 bg-[#111] border border-white/10 rounded-xl shadow-2xl p-4">
-                      <p className="text-[0.625rem] font-black text-purple-400 uppercase tracking-widest mb-2">
-                        Why this matters
-                      </p>
-                      <p className="text-slate-300 text-xs leading-relaxed">
-                        {alert.ai_reasoning}
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                <Badge
-                  className={`px-2.5 py-0.5 rounded-md text-[0.625rem] font-black uppercase tracking-widest ${style.badge}`}
-                >
-                  {style.badgeLabel}
-                </Badge>
-
-                <span className="text-[0.6875rem] font-medium text-slate-500">
-                  {formatRelativeTime(alert.created_at)}
-                </span>
+                {showReasoning && alert.ai_reasoning && (
+                  <div className="absolute right-0 top-6 z-50 w-72 sm:w-80 bg-[#111] border border-white/10 rounded-xl shadow-2xl p-3 sm:p-4">
+                    <p className="text-[0.625rem] font-black text-purple-400 uppercase tracking-widest mb-2">
+                      Why this matters
+                    </p>
+                    <p className="text-slate-300 text-xs leading-relaxed">
+                      {alert.ai_reasoning}
+                    </p>
+                  </div>
+                )}
               </div>
-            </div>
 
+              <Badge
+                className={`px-2 py-0.5 rounded-md text-[0.55rem] sm:text-[0.625rem] font-black uppercase tracking-widest ${style.badge}`}
+              >
+                {style.badgeLabel}
+              </Badge>
+
+              <span className="text-[0.625rem] sm:text-[0.6875rem] font-medium text-slate-500">
+                {formatRelativeTime(alert.created_at)}
+              </span>
+            </div>
+          </div>
+
+          {/* Collapsible/Full-width content block for mobile (spans 2 columns on mobile, starts at column 2 on desktop) */}
+          <div className="col-span-2 sm:col-span-1 sm:col-start-2 min-w-0 flex flex-col mt-2 sm:mt-0">
             {/* Accept / Reject actions — only shown when pending review */}
             {isPendingReview && (
               <div className="flex justify-end gap-2 mb-2">

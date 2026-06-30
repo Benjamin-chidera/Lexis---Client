@@ -69,14 +69,24 @@ export const CaseAlertPage = () => {
   const caseGroups = groupAlertsByCase(visibleAlerts);
 
   return (
-    <div className="min-h-screen bg-black text-slate-200 pt-5 font-sans selection:bg-purple-500/30 pb-30">
+    <div className="min-h-screen bg-black text-slate-200 pt-17 font-sans selection:bg-purple-500/30 pb-30">
+      {/* Hide scrollbar styles */}
+      <style>{`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
+      <div className="flex md:flex-row md:items-center justify-between mb-5 md:mb-10 gap-6">
         <div>
-          <h1 className="text-4xl font-bold text-white tracking-tight mb-2">
+          <h1 className="text-xl md:text-3xl font-bold text-white tracking-tight mb-2">
             Command Center
           </h1>
-          <p className="text-slate-400 text-sm md:text-base">
+          <p className="text-slate-400 text-xs md:text-sm">
             Intelligent alert synthesis for active case management.
           </p>
         </div>
@@ -92,9 +102,9 @@ export const CaseAlertPage = () => {
 
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Left sidebar */}
-        <div className="w-full lg:w-72 flex flex-col gap-6 shrink-0">
+        <div className="w-full lg:w-72 flex flex-row lg:flex-col gap-4 lg:gap-6 shrink-0 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 no-scrollbar snap-x snap-mandatory">
           {/* Active Vigilance card */}
-          <div className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-6 shadow-xl">
+          <div className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-6 shadow-xl shrink-0 w-full sm:w-[280px] lg:w-auto snap-start">
             <div className="flex items-center justify-between mb-6">
               <span className="text-[0.625rem] font-black text-slate-500 uppercase tracking-widest">
                 Active Vigilance
@@ -125,7 +135,7 @@ export const CaseAlertPage = () => {
           </div>
 
           {/* Deep Dig Status card */}
-          <div className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-6 shadow-xl">
+          <div className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-6 shadow-xl shrink-0 w-full sm:w-[280px] lg:w-auto snap-start">
             <span className="text-[0.625rem] font-black text-slate-500 uppercase tracking-widest block mb-5">
               Deep Dig Status
             </span>
@@ -163,8 +173,17 @@ export const CaseAlertPage = () => {
               {(caseGroups.length > 0
                 ? caseGroups
                 : [
-                    { caseId: "loading1", alerts: [{ id: 1 } as unknown as AlertItem] },
-                    { caseId: "loading2", alerts: [{ id: 1 } as unknown as AlertItem, { id: 2 } as unknown as AlertItem] },
+                    {
+                      caseId: "loading1",
+                      alerts: [{ id: 1 } as unknown as AlertItem],
+                    },
+                    {
+                      caseId: "loading2",
+                      alerts: [
+                        { id: 1 } as unknown as AlertItem,
+                        { id: 2 } as unknown as AlertItem,
+                      ],
+                    },
                   ]
               ).map((group) => (
                 <div key={group.caseId} className="flex flex-col gap-4">
@@ -305,4 +324,3 @@ const CaseGroupSection = ({ group, onMarkRead }: CaseGroupSectionProps) => {
     </div>
   );
 };
-

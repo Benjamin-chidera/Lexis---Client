@@ -1,6 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Lock, Mail, ShieldCheck, ArrowRight, Eye, EyeOff, Copy, Check, Sparkles } from "lucide-react";
+import {
+  Lock,
+  Mail,
+  ShieldCheck,
+  ArrowRight,
+  Eye,
+  EyeOff,
+  Copy,
+  Check,
+  Sparkles,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/authStore";
 import { toast } from "sonner";
@@ -104,7 +114,9 @@ const LoginPage = () => {
       await login(email.trim(), password);
       navigate("/", { replace: true });
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Login failed. Please try again.");
+      toast.error(
+        err instanceof Error ? err.message : "Login failed. Please try again.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -131,7 +143,9 @@ const LoginPage = () => {
       await setPassword(email.trim(), password, confirmPassword);
       navigate("/", { replace: true });
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to set password.");
+      toast.error(
+        err instanceof Error ? err.message : "Failed to set password.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -154,7 +168,9 @@ const LoginPage = () => {
             <ShieldCheck className="w-5 h-5 text-purple-400" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white tracking-tight">Lexis AI</h1>
+            <h1 className="text-xl font-bold text-white tracking-tight">
+              Lexis AI
+            </h1>
             <p className="text-[0.625rem] text-slate-500 uppercase tracking-widest">
               Legal Intelligence Platform
             </p>
@@ -163,12 +179,13 @@ const LoginPage = () => {
 
         {/* Card */}
         <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-8">
-
           {/* Step: email */}
           {step === "email" && (
             <>
               <h2 className="text-2xl font-bold text-white mb-1">Sign in</h2>
-              <p className="text-slate-400 text-sm mb-8">Enter your corporate email to continue.</p>
+              <p className="text-slate-400 text-sm mb-8">
+                Enter your corporate email to continue.
+              </p>
 
               <form onSubmit={handleContinue} className="space-y-5" noValidate>
                 <div className="space-y-2">
@@ -198,7 +215,9 @@ const LoginPage = () => {
                   disabled={isLoading}
                   className="w-full h-12 bg-white hover:bg-zinc-200 text-black border border-purple-400/30 font-bold rounded-xl shadow-[0_0_1.875rem_rgba(147,51,234,0.3)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed mt-2 flex items-center justify-center gap-2"
                 >
-                  {isLoading ? "Checking..." : (
+                  {isLoading ? (
+                    "Checking..."
+                  ) : (
                     <>
                       Continue <ArrowRight className="w-4 h-4" />
                     </>
@@ -225,7 +244,9 @@ const LoginPage = () => {
                 Welcome back
               </p>
               <h2 className="text-2xl font-bold text-white mb-1">{userName}</h2>
-              <p className="text-slate-400 text-sm mb-8">Enter your password to sign in.</p>
+              <p className="text-slate-400 text-sm mb-8">
+                Enter your password to sign in.
+              </p>
 
               <form onSubmit={handleLogin} className="space-y-5" noValidate>
                 <div className="space-y-2">
@@ -252,7 +273,11 @@ const LoginPage = () => {
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
                     >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      {showPassword ? (
+                        <EyeOff className="w-4 h-4" />
+                      ) : (
+                        <Eye className="w-4 h-4" />
+                      )}
                     </button>
                   </div>
                 </div>
@@ -282,12 +307,19 @@ const LoginPage = () => {
               <p className="text-xs text-purple-400 font-semibold uppercase tracking-widest mb-1">
                 Hey {userName}
               </p>
-              <h2 className="text-2xl font-bold text-white mb-1">Set your password</h2>
+              <h2 className="text-2xl font-bold text-white mb-1">
+                Set your password
+              </h2>
               <p className="text-slate-400 text-sm mb-8">
-                Welcome to Lexis AI. Start by creating a password for your account.
+                Welcome to Lexis AI. Start by creating a password for your
+                account.
               </p>
 
-              <form onSubmit={handleSetPassword} className="space-y-5" noValidate>
+              <form
+                onSubmit={handleSetPassword}
+                className="space-y-5"
+                noValidate
+              >
                 <div className="space-y-2">
                   <label
                     htmlFor="new-password"
@@ -312,7 +344,11 @@ const LoginPage = () => {
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
                     >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      {showPassword ? (
+                        <EyeOff className="w-4 h-4" />
+                      ) : (
+                        <Eye className="w-4 h-4" />
+                      )}
                     </button>
                   </div>
                 </div>
@@ -337,10 +373,16 @@ const LoginPage = () => {
                     />
                     <button
                       type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
                     >
-                      {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      {showConfirmPassword ? (
+                        <EyeOff className="w-4 h-4" />
+                      ) : (
+                        <Eye className="w-4 h-4" />
+                      )}
                     </button>
                   </div>
                 </div>
@@ -388,37 +430,54 @@ const LoginPage = () => {
           </div>
 
           <p className="text-xs text-slate-400 leading-relaxed mb-5">
-            Use these pre-configured developer credentials to log in and explore the full features of the Lexis AI platform.
+            Use these pre-configured developer credentials to log in and explore
+            the full features of the Lexis AI platform.
           </p>
 
           <div className="space-y-3 mb-6">
             {/* Email Field */}
             <div className="bg-black/40 border border-white/5 rounded-xl p-3 flex items-center justify-between">
               <div>
-                <p className="text-[9px] text-slate-500 uppercase tracking-wider font-bold mb-0.5">Corporate Email</p>
-                <p className="text-xs text-slate-300 font-mono select-all">testuser@gmail.com</p>
+                <p className="text-[9px] text-slate-500 uppercase tracking-wider font-bold mb-0.5">
+                  Corporate Email
+                </p>
+                <p className="text-xs text-slate-300 font-mono select-all">
+                  testuser@gmail.com
+                </p>
               </div>
               <button
                 type="button"
                 onClick={handleCopyEmail}
                 className="p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-slate-400 hover:text-white transition-all outline-none cursor-pointer"
               >
-                {copiedEmail ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {copiedEmail ? (
+                  <Check className="w-3.5 h-3.5 text-green-400" />
+                ) : (
+                  <Copy className="w-3.5 h-3.5" />
+                )}
               </button>
             </div>
 
             {/* Password Field */}
             <div className="bg-black/40 border border-white/5 rounded-xl p-3 flex items-center justify-between">
               <div>
-                <p className="text-[9px] text-slate-500 uppercase tracking-wider font-bold mb-0.5">Password</p>
-                <p className="text-xs text-slate-300 font-mono select-all">testuser</p>
+                <p className="text-[9px] text-slate-500 uppercase tracking-wider font-bold mb-0.5">
+                  Password
+                </p>
+                <p className="text-xs text-slate-300 font-mono select-all">
+                  testuser
+                </p>
               </div>
               <button
                 type="button"
                 onClick={handleCopyPassword}
                 className="p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-slate-400 hover:text-white transition-all outline-none cursor-pointer"
               >
-                {copiedPassword ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {copiedPassword ? (
+                  <Check className="w-3.5 h-3.5 text-green-400" />
+                ) : (
+                  <Copy className="w-3.5 h-3.5" />
+                )}
               </button>
             </div>
           </div>

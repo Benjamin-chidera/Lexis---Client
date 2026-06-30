@@ -52,7 +52,8 @@ export const Urls = () => {
         <Button
           type="button"
           onClick={handleAdd}
-          className="h-15 w-20   bg-white hover:bg-zinc-200 text-black border border-white/20 rounded-2xl font-bold shrink-0"
+          disabled={!input}
+          className="h-14 w-20   bg-white hover:bg-zinc-200 text-black border border-white/20 rounded-2xl font-bold shrink-0"
         >
           Add
         </Button>

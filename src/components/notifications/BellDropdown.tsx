@@ -40,7 +40,7 @@ export const BellDropdown = () => {
 
   return (
     // Fixed position at top-right corner, above everything else
-    <div ref={dropdownRef} className="fixed top-5 right-5 z-[100]">
+    <div ref={dropdownRef} className="fixed top-5 right-5 z-40">
 
       {/* Bell button */}
       <button
@@ -51,7 +51,7 @@ export const BellDropdown = () => {
 
         {/* Unread count badge */}
         {unreadCount > 0 && (
-          <span className="absolute -top-1.5 -right-1.5 min-w-[1.125rem] h-[1.125rem] bg-red-500 text-white text-[0.625rem] font-black rounded-full flex items-center justify-center px-1 shadow-lg shadow-red-500/40 animate-pulse">
+          <span className="absolute -top-1.5 -right-1.5 min-w-4.5 h-4.5 bg-red-500 text-white text-[0.625rem] font-black rounded-full flex items-center justify-center px-1 shadow-lg shadow-red-500/40 animate-pulse">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
@@ -97,7 +97,7 @@ export const BellDropdown = () => {
               <button
                 key={alert.id}
                 onClick={() => handleAlertClick(alert)}
-                className="w-full text-left px-4 py-3 border-b border-white/[0.04] hover:bg-white/[0.03] transition-colors flex items-start gap-3 group"
+                className="w-full text-left px-4 py-3 border-b border-white/4 hover:bg-white/3 transition-colors flex items-start gap-3 group"
               >
                 <AlertIcon severity={alert.severity} />
 

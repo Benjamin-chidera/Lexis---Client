@@ -68,12 +68,12 @@ const CasesPage = () => {
       <CallModal />
 
       {/* ── Fixed header ── */}
-      <div className="shrink-0-6 pt-5 pb-4 md:px-10 bg-transparent">
+      <div className="shrink-0-6 pt-17 pb-4 md:px-10 bg-transparent">
         {/* Page title row */}
-        <div className="flex items-start justify-between mb-6">
+        <div className="flex items-start justify-between mb-4 md:mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-white tracking-tight mb-1">Cases</h1>
-            <p className="text-slate-500 text-sm">
+            <h1 className="text-xl md:text-3xl font-bold text-white tracking-tight mb-1">Cases</h1>
+            <p className="text-slate-500 text-xs md:text-sm">
               Your active and archived case workspaces
             </p>
           </div>
@@ -98,7 +98,7 @@ const CasesPage = () => {
           </div>
 
           {/* Filter tabs */}
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2">
             {FILTER_TABS.map((tab) => (
               <Button
                 key={tab.key}
@@ -106,7 +106,7 @@ const CasesPage = () => {
                 size="sm"
                 onClick={() => setActiveFilter(tab.key)}
                 className={cn(
-                  "h-0.5625rem-4 rounded-xl text-xs font-bold tracking-wide border gap-2 transition-all",
+                  "h-7 rounded-xl text-[0.68rem] font-bold tracking-wide border gap-2 transition-all",
                   activeFilter === tab.key
                     ? "bg-purple-500/10 text-purple-300 border-purple-500/30"
                     : "bg-[#0a0a0a] border-white/10 text-slate-400 hover:text-white hover:bg-white/5"
@@ -131,7 +131,7 @@ const CasesPage = () => {
 
       {/* ── Scrollable case list ── */}
       {/* flex-1 + overflow-y-auto makes this section fill remaining height and scroll */}
-      <div className="flex-1 overflow-y-auto px-6 pb-36 md:px-10 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto pb-36 md:px-10 custom-scrollbar">
         {!isLoading && visibleCases.length > 0 && (
           <div className="flex flex-col gap-3 pt-2">
             {visibleCases.map((caseData) => (

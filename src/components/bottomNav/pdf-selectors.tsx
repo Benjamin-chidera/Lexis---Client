@@ -29,7 +29,7 @@ export const PdfSelectors = () => {
       onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
       onDragLeave={() => setDragging(false)}
       onDrop={handleDrop}
-      className={`bg-white/3 border-white/10 p-8 flex flex-col items-center justify-center text-center backdrop-blur-md shadow-2xl relative overflow-hidden group rounded-3xl cursor-pointer transition-all duration-300 ${
+      className={`bg-white/3 border-white/10 p-3 md:p-8 flex flex-col items-center justify-center text-center backdrop-blur-md shadow-2xl relative overflow-hidden group rounded-3xl cursor-pointer transition-all duration-300 ${
         dragging ? "border-purple-500/50 bg-purple-500/5" : ""
       }`}
     >
@@ -45,13 +45,13 @@ export const PdfSelectors = () => {
 
       <div className="absolute inset-0 bg-linear-to-b from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-      <div className="w-10 h-10 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-4 border border-purple-500/20 shadow-[0_0_1.25rem_rgba(168,85,247,0.15)] group-hover:scale-110 transition-transform duration-300">
+      <div className="w-10 h-10 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-2 md:mb-4 border border-purple-500/20 shadow-[0_0_1.25rem_rgba(168,85,247,0.15)] group-hover:scale-110 transition-transform duration-300">
         <FilePlus className="w-6 h-6 text-purple-400" />
       </div>
-      <h2 className="text-xl font-bold text-white mb-1">
+      <h2 className="text-lg md:text-xl font-bold text-white mb-1">
         Deposit Case Evidence
       </h2>
-      <p className="text-slate-400 text-xs mb-6 max-w-md leading-relaxed">
+      <p className="text-slate-400 text-xs mb-3 md:mb-6 max-w-md leading-relaxed">
         {dragging
           ? "Drop your PDFs here..."
           : "Add depositions, transcripts, or discovery files here to initiate neural indexing."}

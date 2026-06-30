@@ -85,9 +85,7 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
 
   const handlePdfFiles = (files: FileList | null) => {
     if (!files) return;
-    const pdfs = Array.from(files).filter(
-      (f) => f.type === "application/pdf"
-    );
+    const pdfs = Array.from(files).filter((f) => f.type === "application/pdf");
     if (pdfs.length > 0) {
       addPdfsToVault(caseId, pdfs);
     }
@@ -95,9 +93,7 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
 
   const handleImageFiles = (files: FileList | null) => {
     if (!files) return;
-    const images = Array.from(files).filter((f) =>
-      f.type.startsWith("image/")
-    );
+    const images = Array.from(files).filter((f) => f.type.startsWith("image/"));
     if (images.length > 0) {
       addImagesToVault(caseId, images);
     }
@@ -143,7 +139,6 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
 
   return (
     <>
-
       <div className="border-t border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl px-5 py-4 space-y-3">
         {/* Attachment panel (PDF, Image, URL) */}
         {attachmentPanelOpen && (
@@ -239,7 +234,7 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
                     onChange={(e) => setUrlInput(e.target.value)}
                     onKeyDown={handleUrlKeyDown}
                     placeholder="https://..."
-                    className="bg-white/5 border-white/10 pl-9 h-9 text-xs text-slate-200 placeholder:text-slate-600 rounded-xl focus:border-purple-500/40 focus:ring-0"
+                    className="bg-white/5 border-white/10 pl-9 h-9 text-base md:text-xs text-slate-200 placeholder:text-slate-600 rounded-xl focus:border-purple-500/40 focus:ring-0"
                   />
                 </div>
                 <Button
@@ -274,7 +269,7 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
                   onChange={(e) => setContextInput(e.target.value)}
                   placeholder="Add more context for the AI agent..."
                   rows={3}
-                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-200 placeholder:text-slate-600 resize-none focus:outline-none focus:border-green-500/40"
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-base md:text-xs text-slate-200 placeholder:text-slate-600 resize-none focus:outline-none focus:border-green-500/40"
                 />
                 <Button
                   type="button"
@@ -331,7 +326,7 @@ export const CaseChatInput = ({ caseId }: CaseChatInputProps) => {
               onChange={(e) => setChatText(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Ask Lexis AI about this case..."
-              className="bg-white/3 border-white/10 h-0.625rem-4 rounded-xl text-sm text-slate-200 placeholder:text-slate-600 focus:border-purple-500/40 focus:ring-0 transition-all"
+              className="bg-white/3 border-white/10 h-10 rounded-xl text-base md:text-sm text-slate-200 placeholder:text-slate-600 focus:border-purple-500/40 focus:ring-0 transition-all"
             />
           </div>
 
