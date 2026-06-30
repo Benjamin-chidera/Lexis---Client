@@ -154,7 +154,7 @@ export const TextMicInput = () => {
           setInterimResult("");
         }}
         placeholder="Describe the strategic context, desired outcomes, and key legal theories to explore..."
-        className="w-full min-h-50 md:min-h-50 bg-white/3 border border-white/10 rounded-[1.5rem] p-6 pr-24 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-purple-500/40 focus:ring-8 focus:ring-purple-500/5 transition-all resize-none shadow-2xl backdrop-blur-md text-base leading-relaxed"
+        className="w-full min-h-50 md:min-h-50 bg-white/3 border border-white/10 rounded-[1.5rem] p-6 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-purple-500/40 focus:ring-8 focus:ring-purple-500/5 transition-all resize-none shadow-2xl backdrop-blur-md text-base leading-relaxed"
       />
       {/* <div className="absolute bottom-6 right-6">
         {supported ? (
