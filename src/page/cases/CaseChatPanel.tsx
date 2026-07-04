@@ -88,6 +88,17 @@ const UserMessage = ({ message }: { message: ChatMessage }) => {
   );
 };
 
+const formatMessageContent = (text: string) => {
+  if (!text) return "";
+  // Ensure headers (##) are preceded by double newlines if they aren't already
+  let formatted = text.replace(/(?<!\n)\s*(##\s+)/g, "\n\n$1");
+  // Ensure numbered list items (e.g. 1., 2.) are preceded by a newline
+  formatted = formatted.replace(/(?<!\n)\s*(\d+\.\s+)/g, "\n$1");
+  // Clean up any potential triple newlines
+  formatted = formatted.replace(/\n{3,}/g, "\n\n");
+  return formatted.trim();
+};
+
 const AiMessage = memo(({ message, caseId }: { message: ChatMessage; caseId: string }) => {
   // useShallow does a shallow-equal check so this only re-renders when vault items actually change,
   // not on every store write (which would create a new [] reference via the ?? fallback).
@@ -176,7 +187,7 @@ const AiMessage = memo(({ message, caseId }: { message: ChatMessage; caseId: str
               ),
             }}
           >
-            {message.content}
+            {formatMessageContent(message.content)}
           </ReactMarkdown>
         </div>
 
