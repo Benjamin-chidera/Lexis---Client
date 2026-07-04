@@ -88,14 +88,34 @@ const UserMessage = ({ message }: { message: ChatMessage }) => {
   );
 };
 
-const formatMessageContent = (text: string) => {
+const formatMessageContent = (text: string): string => {
   if (!text) return "";
-  // Ensure headers (##) are preceded by double newlines if they aren't already
-  let formatted = text.replace(/(?<!\n)\s*(##\s+)/g, "\n\n$1");
-  // Ensure numbered list items (e.g. 1., 2.) are preceded by a newline
+
+  let formatted = text;
+
+  // Step 1: Ensure every "##" heading marker is preceded by a double newline.
+  // This handles messages stored as a single compressed line.
+  formatted = formatted.replace(/(?<!\n)\s*(##\s+)/g, "\n\n$1");
+
+  // Step 2: Separate heading names from body text on the same line.
+  // e.g. "## Issue How can we argue..." → "## Issue\nHow can we argue..."
+  // Without this, Markdown treats the entire line as a heading (bold).
+  const headingNames = "Issue|Rule|Analysis|Conclusion|Next Moves";
+  const headingSeparator = new RegExp(
+    `(## (?:${headingNames}))\\s+(?=\\S)`,
+    "g"
+  );
+  formatted = formatted.replace(headingSeparator, "$1\n\n");
+
+  // Step 3: Ensure numbered list items (1., 2., 3.) start on a new line.
   formatted = formatted.replace(/(?<!\n)\s*(\d+\.\s+)/g, "\n$1");
-  // Clean up any potential triple newlines
+
+  // Step 4: Ensure dash list items (- item) start on a new line.
+  formatted = formatted.replace(/(?<!\n)\s*(-\s+)/g, "\n$1");
+
+  // Step 5: Clean up excessive newlines (3+ → 2).
   formatted = formatted.replace(/\n{3,}/g, "\n\n");
+
   return formatted.trim();
 };
 
