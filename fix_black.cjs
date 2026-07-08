@@ -16,7 +16,7 @@ fs.readdirSync(pagesDir).forEach(pageFolder => {
 
     if (content !== original) {
       fs.writeFileSync(pagePath, content, 'utf8');
-      console.log('Fixed ' + pagePath);
+      // console.log('Fixed ' + pagePath);
     }
   }
 });

@@ -19,7 +19,7 @@ import {
   AlertDialogTitle,
   AlertDialogDescription,
 } from "@/components/ui/alert-dialog";
-import logo from '@/assets/logo.png'
+import logo from "@/assets/logo.png";
 
 type Step = "email" | "login" | "set-password";
 
@@ -166,7 +166,7 @@ const LoginPage = () => {
         <div className="flex items-center gap-3 mb-10">
           <div className="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center">
             {/* <ShieldCheck className="w-5 h-5 text-purple-400" /> */}
-             <img src={logo} alt="Lexis AI" />
+            <img src={logo} alt="Lexis AI" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-white tracking-tight">
@@ -418,7 +418,7 @@ const LoginPage = () => {
         <AlertDialogContent className="w-full max-w-sm bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(147,51,234,0.15)] flex flex-col p-6 gap-0">
           <div className="flex items-center gap-2.5 mb-4">
             <div className="w-8 h-8 rounded-lg bg-purple-600/20 border border-purple-500/30 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-purple-400" />
+              <img src={logo} alt="Lexis AI" />
             </div>
             <div>
               <AlertDialogTitle className="font-bold text-sm text-white">

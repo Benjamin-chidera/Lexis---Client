@@ -42,7 +42,7 @@ walkDir('./src', function(filePath) {
 
     if (content !== original) {
       fs.writeFileSync(filePath, content, 'utf8');
-      console.log('Updated: ' + filePath);
+      // console.log('Updated: ' + filePath);
     }
   }
 });

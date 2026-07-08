@@ -106,7 +106,7 @@ export function useVoiceCall(caseId: string | null) {
   }, []);
 
   const endCall = useCallback(() => {
-    console.log("[useVoiceCall] Ending call...");
+    // console.log("[useVoiceCall] Ending call...");
     
     // Stop recording tracks
     if (mediaStreamRef.current) {
@@ -169,16 +169,16 @@ export function useVoiceCall(caseId: string | null) {
       mediaStreamRef.current = stream;
 
       // Step 2: Create AudioContext and load downsampler worklet module
-      console.log("[useVoiceCall] Creating AudioContext...");
+      // console.log("[useVoiceCall] Creating AudioContext...");
       const audioContext = new AudioContext({ sampleRate: 48000 });
       audioContextRef.current = audioContext;
 
       if (audioContext.state === "suspended") {
-        console.log("[useVoiceCall] AudioContext is suspended. Attempting to resume...");
+        // console.log("[useVoiceCall] AudioContext is suspended. Attempting to resume...");
         await audioContext.resume();
       }
 
-      console.log("[useVoiceCall] Loading AudioWorklet module...");
+      // console.log("[useVoiceCall] Loading AudioWorklet module...");
       await audioContext.audioWorklet.addModule("/audio-processor.js");
 
       // Step 3: Connect mic stream -> AudioWorklet processor
@@ -206,7 +206,7 @@ export function useVoiceCall(caseId: string | null) {
       });
 
     } catch (error) {
-      console.error("[useVoiceCall] Failed to start call:", error);
+      // console.error("[useVoiceCall] Failed to start call:", error);
       setCallStatus("error");
     }
   }, [caseId]);
@@ -214,7 +214,7 @@ export function useVoiceCall(caseId: string | null) {
   useEffect(() => {
     const handleSessionStarted = () => {
       setCallStatus("active");
-      console.log("[useVoiceCall] Call session successfully started on server");
+      // console.log("[useVoiceCall] Call session successfully started on server");
     };
 
     // User speech transcription
