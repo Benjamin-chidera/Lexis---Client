@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import {
   Lock,
   Mail,
-  ShieldCheck,
   ArrowRight,
   Eye,
   EyeOff,
