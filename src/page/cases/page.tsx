@@ -106,7 +106,7 @@ const CasesPage = () => {
                 size="sm"
                 onClick={() => setActiveFilter(tab.key)}
                 className={cn(
-                  "h-7 rounded-xl text-[.68rem] font-bold tracking-wide border gap-2 transition-all",
+                  "h-7 rounded-xl text-[.63rem] font-bold tracking-wide border transition-all",
                   activeFilter === tab.key
                     ? "bg-purple-500/10 text-purple-300 border-purple-500/30"
                     : "bg-[#0a0a0a] border-white/10 text-slate-400 hover:text-white hover:bg-white/5"

@@ -8,8 +8,8 @@ export const BottomNav = () => {
 
   return (
     <div className="fixed bottom-0 z-50 left-0 right-0 pointer-events-none px-5 md:px-0">
-      <div className="pb-4 md:pb-8 pt-2 flex justify-center relative w-full">
-        <nav className="w-full md:w-auto bg-white/4 border border-white/10 px-2 md:px-4 py-3 rounded-[1.5rem] md:rounded-full flex justify-between md:justify-center items-center gap-1 md:gap-4 backdrop-blur-3xl shadow-[0_0.5rem_2rem_rgba(0,0,0,0.7),inset_0_0.0625rem_0_rgba(255,255,255,0.07)] pointer-events-auto">
+      <div className="pb-2 md:pb-8 pt-2 flex justify-center relative w-full">
+        <nav className="w-full md:w-auto bg-white/4 border border-white/10 px-2 md:px-4 py-1 rounded-[1.5rem] md:rounded-full flex justify-between md:justify-center items-center gap-1 md:gap-4 backdrop-blur-3xl shadow-[0_0.5rem_2rem_rgba(0,0,0,0.7),inset_0_0.0625rem_0_rgba(255,255,255,0.07)] pointer-events-auto">
           <Link to="/" className="flex-1 md:flex-none">
             <Button
               variant="ghost"
