@@ -205,8 +205,8 @@ export function useVoiceCall(caseId: string | null) {
         case_id: Number(caseId),
       });
 
-    } catch (error) {
-      // console.error("[useVoiceCall] Failed to start call:", error);
+    } catch {
+      // console.error("[useVoiceCall] Failed to start call");
       setCallStatus("error");
     }
   }, [caseId]);
