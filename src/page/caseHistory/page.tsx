@@ -3,6 +3,7 @@ import { CheckCircle2, XCircle, Ban, Scale, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CaseCard, type CaseStatus } from "@/components/caseHistory/CaseCard";
+import { CaseDetailsModal } from "@/components/caseHistory/CaseDetailsModal";
 import { StatsOverview } from "@/components/caseHistory/StatsOverview";
 import { useCasesStore } from "@/store/casesStore";
 import { cn } from "@/lib/utils";
@@ -50,6 +51,11 @@ const STATUS_ICONS: Record<CaseStatus, React.ReactNode> = {
 
 export const CaseHistoryPage = () => {
   const [activeTab, setActiveTab] = useState<TabType>("all");
+  const [selectedCase, setSelectedCase] = useState<{
+    id: string;
+    name: string;
+    status: CaseStatus;
+  } | null>(null);
   const allCases = useCasesStore((state) => state.cases);
   const fetchCases = useCasesStore((state) => state.fetchCases);
 
@@ -107,8 +113,8 @@ export const CaseHistoryPage = () => {
         }
       `}</style>
       {/* Header */}
-      <div className="mb-3 md:mb-10">
-        <h1 className=" text-xl md:text-4xl font-bold text-white tracking-tight mb-2">
+      <div className="mb-3 md:mb-5">
+        <h1 className=" text-xl md:text-3xl font-bold text-white tracking-tight mb-1">
           Case History
         </h1>
         <p className="text-slate-400 text-xs md:text-sm">
@@ -163,7 +169,17 @@ export const CaseHistoryPage = () => {
       {/* Cases List */}
       <div className="flex flex-col gap-4">
         {filtered.map((c) => (
-          <CaseCard key={c.id} {...c} />
+          <CaseCard
+            key={c.id}
+            {...c}
+            onViewCase={() =>
+              setSelectedCase({
+                id: c.id,
+                name: c.caseName,
+                status: c.status,
+              })
+            }
+          />
         ))}
       </div>
 
@@ -172,6 +188,17 @@ export const CaseHistoryPage = () => {
           <FileText className="w-10 h-10 mb-4 opacity-30" />
           <p className="text-sm font-medium">No cases in this category</p>
         </div>
+      )}
+
+      {/* Case Details Modal */}
+      {selectedCase && (
+        <CaseDetailsModal
+          open={true}
+          onClose={() => setSelectedCase(null)}
+          caseId={selectedCase.id}
+          caseName={selectedCase.name}
+          status={selectedCase.status}
+        />
       )}
     </div>
   );

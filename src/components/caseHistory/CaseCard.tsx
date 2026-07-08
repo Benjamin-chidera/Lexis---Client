@@ -17,6 +17,7 @@ export interface CaseCardProps {
   reason: string;
   status: CaseStatus;
   icon: React.ReactNode;
+  onViewCase?: () => void;
 }
 
 const statusStyles: Record<
@@ -84,6 +85,7 @@ export const CaseCard = ({
   reason,
   status,
   icon,
+  onViewCase,
 }: CaseCardProps) => {
   const s = statusStyles[status];
   const [showReason, setShowReason] = useState(false);
@@ -91,7 +93,7 @@ export const CaseCard = ({
   return (
     <div
       className={cn(
-        "bg-[#0a0a0a] border rounded-2xl p-5 md:p-6 transition-all hover:bg-white/1",
+        "bg-[#0a0a0a] border rounded-2xl p-5 md:p-4 transition-all hover:bg-white/1",
         s.border,
       )}
     >
@@ -165,6 +167,7 @@ export const CaseCard = ({
 
         {/* Action Button */}
         <Button
+          onClick={onViewCase}
           className={cn(
             "text-white rounded-xl h-9 text-xs font-bold tracking-wide w-full sm:w-auto px-5 shadow-lg shrink-0",
             s.btnBg,

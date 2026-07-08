@@ -50,9 +50,9 @@ export const StatsOverview = ({ successCount, closedCount, abandonedCount, total
           scrollbar-width: none;
         }
       `}</style>
-      <div className="flex flex-row md:grid md:grid-cols-3 gap-4 mb-2 md:mb-10 overflow-x-auto no-scrollbar flex-nowrap pb-2 md:pb-0 snap-x snap-mandatory">
+      <div className="flex flex-row md:grid md:grid-cols-3 gap-4 mb-2 md:mb-5 overflow-x-auto no-scrollbar flex-nowrap pb-2 md:pb-0 snap-x snap-mandatory">
         {stats(successCount, closedCount, abandonedCount, total).map((s) => (
-          <div key={s.label} className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-6 shrink-0 w-full sm:w-[280px] md:w-auto snap-start">
+          <div key={s.label} className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-4 shrink-0 w-full sm:w-[280px] md:w-auto snap-start">
             <div className="flex items-center justify-between mb-4">
               <span className="text-[0.625rem] font-black text-slate-500 uppercase tracking-widest">{s.label}</span>
               <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center", s.iconBg)}>

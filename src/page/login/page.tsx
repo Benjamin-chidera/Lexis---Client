@@ -20,6 +20,7 @@ import {
   AlertDialogTitle,
   AlertDialogDescription,
 } from "@/components/ui/alert-dialog";
+import logo from '@/assets/logo.png'
 
 type Step = "email" | "login" | "set-password";
 
@@ -165,7 +166,8 @@ const LoginPage = () => {
         {/* Brand header */}
         <div className="flex items-center gap-3 mb-10">
           <div className="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center">
-            <ShieldCheck className="w-5 h-5 text-purple-400" />
+            {/* <ShieldCheck className="w-5 h-5 text-purple-400" /> */}
+             <img src={logo} alt="Lexis AI" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-white tracking-tight">
@@ -229,7 +231,7 @@ const LoginPage = () => {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(true)}
-                  className="text-xs text-purple-400 hover:text-purple-300 font-semibold uppercase tracking-wider flex items-center gap-1.5 transition-all outline-none"
+                  className="text-xs text-slate-400 hover:text-slate-300 font-semibold uppercase tracking-wider flex items-center gap-1.5 transition-all outline-none"
                 >
                   <Sparkles className="w-3.5 h-3.5" /> Show Demo Credentials
                 </button>

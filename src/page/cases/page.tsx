@@ -68,9 +68,9 @@ const CasesPage = () => {
       <CallModal />
 
       {/* ── Fixed header ── */}
-      <div className="shrink-0-6 pt-17 pb-4 md:px-10 bg-transparent">
+      <div className="shrink-0-6 pt-17 pb-4  bg-transparent">
         {/* Page title row */}
-        <div className="flex items-start justify-between mb-4 md:mb-6">
+        <div className="flex items-start justify-between mb-4 md:mb-5">
           <div>
             <h1 className="text-xl md:text-3xl font-bold text-white tracking-tight mb-1">Cases</h1>
             <p className="text-slate-500 text-xs md:text-sm">
@@ -106,7 +106,7 @@ const CasesPage = () => {
                 size="sm"
                 onClick={() => setActiveFilter(tab.key)}
                 className={cn(
-                  "h-7 rounded-xl text-[0.68rem] font-bold tracking-wide border gap-2 transition-all",
+                  "h-7 rounded-xl text-[.68rem] font-bold tracking-wide border gap-2 transition-all",
                   activeFilter === tab.key
                     ? "bg-purple-500/10 text-purple-300 border-purple-500/30"
                     : "bg-[#0a0a0a] border-white/10 text-slate-400 hover:text-white hover:bg-white/5"
@@ -115,7 +115,7 @@ const CasesPage = () => {
                 {tab.label}
                 <Badge
                   className={cn(
-                    "ml-0-1.5 py-0 h-4 text-[0.5625rem] font-black rounded border-0",
+                    "ml-0-1.5 py-0 h-4 text-[.5625rem] font-black rounded border-0",
                     activeFilter === tab.key
                       ? "bg-purple-500/20 text-purple-300"
                       : "bg-white/5 text-slate-500"
@@ -131,7 +131,7 @@ const CasesPage = () => {
 
       {/* ── Scrollable case list ── */}
       {/* flex-1 + overflow-y-auto makes this section fill remaining height and scroll */}
-      <div className="flex-1 overflow-y-auto pb-36 md:px-10 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto pb-36 custom-scrollbar">
         {!isLoading && visibleCases.length > 0 && (
           <div className="flex flex-col gap-3 pt-2">
             {visibleCases.map((caseData) => (
@@ -196,9 +196,9 @@ const CasesPage = () => {
 
       {/* Custom scrollbar styles scoped to this page */}
       <style>{`
-        .custom-scrollbar::-webkit-scrollbar { width: 0.3125rem; }
+        .custom-scrollbar::-webkit-scrollbar { width: .3125rem; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 0.625rem; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: .625rem; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.12); }
       `}</style>
     </div>
