@@ -1,7 +1,7 @@
 /* App.css is intentionally left blank because Tailwind base styles are managed in index.css */
 @layer base {
   html {
-    font-size: 100%;
+    font-size: 95%;
   }
 }
 
