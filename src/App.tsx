@@ -23,6 +23,10 @@ import { playNotificationSound } from "./components/notifications/useNotificatio
 import type { AlertItem } from "./store/alertStore";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
+import * as Sentry from "@sentry/react";
+import { SentryErrorFallback } from "./components/SentryErrorFallback";
+
+const SentryRoutes = Sentry.withSentryReactRouterV6Routing(Routes);
 
 const LogoutButton = () => {
   const logout = useAuthStore((state) => state.logout);
@@ -71,6 +75,14 @@ const App = () => {
   const user = useAuthStore((state) => state.user);
   const fetchCases = useCasesStore((state) => state.fetchCases);
 
+  useEffect(() => {
+    if (user) {
+      Sentry.setUser({ email: user.email });
+    } else {
+      Sentry.setUser(null);
+    }
+  }, [user]);
+
   // Verify the cookie on every page load
   useEffect(() => {
     checkSession();
@@ -114,24 +126,26 @@ const App = () => {
 
   return (
     <main className="w-full min-h-screen bg-black px-5 md:px-0">
-      <BrowserRouter>
-        <AppChrome>
-          <Routes>
-            {/* Public */}
-            <Route path="/login" element={<LoginPage />} />
+      <Sentry.ErrorBoundary fallback={SentryErrorFallback}>
+        <BrowserRouter>
+          <AppChrome>
+            <SentryRoutes>
+              {/* Public */}
+              <Route path="/login" element={<LoginPage />} />
 
-            {/* Protected */}
-            <Route path="/" element={<ProtectedRoute><BriefingPage /></ProtectedRoute>} />
-            <Route path="/cases" element={<ProtectedRoute><CasesPage /></ProtectedRoute>} />
-            <Route path="/chat" element={<ProtectedRoute><ChatRoomPage /></ProtectedRoute>} />
-            <Route path="/alerts" element={<ProtectedRoute><CaseAlertPage /></ProtectedRoute>} />
-            {/* <Route path="/archive" element={<ProtectedRoute><MeetingHistoryPage /></ProtectedRoute>} /> */}
-            <Route path="/history" element={<ProtectedRoute><CaseHistoryPage /></ProtectedRoute>} />
+              {/* Protected */}
+              <Route path="/" element={<ProtectedRoute><BriefingPage /></ProtectedRoute>} />
+              <Route path="/cases" element={<ProtectedRoute><CasesPage /></ProtectedRoute>} />
+              <Route path="/chat" element={<ProtectedRoute><ChatRoomPage /></ProtectedRoute>} />
+              <Route path="/alerts" element={<ProtectedRoute><CaseAlertPage /></ProtectedRoute>} />
+              {/* <Route path="/archive" element={<ProtectedRoute><MeetingHistoryPage /></ProtectedRoute>} /> */}
+              <Route path="/history" element={<ProtectedRoute><CaseHistoryPage /></ProtectedRoute>} />
 
-            <Route path="*" element={<ErrorPage />} />
-          </Routes>
-        </AppChrome>
-      </BrowserRouter>
+              <Route path="*" element={<ErrorPage />} />
+            </SentryRoutes>
+          </AppChrome>
+        </BrowserRouter>
+      </Sentry.ErrorBoundary>
       <Toaster position="top-right" />
     </main>
   );

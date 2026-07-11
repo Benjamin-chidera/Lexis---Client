@@ -173,7 +173,7 @@ export const CaseDetailsModal = ({
                 value="chat"
                 className="flex-1 overflow-y-auto m-0 p-0"
               >
-                <ChatPanel messages={messages} />
+                <ChatPanel messages={messages} caseId={caseId} />
               </TabsContent>
 
               {/* ─── Alerts Tab ─── */}
@@ -194,7 +194,39 @@ export const CaseDetailsModal = ({
 // ────────────────────────────────────────────────────────────
 // Chat Panel — renders the conversation between user & Lexi
 // ────────────────────────────────────────────────────────────
-const ChatPanel = ({ messages }: { messages: ChatMessage[] }) => {
+const ChatPanel = ({ messages, caseId }: { messages: ChatMessage[]; caseId: string }) => {
+  const vault = useCasesStore(
+    (state) => state.cases.find((c) => c.id === caseId)?.vault ?? []
+  );
+
+  const handleCitationClick = (filename: string) => {
+    const cleanName = (name: string) => {
+      try {
+        return decodeURIComponent(name)
+          .replace(/^(image|pdf|file|document|url):\s*/i, "")
+          .trim()
+          .toLowerCase();
+      } catch (e) {
+        return name
+          .replace(/^(image|pdf|file|document|url):\s*/i, "")
+          .trim()
+          .toLowerCase();
+      }
+    };
+
+    const target = cleanName(filename);
+    const match = vault.find((v) => {
+      const vName = cleanName(v.name);
+      return vName.includes(target) || target.includes(vName);
+    });
+
+    if (match?.url) {
+      window.open(match.url, "_blank", "noopener,noreferrer");
+    } else {
+      console.warn("No match found in vault for citation:", filename, "target:", target);
+    }
+  };
+
   if (messages.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-slate-500">
@@ -295,10 +327,15 @@ const ChatPanel = ({ messages }: { messages: ChatMessage[] }) => {
 
             {/* Citation badge */}
             {msg.citation && (
-              <div className="mt-2 inline-flex items-center gap-1.5 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[0.625rem] font-bold px-2 py-1 rounded-md">
-                <FileText className="w-3 h-3" />
-                {msg.citation.filename}
-                {msg.citation.page && ` — p.${msg.citation.page}`}
+              <div
+                onClick={() => handleCitationClick(msg.citation!.filename)}
+                className="mt-2 inline-flex items-center gap-1.5 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[0.625rem] font-bold px-2 py-1 rounded-md max-w-full min-w-0 cursor-pointer hover:bg-cyan-500/20 hover:border-cyan-500/40 transition-all"
+              >
+                <FileText className="w-3 h-3 shrink-0" />
+                <span className="truncate" title={msg.citation.filename}>
+                  {msg.citation.filename}
+                </span>
+                {msg.citation.page && <span className="shrink-0"> — p.{msg.citation.page}</span>}
               </div>
             )}
           </div>

@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/authStore";
 import { toast } from "sonner";
+import * as Sentry from "@sentry/react";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -65,7 +66,8 @@ const LoginPage = () => {
       setPasswordValue("testuser");
       await login("testuser@gmail.com", "testuser");
       navigate("/", { replace: true });
-    } catch {
+    } catch (error) {
+      Sentry.captureException(error);
       toast.error("Auto-login failed. Fills applied, please click Continue.");
       setEmail("testuser@gmail.com");
       setPasswordValue("testuser");
@@ -73,7 +75,8 @@ const LoginPage = () => {
         const result = await checkEmail("testuser@gmail.com");
         setUserName(result.name);
         setStep(result.has_password ? "login" : "set-password");
-      } catch {
+      } catch (innerError) {
+        Sentry.captureException(innerError);
         setStep("email");
       }
     } finally {
@@ -95,6 +98,7 @@ const LoginPage = () => {
       setUserName(result.name);
       setStep(result.has_password ? "login" : "set-password");
     } catch (err) {
+      Sentry.captureException(err);
       toast.error(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
       setIsLoading(false);
@@ -114,6 +118,7 @@ const LoginPage = () => {
       await login(email.trim(), password);
       navigate("/", { replace: true });
     } catch (err) {
+      Sentry.captureException(err);
       toast.error(
         err instanceof Error ? err.message : "Login failed. Please try again.",
       );
@@ -143,6 +148,7 @@ const LoginPage = () => {
       await setPassword(email.trim(), password, confirmPassword);
       navigate("/", { replace: true });
     } catch (err) {
+      Sentry.captureException(err);
       toast.error(
         err instanceof Error ? err.message : "Failed to set password.",
       );

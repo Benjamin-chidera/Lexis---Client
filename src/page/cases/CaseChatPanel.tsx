@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useCasesStore } from "@/store/casesStore";
 import { useShallow } from "zustand/react/shallow";
 import type { ChatMessage } from "@/store/casesStore";
+import * as Sentry from "@sentry/react";
 
 interface CaseChatPanelProps {
   caseId: string;
@@ -128,16 +129,37 @@ const AiMessage = memo(({ message, caseId }: { message: ChatMessage; caseId: str
 
   const handleCitationClick = () => {
     if (!message.citation) return;
-    const match = vault.find(
-      (v) => v.name === message.citation!.filename || v.name.includes(message.citation!.filename)
-    );
+
+    const cleanName = (name: string) => {
+      try {
+        return decodeURIComponent(name)
+          .replace(/^(image|pdf|file|document|url):\s*/i, "")
+          .trim()
+          .toLowerCase();
+      } catch (e) {
+        Sentry.captureException(e);
+        return name
+          .replace(/^(image|pdf|file|document|url):\s*/i, "")
+          .trim()
+          .toLowerCase();
+      }
+    };
+
+    const target = cleanName(message.citation.filename);
+    const match = vault.find((v) => {
+      const vName = cleanName(v.name);
+      return vName.includes(target) || target.includes(vName);
+    });
+
     if (match?.url) {
       window.open(match.url, "_blank", "noopener,noreferrer");
+    } else {
+      console.warn("No match found in vault for citation:", message.citation.filename, "target:", target);
     }
   };
 
   return (
-    <div className="flex flex-col items-start gap-3 max-w-[92%]">
+    <div className="flex flex-col items-start gap-3 max-w-[95%]">
       {/* AI avatar + name */}
       <div className="flex items-center gap-3 ml-1">
         <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/20">
@@ -214,20 +236,25 @@ const AiMessage = memo(({ message, caseId }: { message: ChatMessage; caseId: str
         {/* Optional citation card */}
         {message.citation && (
           <div className="mt-4 pl-3">
-            <div onClick={handleCitationClick} className="bg-white/3 border border-white/10 rounded-xl p-3 flex items-center justify-between hover:border-white/20 transition-all cursor-pointer group/card">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10">
+            <div
+              onClick={handleCitationClick}
+              className="bg-white/3 border border-white/10 rounded-xl p-3 flex items-center justify-between hover:border-white/20 transition-all cursor-pointer group/card w-full min-w-0"
+            >
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 shrink-0">
                   <FileText className="w-4 h-4 text-slate-400" />
                 </div>
-                <div>
-                  <p className="text-xs font-bold text-slate-200">{message.citation.filename}</p>
-                  <p className="text-[0.625rem] text-slate-500 font-medium">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold text-slate-200 truncate" title={message.citation.filename}>
+                    {message.citation.filename}
+                  </p>
+                  <p className="text-[0.625rem] text-slate-500 font-medium truncate">
                     {message.citation.exhibit}
                     {message.citation.page ? ` · Page ${message.citation.page}` : ""}
                   </p>
                 </div>
               </div>
-              <ExternalLink className="w-3.5 h-3.5 text-slate-600 group-hover/card:text-slate-400 transition-colors" />
+              <ExternalLink className="w-3.5 h-3.5 text-slate-600 group-hover/card:text-slate-400 transition-colors shrink-0 ml-2" />
             </div>
           </div>
         )}

@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import * as Sentry from "@sentry/react";
 
 const API_BASE = import.meta.env.VITE_API_URL;
 
@@ -118,7 +119,8 @@ export const useAuthStore = create<AuthStore>()(
             method: "POST",
             credentials: "include",
           });
-        } catch {
+        } catch (error) {
+          Sentry.captureException(error);
           // best-effort — clear local state regardless
         }
         set({ user: null });
@@ -143,7 +145,8 @@ export const useAuthStore = create<AuthStore>()(
             },
             sessionChecked: true,
           });
-        } catch {
+        } catch (error) {
+          Sentry.captureException(error);
           set({ user: null, sessionChecked: true });
         }
       },

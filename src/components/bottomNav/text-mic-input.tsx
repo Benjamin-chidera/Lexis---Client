@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Mic, MicOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useBriefingStore } from "@/store/briefingStore";
+import * as Sentry from "@sentry/react";
 
 interface SpeechRecognitionResult {
   readonly isFinal: boolean;
@@ -101,6 +102,7 @@ export const TextMicInput = () => {
               recognition.start();
             } catch (error) {
               console.error("Error restarting speech recognition:", error);
+              Sentry.captureException(error);
               setListening(false);
               setInterimResult("");
               isIntendedListeningRef.current = false;
@@ -145,6 +147,7 @@ export const TextMicInput = () => {
         setListening(true);
       } catch (e) {
         console.error("Failed to start recognition:", e);
+        Sentry.captureException(e);
       }
     }
   };

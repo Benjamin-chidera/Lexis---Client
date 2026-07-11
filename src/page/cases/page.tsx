@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FolderOpen, Plus, Search } from "lucide-react";
+import { FolderOpen, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +9,8 @@ import { CaseListCard } from "./CaseListCard";
 import { CaseModal } from "./CaseModal";
 import { CallModal } from "./CallModal";
 import { cn } from "@/lib/utils";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+
 
 type FilterTab = "all" | "active" | "archived" | "closed";
 
@@ -28,7 +29,7 @@ const CasesPage = () => {
   const [activeFilter, setActiveFilter] = useState<FilterTab>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const navigate = useNavigate(); 
+  // const navigate = useNavigate(); 
 
   useEffect(() => {
     fetchCases();
@@ -78,10 +79,7 @@ const CasesPage = () => {
             </p>
           </div>
 
-          <Button className="bg-white hover:bg-zinc-200 text-black border border-white/20 rounded-xl px-5 h-10 gap-2 font-bold shadow-lg shadow-purple-500/20 text-sm"  onClick={() => navigate("/")}> 
-            <Plus className="w-4 h-4" />
-            New Case
-          </Button>
+          
         </div>
 
         {/* Search + Filter row — also fixed */}

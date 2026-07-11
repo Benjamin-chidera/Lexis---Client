@@ -87,7 +87,7 @@ export const RightSplitSection = () => {
             className="flex-1 overflow-hidden m-0 data-[state=active]:flex flex-col relative"
           >
             <div className="flex-1 overflow-y-auto p-12 bg-black/80 flex justify-center custom-scrollbar scroll-smooth">
-              <div className="w-full max-w-2xl bg-[#0a0a0a] shadow-[0_1.875rem_6.25rem_rgba(0,0,0,0.9)] p-20 rounded-md border border-white/3 relative min-h-[59.375rem] group/pdf">
+              <div className="w-full max-w-2xl bg-[#0a0a0a] shadow-[0_1.875rem_6.25rem_rgba(0,0,0,0.9)] p-20 rounded-md border border-white/3 relative min-h-237.5 group/pdf">
                 {/* Watermark/Header */}
                 <div className="flex justify-between mb-20 opacity-30">
                   <span className="text-[0.625rem] font-bold tracking-widest text-slate-500 uppercase">
