@@ -1,5 +1,5 @@
 interface FallbackProps {
-  error: Error;
+  error: unknown;
   componentStack: string | null;
   eventId: string | null;
   resetError: () => void;
@@ -26,7 +26,9 @@ export function SentryErrorFallback({ error, eventId, resetError }: FallbackProp
 
         <div className="w-full text-left bg-gray-950/50 rounded-xl p-4 mb-8 border border-gray-800/50 overflow-x-auto">
           <p className="text-red-400 font-mono text-sm mb-2 font-medium">Error details:</p>
-          <code className="text-gray-300 text-xs font-mono whitespace-pre-wrap">{error.toString()}</code>
+          <code className="text-gray-300 text-xs font-mono whitespace-pre-wrap">
+            {error instanceof Error ? error.toString() : String(error)}
+          </code>
           {eventId && (
             <p className="text-gray-500 text-xs mt-3 pt-3 border-t border-gray-800/50">
               Error ID: {eventId}

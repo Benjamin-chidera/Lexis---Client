@@ -206,7 +206,7 @@ const ChatPanel = ({ messages, caseId }: { messages: ChatMessage[]; caseId: stri
           .replace(/^(image|pdf|file|document|url):\s*/i, "")
           .trim()
           .toLowerCase();
-      } catch (e) {
+      } catch {
         return name
           .replace(/^(image|pdf|file|document|url):\s*/i, "")
           .trim()
