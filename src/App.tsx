@@ -106,6 +106,20 @@ const App = () => {
       playNotificationSound();
       fetchCases();
       fetchAlerts();
+
+      // Show an interactive toast so the user knows research is done
+      // and can jump straight to the case memo
+      const caseName = data.alert.case_name || `Case #${data.alert.case_id}`;
+      toast.success(`⚖️ Research Complete: ${caseName}`, {
+        description: data.alert.title,
+        duration: 8000,
+        action: {
+          label: "View Memo",
+          onClick: () => {
+            useCasesStore.getState().openCase(String(data.alert.case_id));
+          },
+        },
+      });
     };
 
     const handleError = (data: { case_name: string; message: string }) => {

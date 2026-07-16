@@ -1,8 +1,15 @@
 import { useEffect, useRef, memo } from "react";
 import ReactMarkdown from "react-markdown";
-import { Brain, Terminal, FileText, ExternalLink } from "lucide-react";
+import {
+  Brain,
+  Terminal,
+  FileText,
+  ExternalLink,
+  Loader2,
+  // CheckCircle2
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { useCasesStore } from "@/store/casesStore";
+import { useCasesStore, getActiveCase } from "@/store/casesStore";
 import { useShallow } from "zustand/react/shallow";
 import type { ChatMessage } from "@/store/casesStore";
 import * as Sentry from "@sentry/react";
@@ -14,6 +21,8 @@ interface CaseChatPanelProps {
 
 export const CaseChatPanel = ({ caseId, messages }: CaseChatPanelProps) => {
   const isAiTyping = useCasesStore((state) => state.isAiTyping);
+  const activeCase = useCasesStore(getActiveCase);
+  const researchStatus = activeCase?.researchStatus;
   const bottomRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom whenever messages change or typing starts
@@ -27,12 +36,45 @@ export const CaseChatPanel = ({ caseId, messages }: CaseChatPanelProps) => {
       <div className="px-6 py-5 flex items-center justify-between border-b border-white/5 bg-[#0a0a0a]/50 backdrop-blur-sm shrink-0">
         <div className="flex items-center gap-3">
           <Brain className="w-5 h-5 text-purple-400" />
-          <h2 className="text-lg font-bold text-white tracking-tight">Intelligence Stream</h2>
+          <h2 className="text-lg font-bold text-white tracking-tight">
+            Intelligence Stream
+          </h2>
         </div>
         <Badge className="bg-purple-500/10 text-purple-400 border-purple-500/1.25rem-3 py-1 rounded-md text-[0.625rem] font-bold uppercase tracking-widest">
           AI Active
         </Badge>
       </div>
+
+      {/* Background Research Progress Banner */}
+      {researchStatus &&
+        (researchStatus === "processing" || researchStatus === "pending") && (
+          <div className="mx-4 mt-3 px-4 py-3 rounded-xl bg-amber-500/5 border border-amber-500/20 flex items-center gap-3 shrink-0 animate-in fade-in slide-in-from-top-2 duration-300">
+            <Loader2 className="w-4 h-4 text-amber-400 animate-spin shrink-0" />
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold text-amber-300">
+                Background Research In Progress
+              </p>
+              <p className="text-[0.625rem] text-amber-400/70 mt-0.5">
+                Lexis is searching legislation.gov.uk, BAILII, and Scottish
+                Courts for precedents and statutes relevant to your case. You
+                will be notified when complete.
+              </p>
+            </div>
+          </div>
+        )}
+      {/* {researchStatus && (researchStatus === "success" || researchStatus === "completed" || researchStatus === "complete") && (
+        <div className="mx-4 mt-3 px-4 py-3 rounded-xl bg-emerald-500/5 border border-emerald-500/20 flex items-center gap-3 shrink-0 animate-in fade-in slide-in-from-top-2 duration-300">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-semibold text-emerald-300">
+              Background Research Complete
+            </p>
+            <p className="text-[0.625rem] text-emerald-400/70 mt-0.5">
+              Research findings are ready. Ask Lexis about the results or check your alerts.
+            </p>
+          </div>
+        </div>
+      )} */}
 
       {/* Chat message list */}
       <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar scroll-smooth">
@@ -61,7 +103,9 @@ export const CaseChatPanel = ({ caseId, messages }: CaseChatPanelProps) => {
           if (message.role === "user") {
             return <UserMessage key={message.id} message={message} />;
           }
-          return <AiMessage key={message.id} message={message} caseId={caseId} />;
+          return (
+            <AiMessage key={message.id} message={message} caseId={caseId} />
+          );
         })}
 
         {/* Typing indicator — shown while the AI is generating a response */}
@@ -104,7 +148,7 @@ const formatMessageContent = (text: string): string => {
   const headingNames = "Issue|Rule|Analysis|Conclusion|Next Moves";
   const headingSeparator = new RegExp(
     `(## (?:${headingNames}))\\s+(?=\\S)`,
-    "g"
+    "g",
   );
   formatted = formatted.replace(headingSeparator, "$1\n\n");
 
@@ -120,152 +164,180 @@ const formatMessageContent = (text: string): string => {
   return formatted.trim();
 };
 
-const AiMessage = memo(({ message, caseId }: { message: ChatMessage; caseId: string }) => {
-  // useShallow does a shallow-equal check so this only re-renders when vault items actually change,
-  // not on every store write (which would create a new [] reference via the ?? fallback).
-  const vault = useCasesStore(
-    useShallow((state) => state.cases.find((c) => c.id === caseId)?.vault ?? [])
-  );
+const AiMessage = memo(
+  ({ message, caseId }: { message: ChatMessage; caseId: string }) => {
+    // useShallow does a shallow-equal check so this only re-renders when vault items actually change,
+    // not on every store write (which would create a new [] reference via the ?? fallback).
+    const vault = useCasesStore(
+      useShallow(
+        (state) => state.cases.find((c) => c.id === caseId)?.vault ?? [],
+      ),
+    );
 
-  const handleCitationClick = () => {
-    if (!message.citation) return;
+    const handleCitationClick = () => {
+      if (!message.citation) return;
 
-    const cleanName = (name: string) => {
-      try {
-        return decodeURIComponent(name)
-          .replace(/^(image|pdf|file|document|url):\s*/i, "")
-          .trim()
-          .toLowerCase();
-      } catch (e) {
-        Sentry.captureException(e);
-        return name
-          .replace(/^(image|pdf|file|document|url):\s*/i, "")
-          .trim()
-          .toLowerCase();
+      const cleanName = (name: string) => {
+        try {
+          return decodeURIComponent(name)
+            .replace(/^(image|pdf|file|document|url):\s*/i, "")
+            .trim()
+            .toLowerCase();
+        } catch (e) {
+          Sentry.captureException(e);
+          return name
+            .replace(/^(image|pdf|file|document|url):\s*/i, "")
+            .trim()
+            .toLowerCase();
+        }
+      };
+
+      const target = cleanName(message.citation.filename);
+      const match = vault.find((v) => {
+        const vName = cleanName(v.name);
+        return vName.includes(target) || target.includes(vName);
+      });
+
+      if (match?.url) {
+        window.open(match.url, "_blank", "noopener,noreferrer");
+      } else {
+        console.warn(
+          "No match found in vault for citation:",
+          message.citation.filename,
+          "target:",
+          target,
+        );
       }
     };
 
-    const target = cleanName(message.citation.filename);
-    const match = vault.find((v) => {
-      const vName = cleanName(v.name);
-      return vName.includes(target) || target.includes(vName);
-    });
-
-    if (match?.url) {
-      window.open(match.url, "_blank", "noopener,noreferrer");
-    } else {
-      console.warn("No match found in vault for citation:", message.citation.filename, "target:", target);
-    }
-  };
-
-  return (
-    <div className="flex flex-col items-start gap-3 max-w-[95%]">
-      {/* AI avatar + name */}
-      <div className="flex items-center gap-3 ml-1">
-        <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/20">
-          <Terminal className="w-4 h-4 text-white" />
+    return (
+      <div className="flex flex-col items-start gap-3 max-w-[95%]">
+        {/* AI avatar + name */}
+        <div className="flex items-center gap-3 ml-1">
+          <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/20">
+            <Terminal className="w-4 h-4 text-white" />
+          </div>
+          <span className="text-[0.625rem] font-black text-purple-400 uppercase tracking-[0.25em]">
+            Lexis AI
+          </span>
         </div>
-        <span className="text-[0.625rem] font-black text-purple-400 uppercase tracking-[0.25em]">
-          Lexis AI
+
+        {/* Message bubble */}
+        <div className="bg-white/2 border border-white/5 rounded-2xl p-5 relative overflow-hidden shadow-xl w-full">
+          <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-purple-500 rounded-l" />
+          <div className="pl-3 text-sm leading-relaxed prose prose-invert prose-sm max-w-none overflow-x-hidden">
+            <ReactMarkdown
+              components={{
+                h1: ({ children }) => (
+                  <h1 className="text-white font-bold text-base mt-4 mb-2">
+                    {children}
+                  </h1>
+                ),
+                h2: ({ children }) => (
+                  <h2 className="text-white font-bold text-sm mt-4 mb-1.5">
+                    {children}
+                  </h2>
+                ),
+                h3: ({ children }) => (
+                  <h3 className="text-slate-200 font-semibold text-sm mt-3 mb-1">
+                    {children}
+                  </h3>
+                ),
+                h4: ({ children }) => (
+                  <h4 className="text-slate-300 font-semibold text-xs mt-2 mb-1 uppercase tracking-wide">
+                    {children}
+                  </h4>
+                ),
+                p: ({ children }) => (
+                  <p className="text-slate-300 mb-2">{children}</p>
+                ),
+                strong: ({ children }) => (
+                  <strong className="text-white font-semibold">
+                    {children}
+                  </strong>
+                ),
+                em: ({ children }) => (
+                  <em className="text-slate-300 italic">{children}</em>
+                ),
+                a: ({ href, children }) => (
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-purple-400 hover:text-purple-300 underline underline-offset-2 transition-colors break-all"
+                  >
+                    {children}
+                  </a>
+                ),
+                ul: ({ children }) => (
+                  <ul className="list-disc list-inside space-y-1 text-slate-300 mb-2">
+                    {children}
+                  </ul>
+                ),
+                ol: ({ children }) => (
+                  <ol className="list-decimal list-inside space-y-1 text-slate-300 mb-2">
+                    {children}
+                  </ol>
+                ),
+                li: ({ children }) => (
+                  <li className="text-slate-300">{children}</li>
+                ),
+                hr: () => <hr className="border-white/10 my-4" />,
+                code: ({ children }) => (
+                  <code className="bg-white/5 text-slate-300 text-xs px-1.5 py-0.5 rounded font-mono break-all">
+                    {children}
+                  </code>
+                ),
+                blockquote: ({ children }) => (
+                  <blockquote className="border-l-2 border-purple-500/50 pl-3 text-slate-400 italic">
+                    {children}
+                  </blockquote>
+                ),
+              }}
+            >
+              {formatMessageContent(message.content)}
+            </ReactMarkdown>
+          </div>
+
+          {/* Optional citation card */}
+          {message.citation && (
+            <div className="mt-4 pl-3">
+              <div
+                onClick={handleCitationClick}
+                className="bg-white/3 border border-white/10 rounded-xl p-3 flex items-center justify-between hover:border-white/20 transition-all cursor-pointer group/card w-full min-w-0"
+              >
+                <div className="flex items-center gap-3 min-w-0 flex-1">
+                  <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 shrink-0">
+                    <FileText className="w-4 h-4 text-slate-400" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p
+                      className="text-xs font-bold text-slate-200 truncate"
+                      title={message.citation.filename}
+                    >
+                      {message.citation.filename}
+                    </p>
+                    <p className="text-[0.625rem] text-slate-500 font-medium truncate">
+                      {message.citation.exhibit}
+                      {message.citation.page
+                        ? ` · Page ${message.citation.page}`
+                        : ""}
+                    </p>
+                  </div>
+                </div>
+                <ExternalLink className="w-3.5 h-3.5 text-slate-600 group-hover/card:text-slate-400 transition-colors shrink-0 ml-2" />
+              </div>
+            </div>
+          )}
+        </div>
+
+        <span className="text-[0.625rem] font-bold text-slate-600 uppercase tracking-widest ml-1">
+          Lexis AI · {message.timestamp}
         </span>
       </div>
-
-      {/* Message bubble */}
-      <div className="bg-white/2 border border-white/5 rounded-2xl p-5 relative overflow-hidden shadow-xl w-full">
-        <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-purple-500 rounded-l" />
-        <div className="pl-3 text-sm leading-relaxed prose prose-invert prose-sm max-w-none overflow-x-hidden">
-          <ReactMarkdown
-            components={{
-              h1: ({ children }) => (
-                <h1 className="text-white font-bold text-base mt-4 mb-2">{children}</h1>
-              ),
-              h2: ({ children }) => (
-                <h2 className="text-white font-bold text-sm mt-4 mb-1.5">{children}</h2>
-              ),
-              h3: ({ children }) => (
-                <h3 className="text-slate-200 font-semibold text-sm mt-3 mb-1">{children}</h3>
-              ),
-              h4: ({ children }) => (
-                <h4 className="text-slate-300 font-semibold text-xs mt-2 mb-1 uppercase tracking-wide">{children}</h4>
-              ),
-              p: ({ children }) => (
-                <p className="text-slate-300 mb-2">{children}</p>
-              ),
-              strong: ({ children }) => (
-                <strong className="text-white font-semibold">{children}</strong>
-              ),
-              em: ({ children }) => (
-                <em className="text-slate-300 italic">{children}</em>
-              ),
-              a: ({ href, children }) => (
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-purple-400 hover:text-purple-300 underline underline-offset-2 transition-colors break-all"
-                >
-                  {children}
-                </a>
-              ),
-              ul: ({ children }) => (
-                <ul className="list-disc list-inside space-y-1 text-slate-300 mb-2">{children}</ul>
-              ),
-              ol: ({ children }) => (
-                <ol className="list-decimal list-inside space-y-1 text-slate-300 mb-2">{children}</ol>
-              ),
-              li: ({ children }) => (
-                <li className="text-slate-300">{children}</li>
-              ),
-              hr: () => <hr className="border-white/10 my-4" />,
-              code: ({ children }) => (
-                <code className="bg-white/5 text-slate-300 text-xs px-1.5 py-0.5 rounded font-mono break-all">
-                  {children}
-                </code>
-              ),
-              blockquote: ({ children }) => (
-                <blockquote className="border-l-2 border-purple-500/50 pl-3 text-slate-400 italic">
-                  {children}
-                </blockquote>
-              ),
-            }}
-          >
-            {formatMessageContent(message.content)}
-          </ReactMarkdown>
-        </div>
-
-        {/* Optional citation card */}
-        {message.citation && (
-          <div className="mt-4 pl-3">
-            <div
-              onClick={handleCitationClick}
-              className="bg-white/3 border border-white/10 rounded-xl p-3 flex items-center justify-between hover:border-white/20 transition-all cursor-pointer group/card w-full min-w-0"
-            >
-              <div className="flex items-center gap-3 min-w-0 flex-1">
-                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 shrink-0">
-                  <FileText className="w-4 h-4 text-slate-400" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-xs font-bold text-slate-200 truncate" title={message.citation.filename}>
-                    {message.citation.filename}
-                  </p>
-                  <p className="text-[0.625rem] text-slate-500 font-medium truncate">
-                    {message.citation.exhibit}
-                    {message.citation.page ? ` · Page ${message.citation.page}` : ""}
-                  </p>
-                </div>
-              </div>
-              <ExternalLink className="w-3.5 h-3.5 text-slate-600 group-hover/card:text-slate-400 transition-colors shrink-0 ml-2" />
-            </div>
-          </div>
-        )}
-      </div>
-
-      <span className="text-[0.625rem] font-bold text-slate-600 uppercase tracking-widest ml-1">
-        Lexis AI · {message.timestamp}
-      </span>
-    </div>
-  );
-});
+    );
+  },
+);
 
 // Typing indicator shown while the AI is generating a response.
 // Displays the active pipeline stage label when available.
@@ -291,7 +363,9 @@ const TypingIndicator = () => {
           {researchStage ? (
             <>
               <span className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse shrink-0" />
-              <span className="text-xs text-purple-300 font-medium animate-pulse">{researchStage}</span>
+              <span className="text-xs text-purple-300 font-medium animate-pulse">
+                {researchStage}
+              </span>
             </>
           ) : (
             <>

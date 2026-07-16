@@ -181,7 +181,14 @@ export const useCasesStore = create<CasesStore>((set, get) => ({
   },
 
   endCall: () => {
-    set({ activeCallCaseId: null });
+    const caseId = get().activeCallCaseId;
+    set({
+      activeCallCaseId: null,
+      activeCaseId: caseId, // Reopen CaseModal
+    });
+    if (caseId) {
+      get().loadMessages(caseId); // Refresh messages from DB
+    }
   },
 
   setAiTyping: (isTyping: boolean) => {
