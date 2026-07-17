@@ -16,6 +16,8 @@
     "@fontsource-variable/geist": "^5.2.8",
     "@sentry/react": "^10.65.0",
     "@tailwindcss/vite": "^4.2.4",
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "axios": "^1.16.0",
     "canvas-confetti": "^1.9.4",
     "class-variance-authority": "^0.7.1",

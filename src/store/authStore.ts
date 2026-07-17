@@ -114,23 +114,39 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       logout: async () => {
+        // Clear local session state immediately so UI updates instantly
+        set({ user: null });
+
+        // Fire-and-forget the server request with a timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+
         try {
           await fetch(`${API_BASE}/auth/logout`, {
             method: "POST",
             credentials: "include",
+            signal: controller.signal,
           });
         } catch (error) {
-          Sentry.captureException(error);
-          // best-effort — clear local state regardless
+          // Only log/capture if it's not a user-triggered abort or transient network drop
+          if (error instanceof Error && error.name !== "AbortError") {
+            console.error("Server logout failed:", error);
+          }
+        } finally {
+          clearTimeout(timeoutId);
         }
-        set({ user: null });
       },
 
       checkSession: async () => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
+
         try {
           const response = await fetch(`${API_BASE}/auth/me`, {
             credentials: "include",
+            signal: controller.signal,
           });
+
           if (!response.ok) {
             set({ user: null, sessionChecked: true });
             return;
@@ -146,8 +162,13 @@ export const useAuthStore = create<AuthStore>()(
             sessionChecked: true,
           });
         } catch (error) {
-          Sentry.captureException(error);
+          // Avoid capturing AbortErrors (timeouts) in Sentry as they are expected during network outages
+          if (error instanceof Error && error.name !== "AbortError") {
+            Sentry.captureException(error);
+          }
           set({ user: null, sessionChecked: true });
+        } finally {
+          clearTimeout(timeoutId);
         }
       },
 

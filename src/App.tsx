@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 import BriefingPage from "./page/briefing/page";
 import ChatRoomPage from "./page/chat-room/page";
@@ -26,7 +28,7 @@ import { toast } from "sonner";
 import * as Sentry from "@sentry/react";
 import { SentryErrorFallback } from "./components/SentryErrorFallback";
 
-const SentryRoutes = Sentry.withSentryReactRouterV6Routing(Routes);
+const SentryRoutes = Sentry.wrapReactRouterRouting(Routes);
 
 const LogoutButton = () => {
   const logout = useAuthStore((state) => state.logout);
@@ -106,6 +108,20 @@ const App = () => {
       playNotificationSound();
       fetchCases();
       fetchAlerts();
+
+      // Show an interactive toast so the user knows research is done
+      // and can jump straight to the case memo
+      const caseName = data.alert.case_name || `Case #${data.alert.case_id}`;
+      toast.success(`⚖️ Research Complete: ${caseName}`, {
+        description: data.alert.title,
+        duration: 8000,
+        action: {
+          label: "View Memo",
+          onClick: () => {
+            useCasesStore.getState().openCase(String(data.alert.case_id));
+          },
+        },
+      });
     };
 
     const handleError = (data: { case_name: string; message: string }) => {
@@ -147,6 +163,8 @@ const App = () => {
         </BrowserRouter>
       </Sentry.ErrorBoundary>
       <Toaster position="top-right" />
+      <Analytics />
+      <SpeedInsights />
     </main>
   );
 };

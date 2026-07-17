@@ -1,9 +1,19 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Zap, PlayCircle, X, Info, ChevronDown, ChevronUp, Copy, Check } from "lucide-react";
+import {
+  Zap,
+  PlayCircle,
+  X,
+  Info,
+  ChevronDown,
+  ChevronUp,
+  Copy,
+  Check,
+} from "lucide-react";
 
 // REPLACE THIS URL with your own Loom or YouTube embed link (e.g. https://www.youtube.com/embed/...)
-const DEMO_VIDEO_URL = "https://player.vimeo.com/video/1205495312?badge=0&autopause=0&player_id=0&app_id=58479";
+const DEMO_VIDEO_URL =
+  "https://player.vimeo.com/video/1205495312?badge=0&autopause=0&player_id=0&app_id=58479";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,18 +31,64 @@ import socket from "@/lib/socket";
 import { uploadPdfs, uploadImages } from "@/lib/api";
 import { toast } from "sonner";
 
-const TEST_KIT_PROMPT = `You are a Legal Scenario Engineer. I am testing an autonomous, multi-modal legal research AI named "Lexis." I need you to generate a "Mock Legal Case Test Kit" to test its ability to synthesize internal documents, visual evidence, and web search results. Please generate a high-stakes corporate or commercial liability scenario (e.g., Corporate Negligence, IP Theft, Breach of Contract, or Employment Dispute). Provide the output strictly in the following format:
+const TEST_KIT_PROMPT = `You are a Legal Scenario Engineer. I am testing an autonomous, multi-modal legal
+research AI named "Lexis" on its ability to synthesize internal documents, visual
+evidence, and web sources — the way a real solicitor would build a case file.
 
-1. [PDF FILE CONTENT] Generate the exact text for an internal corporate document (e.g., an Incident Report, Internal Audit, or Confidential Memo). Include case IDs, timestamps, and a specific "hidden" detail or gap that proves liability (e.g., a missing inspection log, a suspicious data transfer, or a signed waiver with a fatal flaw).
+Before writing anything, pick ONE jurisdiction and ONE practice area from this list,
+and state your choice: (a) UK — Workplace Negligence / Health & Safety, (b) UK —
+Employment Dispute (unfair/constructive dismissal), (c) UK — IP Theft / Breach of
+Confidence, (d) UK — Breach of Contract (commercial). Ground everything in that
+jurisdiction's actual regulatory scheme (e.g. for (a): HSWA 1974, PUWER, LOLER; for
+(b): Employment Rights Act 1996, ACAS Code; for (c): Trade Secrets Regulations 2018;
+for (d): Sale of Goods/commercial contract law) — do not mix jurisdictions.
 
-2. [IMAGE EVIDENCE GUIDE] Tell me exactly what kind of image I need to search for online to download as visual evidence. Provide 2-3 specific search queries. The image must contain visual proof that contradicts a standard legal defense (e.g., "search for 'wet floor sign missing' to prove lack of hazard notice").
+Output strictly in this order:
 
-3. [VERIFIED URLs] Provide 3 real, active URLs that are highly relevant to this specific scenario. These should include:
-- 1 official government legislation or statute link.
-- 1 regulatory body guideline or enforcement page.
-- 1 real case precedent (preferably from BAILII or a verified legal database).
+1. [DOCUMENT BUNDLE — not one document, three] Generate three short internal
+documents that reference the SAME case reference number, asset/employee IDs, and at
+least one shared identifier (a certificate number, contract clause, ticket number,
+or serial number) across all three:
+   a. An incident/complaint report filed by a junior or operational staff member,
+      dated at the time of the triggering event.
+   b. An internal audit, review, or appraisal memo dated BEFORE the triggering
+      event, written by a more senior role, that flags the same issue in passing
+      — and is dismissed, deprioritised, or only partially actioned (include the
+      exact dismissive annotation, e.g. a manager's handwritten note or email
+      reply).
+   c. A record/log/register extract (maintenance log, access log, contract
+      schedule, appraisal history) that, when cross-checked against (a) and (b),
+      reveals a factual mismatch — NOT stated outright as "this proves liability,"
+      but built so a careful reader has to compare specific fields (dates, serials,
+      names, figures) across all three documents to find it.
+   Use real-sounding UK conventions: named roles (not just "Manager"), realistic
+   form/reference numbering, RIDDOR/ACAS/contractual terminology appropriate to the
+   practice area, and a clear date timeline where the warning predates the incident.
 
-4. [CASE CONTEXT INPUT] Write the exact 3-4 sentence paragraph I will paste into the Lexis AI "Case Context" input box. It should outline the dispute, mention the attached evidence, and ask the AI to find a specific legal leverage point based on the opponent's likely defense. Keep the tone highly professional, adversarial, and realistic.`;
+2. [IMAGE EVIDENCE GUIDE] Give 2-3 specific, real search queries (3-6 words each)
+   for photos that could be downloaded to corroborate the physical/documentary
+   evidence in Section 1 — each tied to rebutting the specific defence you expect
+   the opponent to raise (e.g. "we always inspect/we always warn/we followed
+   process").
+
+3. [VERIFIED SOURCES] If you have live web/browsing access, use it and only include
+   URLs you actually retrieved — do not invent or reconstruct URLs from memory. If
+   you cannot browse, say so explicitly instead of guessing. Provide:
+   - 1 primary legislation link (legislation.gov.uk or equivalent official source)
+   - 1 regulator/enforcement body guidance page (HSE, ACAS, ICO, etc.)
+   - 1 real case precedent from BAILII (or the jurisdiction's equivalent verified
+     case database) — a real citation, not a plausible-sounding invented one.
+
+4. [CASE CONTEXT INPUT] Write the exact 3-4 sentence paragraph I'll paste into
+   Lexis's "Case Context" box. Reference the specific document names from Section 1
+   by their reference numbers, name the anticipated defence, and ask Lexis to
+   identify the specific leverage point arising from the cross-document
+   discrepancy — not a generic "find something useful" ask. Professional,
+   adversarial, realistic tone.
+
+Do not resolve the discrepancy for me in plain language anywhere in Section 1 — the
+whole point is that Lexis has to find it by comparing documents, the way the mock
+kit built for Ben (ref MLL-HS-2026-0417) does.`;
 
 const BriefingPage = () => {
   const { pdfs, urls, images, context, clearAll } = useBriefingStore();
@@ -144,7 +200,7 @@ const BriefingPage = () => {
           <Button
             onClick={handleStart}
             disabled={isLoading || !hasContent}
-            className="h-15 w-60 bg-white hover:bg-slate-200 text-black font-black rounded-2xl shadow-[0_0_3.125rem_rgba(255,255,255,0.15)] border border-white/40 flex items-center gap-4 text-xl uppercase tracking-[0.15em] transition-all hover:scale-105 active:scale-95 group relative overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed"
+            className="h-15 w-60 bg-white hover:bg-slate-200 text-black font-black rounded-2xl shadow-[0_0_50px_rgba(255,255,255,0.15)] border border-white/40 flex items-center gap-4 text-xl uppercase tracking-[0.15em] transition-all hover:scale-105 active:scale-95 group relative overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <span className="relative z-10">
               {isLoading ? "Starting..." : "Start Case"}
@@ -163,14 +219,14 @@ const BriefingPage = () => {
           else setIsWalkthroughOpen(true);
         }}
       >
-        <AlertDialogContent className="w-[calc(100%-2rem)] sm:w-full max-w-2xl! h-[80vh] bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(147,51,234,0.15)] flex flex-col p-0 gap-0">
+        <AlertDialogContent className="w-[calc(100%-32px)] sm:w-full max-w-2xl! h-[80vh] bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden shadow-[0_0_3.125rem_rgba(147,51,234,0.15)] flex flex-col p-0 gap-0">
           {/* Header */}
           <div className="flex justify-between items-center px-4 py-3 sm:px-6 sm:py-4 border-b border-white/5 bg-zinc-950/40 shrink-0">
             <div>
               <AlertDialogTitle className="font-bold text-base sm:text-lg text-white">
                 Lexis AI Walkthrough
               </AlertDialogTitle>
-              <AlertDialogDescription className="text-[10px] sm:text-xs text-purple-400 font-medium">
+              <AlertDialogDescription className="text-[.625rem] sm:text-xs text-purple-400 font-medium">
                 How to test this feature
               </AlertDialogDescription>
             </div>
@@ -215,7 +271,7 @@ const BriefingPage = () => {
 
             {/* Case Generation Test Kit */}
             <div className="bg-white/1 border border-white/5 p-3.5 sm:p-4 rounded-xl text-sm transition-all duration-300">
-              <button 
+              <button
                 onClick={() => setIsTestKitExpanded(!isTestKitExpanded)}
                 className="w-full flex items-center justify-between text-left group cursor-pointer outline-none"
               >
@@ -228,14 +284,16 @@ const BriefingPage = () => {
                   <ChevronDown className="w-4 h-4 text-slate-500 group-hover:text-slate-300 transition-colors" />
                 )}
               </button>
-              
+
               {isTestKitExpanded && (
                 <div className="animate-in slide-in-from-top-2 fade-in duration-200 mt-4 relative">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-[11px] text-slate-500 font-medium">Use this prompt in ChatGPT/Claude:</span>
+                    <span className="text-[.6875rem] text-slate-500 font-medium">
+                      Use this prompt in ChatGPT/Claude:
+                    </span>
                     <button
                       onClick={handleCopy}
-                      className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] text-slate-400 bg-white/5 border border-white/10 rounded-md hover:bg-white/10 hover:text-white transition-all cursor-pointer outline-none"
+                      className="flex items-center gap-1.5 px-2.5 py-1 text-[.625rem] text-slate-400 bg-white/5 border border-white/10 rounded-md hover:bg-white/10 hover:text-white transition-all cursor-pointer outline-none"
                     >
                       {copied ? (
                         <>
@@ -250,7 +308,7 @@ const BriefingPage = () => {
                       )}
                     </button>
                   </div>
-                  <p className="text-[11px] text-slate-400 bg-black/50 border border-white/5 p-3 rounded-lg select-all leading-relaxed whitespace-pre-wrap">
+                  <p className="text-[.6875rem] text-slate-400 bg-black/50 border border-white/5 p-3 rounded-lg select-all leading-relaxed whitespace-pre-wrap">
                     {TEST_KIT_PROMPT}
                   </p>
                 </div>
