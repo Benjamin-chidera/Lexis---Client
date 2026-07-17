@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 import BriefingPage from "./page/briefing/page";
 import ChatRoomPage from "./page/chat-room/page";
@@ -26,7 +28,7 @@ import { toast } from "sonner";
 import * as Sentry from "@sentry/react";
 import { SentryErrorFallback } from "./components/SentryErrorFallback";
 
-const SentryRoutes = Sentry.withSentryReactRouterV6Routing(Routes);
+const SentryRoutes = Sentry.wrapReactRouterRouting(Routes);
 
 const LogoutButton = () => {
   const logout = useAuthStore((state) => state.logout);
@@ -161,6 +163,8 @@ const App = () => {
         </BrowserRouter>
       </Sentry.ErrorBoundary>
       <Toaster position="top-right" />
+      <Analytics />
+      <SpeedInsights />
     </main>
   );
 };

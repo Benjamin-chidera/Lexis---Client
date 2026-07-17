@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 import * as Sentry from "@sentry/react";
+import { useAuthStore } from "./authStore";
 
 // --- Types ---
 
@@ -142,7 +143,9 @@ export const useCasesStore = create<CasesStore>((set, get) => ({
       set({ cases: response.data, isLoading: false });
     } catch (error) {
       console.error("Failed to fetch cases:", error);
-      Sentry.captureException(error);
+      if (useAuthStore.getState().user && !axios.isCancel(error)) {
+        Sentry.captureException(error);
+      }
       set({ cases: [], isLoading: false });
     }
   },
@@ -159,7 +162,9 @@ export const useCasesStore = create<CasesStore>((set, get) => ({
       }));
     } catch (error) {
       console.error("Failed to load messages for case:", caseId, error);
-      Sentry.captureException(error);
+      if (useAuthStore.getState().user && !axios.isCancel(error)) {
+        Sentry.captureException(error);
+      }
     }
   },
 
@@ -232,7 +237,9 @@ export const useCasesStore = create<CasesStore>((set, get) => ({
       await fetchCases();
     } catch (error) {
       console.error("Failed to add PDFs to vault:", error);
-      Sentry.captureException(error);
+      if (useAuthStore.getState().user && !axios.isCancel(error)) {
+        Sentry.captureException(error);
+      }
     }
   },
 
@@ -244,7 +251,9 @@ export const useCasesStore = create<CasesStore>((set, get) => ({
       await fetchCases();
     } catch (error) {
       console.error("Failed to add images to vault:", error);
-      Sentry.captureException(error);
+      if (useAuthStore.getState().user && !axios.isCancel(error)) {
+        Sentry.captureException(error);
+      }
     }
   },
 
@@ -255,7 +264,9 @@ export const useCasesStore = create<CasesStore>((set, get) => ({
       await fetchCases();
     } catch (error) {
       console.error("Failed to add URL to vault:", error);
-      Sentry.captureException(error);
+      if (useAuthStore.getState().user && !axios.isCancel(error)) {
+        Sentry.captureException(error);
+      }
     }
   },
 
@@ -268,7 +279,9 @@ export const useCasesStore = create<CasesStore>((set, get) => ({
       await fetchCases();
     } catch (error) {
       console.error("Failed to add context to vault:", error);
-      Sentry.captureException(error);
+      if (useAuthStore.getState().user && !axios.isCancel(error)) {
+        Sentry.captureException(error);
+      }
     }
   },
 
@@ -297,7 +310,9 @@ export const useCasesStore = create<CasesStore>((set, get) => ({
       });
     } catch (error) {
       console.error("Failed to update case status:", error);
-      Sentry.captureException(error);
+      if (useAuthStore.getState().user && !axios.isCancel(error)) {
+        Sentry.captureException(error);
+      }
       // Re-fetch to revert optimistic update on failure
       const { fetchCases } = useCasesStore.getState();
       await fetchCases();

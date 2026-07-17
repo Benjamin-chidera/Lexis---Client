@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 import * as Sentry from "@sentry/react";
+import { useAuthStore } from "./authStore";
 
 const API_BASE = import.meta.env.VITE_API_URL;
 
@@ -62,7 +63,9 @@ export const useAlertStore = create<AlertStore>((set, get) => ({
       set({ alerts: response.data, isLoading: false });
     } catch (error) {
       console.error("Failed to fetch alerts:", error);
-      Sentry.captureException(error);
+      if (useAuthStore.getState().user && !axios.isCancel(error)) {
+        Sentry.captureException(error);
+      }
       set({ isLoading: false });
     }
   },
@@ -90,7 +93,9 @@ export const useAlertStore = create<AlertStore>((set, get) => ({
       }));
     } catch (error) {
       console.error("Failed to mark alert as read:", error);
-      Sentry.captureException(error);
+      if (useAuthStore.getState().user && !axios.isCancel(error)) {
+        Sentry.captureException(error);
+      }
     }
   },
 
@@ -102,7 +107,9 @@ export const useAlertStore = create<AlertStore>((set, get) => ({
       }));
     } catch (error) {
       console.error("Failed to archive alerts:", error);
-      Sentry.captureException(error);
+      if (useAuthStore.getState().user && !axios.isCancel(error)) {
+        Sentry.captureException(error);
+      }
     }
   },
 
@@ -117,7 +124,9 @@ export const useAlertStore = create<AlertStore>((set, get) => ({
       }));
     } catch (error) {
       console.error("Failed to accept alert:", error);
-      Sentry.captureException(error);
+      if (useAuthStore.getState().user && !axios.isCancel(error)) {
+        Sentry.captureException(error);
+      }
     }
   },
 
@@ -132,7 +141,9 @@ export const useAlertStore = create<AlertStore>((set, get) => ({
       }));
     } catch (error) {
       console.error("Failed to reject alert:", error);
-      Sentry.captureException(error);
+      if (useAuthStore.getState().user && !axios.isCancel(error)) {
+        Sentry.captureException(error);
+      }
     }
   },
 }));
