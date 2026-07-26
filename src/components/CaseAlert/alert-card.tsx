@@ -207,19 +207,29 @@ export const AlertCard = ({ alert, onMarkRead }: AlertCardProps) => {
                       {children}
                     </strong>
                   ),
-                  a: ({ href, children }) => (
-                    <a
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-purple-400 hover:text-purple-300 underline underline-offset-2 transition-colors break-all"
-                    >
-                      {children}
-                    </a>
-                  ),
+                  a: ({ href, children }) => {
+                    const isHttp = href?.startsWith("http://") || href?.startsWith("https://");
+                    if (isHttp) {
+                      return (
+                        <a
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-purple-400 hover:text-purple-300 underline underline-offset-2 transition-colors break-all font-medium"
+                        >
+                          {children}
+                        </a>
+                      );
+                    }
+                    return (
+                      <span className="text-slate-300 font-medium break-all">
+                        📄 {children}
+                      </span>
+                    );
+                  },
                   ul: ({ children }) => (
                     <ul className="list-disc list-inside space-y-1 text-slate-400 mb-2 wrap-break-word">
-                      {children}
+                      {children} 
                     </ul>
                   ),
                   ol: ({ children }) => (
