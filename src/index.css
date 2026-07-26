@@ -46,6 +46,19 @@
     --radius-2xl: calc(var(--radius) * 1.8);
     --radius-3xl: calc(var(--radius) * 2.2);
     --radius-4xl: calc(var(--radius) * 2.6);
+
+    /* Override purple color utilities with Cobalt / Royal Blue theme */
+    --color-purple-50: #f0f6ff;
+    --color-purple-100: #e0edff;
+    --color-purple-200: #c0daff;
+    --color-purple-300: #90beff;
+    --color-purple-400: #5299ff;
+    --color-purple-500: #1d70f5;
+    --color-purple-600: #0a53d6;
+    --color-purple-700: #0840aa;
+    --color-purple-800: #0b3687;
+    --color-purple-900: #0f2e6b;
+    --color-purple-950: #0a1d47;
 }
 
 :root {
@@ -109,7 +122,7 @@
     --chart-5: oklch(0.269 0 0);
     --sidebar: oklch(0.205 0 0);
     --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary: oklch(0.53 0.22 250);
     --sidebar-primary-foreground: oklch(0.985 0 0);
     --sidebar-accent: oklch(0.269 0 0);
     --sidebar-accent-foreground: oklch(0.985 0 0);
