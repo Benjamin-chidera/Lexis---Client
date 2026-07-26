@@ -31,64 +31,195 @@ import socket from "@/lib/socket";
 import { uploadPdfs, uploadImages } from "@/lib/api";
 import { toast } from "sonner";
 
-const TEST_KIT_PROMPT = `You are a Legal Scenario Engineer. I am testing an autonomous, multi-modal legal
-research AI named "Lexis" on its ability to synthesize internal documents, visual
-evidence, and web sources — the way a real solicitor would build a case file.
+const TEST_KIT_PROMPT = `ROLE
 
-Before writing anything, pick ONE jurisdiction and ONE practice area from this list,
-and state your choice: (a) UK — Workplace Negligence / Health & Safety, (b) UK —
-Employment Dispute (unfair/constructive dismissal), (c) UK — IP Theft / Breach of
-Confidence, (d) UK — Breach of Contract (commercial). Ground everything in that
-jurisdiction's actual regulatory scheme (e.g. for (a): HSWA 1974, PUWER, LOLER; for
-(b): Employment Rights Act 1996, ACAS Code; for (c): Trade Secrets Regulations 2018;
-for (d): Sale of Goods/commercial contract law) — do not mix jurisdictions.
+You are a Senior UK Legal Scenario Engineer.
 
-Output strictly in this order:
+Your task is to construct a fictional but professionally realistic litigation case pack that resembles the evidence bundle a UK solicitor might receive during the early stages of a dispute.
 
-1. [DOCUMENT BUNDLE — not one document, three] Generate three short internal
-documents that reference the SAME case reference number, asset/employee IDs, and at
-least one shared identifier (a certificate number, contract clause, ticket number,
-or serial number) across all three:
-   a. An incident/complaint report filed by a junior or operational staff member,
-      dated at the time of the triggering event.
-   b. An internal audit, review, or appraisal memo dated BEFORE the triggering
-      event, written by a more senior role, that flags the same issue in passing
-      — and is dismissed, deprioritised, or only partially actioned (include the
-      exact dismissive annotation, e.g. a manager's handwritten note or email
-      reply).
-   c. A record/log/register extract (maintenance log, access log, contract
-      schedule, appraisal history) that, when cross-checked against (a) and (b),
-      reveals a factual mismatch — NOT stated outright as "this proves liability,"
-      but built so a careful reader has to compare specific fields (dates, serials,
-      names, figures) across all three documents to find it.
-   Use real-sounding UK conventions: named roles (not just "Manager"), realistic
-   form/reference numbering, RIDDOR/ACAS/contractual terminology appropriate to the
-   practice area, and a clear date timeline where the warning predates the incident.
+The case pack is intended solely for benchmarking an AI legal assistant. It should be internally consistent, legally realistic, and concise enough to fit within a single response while still requiring cross-document reasoning.
 
-2. [IMAGE EVIDENCE GUIDE] Give 2-3 specific, real search queries (3-6 words each)
-   for photos that could be downloaded to corroborate the physical/documentary
-   evidence in Section 1 — each tied to rebutting the specific defence you expect
-   the opponent to raise (e.g. "we always inspect/we always warn/we followed
-   process").
+Everything must be fictional.
 
-3. [VERIFIED SOURCES] If you have live web/browsing access, use it and only include
-   URLs you actually retrieved — do not invent or reconstruct URLs from memory. If
-   you cannot browse, say so explicitly instead of guessing. Provide:
-   - 1 primary legislation link (legislation.gov.uk or equivalent official source)
-   - 1 regulator/enforcement body guidance page (HSE, ACAS, ICO, etc.)
-   - 1 real case precedent from BAILII (or the jurisdiction's equivalent verified
-     case database) — a real citation, not a plausible-sounding invented one.
+Do not use the names of real companies, employees, claimants, or disputes.
 
-4. [CASE CONTEXT INPUT] Write the exact 3-4 sentence paragraph I'll paste into
-   Lexis's "Case Context" box. Reference the specific document names from Section 1
-   by their reference numbers, name the anticipated defence, and ask Lexis to
-   identify the specific leverage point arising from the cross-document
-   discrepancy — not a generic "find something useful" ask. Professional,
-   adversarial, realistic tone.
+Use realistic UK legal drafting conventions.
 
-Do not resolve the discrepancy for me in plain language anywhere in Section 1 — the
-whole point is that Lexis has to find it by comparing documents, the way the mock
-kit built for Ben (ref MLL-HS-2026-0417) does.`;
+STEP 1 — Select the Matter
+
+Choose exactly one:
+
+UK Workplace Negligence / Health & Safety
+UK Employment Dispute
+UK Commercial Breach of Contract
+UK Breach of Confidence / Trade Secrets
+UK Defamation / IP Infringement / Passing Off
+
+State your choice.
+
+Ground every document in the correct legislation and regulatory framework.
+
+STEP 2 — Generate the Benchmark Case Pack
+
+Create 12–15 concise but realistic documents.
+
+Each document should be approximately 150–350 words.
+
+Do not generate placeholder text.
+
+Every document must share the same:
+
+Case Reference
+Company
+Employee IDs
+Asset IDs (if applicable)
+Contract references
+Ticket numbers
+Certificate numbers
+
+The warning signs must pre-date the triggering event.
+
+Required Documents
+Internal
+Incident Report
+Internal Investigation Report
+Audit Report
+Maintenance Log / HR Record / Contract Register
+Risk Assessment
+Training Record
+Relevant Policy Extract
+Timeline Summary
+Communications
+Supervisor Email
+Management Email
+Short Email Chain (2–4 emails)
+Teams or Slack Conversation
+Meeting Minutes
+External
+
+Generate whichever are appropriate for the chosen practice area:
+
+Witness Statement
+Contractor Report
+Customer Complaint
+Occupational or Medical Summary
+
+If the chosen matter is Defamation / IP Infringement / Passing Off, also generate:
+
+Cease and Desist Letter
+Copy or Extract of the Allegedly Infringing/Defamatory Material (as published by the third party, reproduced fictionally)
+
+Each document should include realistic:
+
+dates
+signatures or approval blocks
+document owners
+version numbers
+internal reference numbers
+
+STEP 3 — Cross-Document Reasoning
+
+Embed 8–12 subtle factual inconsistencies across the documents.
+
+Examples include:
+
+inconsistent dates
+conflicting serial numbers
+certificate validity issues
+maintenance timing
+policy version mismatch
+contradictory witness recollections
+email inconsistencies
+revision conflicts
+
+Do not identify or explain them.
+
+Lexis should discover them.
+
+STEP 4 — Image Evidence Guide
+
+Provide 3–5 search queries (3–6 words each).
+
+Each should represent realistic evidence a solicitor might obtain.
+
+For each query, identify the anticipated defence it would help rebut.
+
+Do not fabricate photographs.
+
+STEP 5 — Case Vault Web Evidence (Input)
+
+Assume the solicitor can upload webpages directly into Lexis as an evidence ingestion tool — this is not a link to a Case Management System (CMS) profile such as Clio or MyCase. The purpose is for the AI to scrape, read, and analyse the contents of a given webpage just as it would a PDF.
+
+These are inputs, not research outputs.
+
+For each recommended webpage, provide:
+
+webpage type
+why it should be ingested
+expected evidential value
+
+Include, as relevant to the chosen matter:
+
+Company policy webpage (e.g. Terms of Service, Privacy Policy, Return Policy — for breach of contract matters, to confirm the exact policy version live at the relevant date)
+Regulator guidance webpage
+Legislation webpage
+Public announcement, press release, or regulatory filing (to establish what the company knew and when — public disclosure timing)
+Third-party website containing the allegedly infringing, defamatory, or misappropriated content (e.g. a competitor's site, a blog post, or republished material — for defamation, IP infringement, or breach of confidence matters, to evidence the offending publication itself)
+
+If live browsing is unavailable, state that live URLs cannot be retrieved and specify the type of webpage instead.
+
+Do not invent URLs.
+
+STEP 6 — Legal Research Targets
+
+Identify the legal authorities Lexis should research after ingesting the evidence.
+
+Include:
+
+legislation
+regulator guidance
+leading case law
+
+List only the authorities.
+
+Do not summarise them.
+
+If browsing is available, use official sources.
+
+STEP 7 — Case Context
+
+Write a 3–5 sentence paragraph suitable for Lexis.
+
+Reference the document numbers.
+
+Identify the anticipated defence.
+
+Instruct Lexis to:
+
+build the chronology
+compare all documents
+identify inconsistencies
+determine whether policies, records and communications align
+identify missing disclosure
+identify leverage points
+
+Do not explain where the inconsistencies are.
+
+Constraints
+
+Do NOT:
+
+invent real litigation
+accuse real companies
+fabricate legislation
+fabricate court decisions
+explain the hidden discrepancies
+use placeholder text
+produce more than 15 documents
+
+The objective is to create a compact but realistic benchmark case pack that exercises
+document ingestion, evidence synthesis, chronology reconstruction, legal research, and cross-document reasoning while
+remaining small enough to fit comfortably within a single AI response.`;
 
 const BriefingPage = () => {
   const { pdfs, urls, images, context, clearAll } = useBriefingStore();
@@ -200,7 +331,7 @@ const BriefingPage = () => {
           <Button
             onClick={handleStart}
             disabled={isLoading || !hasContent}
-            className="h-15 w-60 bg-white hover:bg-slate-200 text-black font-black rounded-2xl shadow-[0_0_50px_rgba(255,255,255,0.15)] border border-white/40 flex items-center gap-4 text-xl uppercase tracking-[0.15em] transition-all hover:scale-105 active:scale-95 group relative overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed"
+            className="h-15 w-60 bg-white hover:bg-slate-200 text-black font-black rounded-2xl shadow-[0_0_3.125rem_rgba(255,255,255,0.15)] border border-white/40 flex items-center gap-4 text-xl uppercase tracking-[0.15em] transition-all hover:scale-105 active:scale-95 group relative overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <span className="relative z-10">
               {isLoading ? "Starting..." : "Start Case"}
@@ -219,14 +350,14 @@ const BriefingPage = () => {
           else setIsWalkthroughOpen(true);
         }}
       >
-        <AlertDialogContent className="w-[calc(100%-32px)] sm:w-full max-w-2xl! h-[80vh] bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden shadow-[0_0_3.125rem_rgba(147,51,234,0.15)] flex flex-col p-0 gap-0">
+        <AlertDialogContent className="w-[calc(100%-2rem)] sm:w-full max-w-2xl! h-[80vh] bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(147,51,234,0.15)] flex flex-col p-0 gap-0">
           {/* Header */}
           <div className="flex justify-between items-center px-4 py-3 sm:px-6 sm:py-4 border-b border-white/5 bg-zinc-950/40 shrink-0">
             <div>
               <AlertDialogTitle className="font-bold text-base sm:text-lg text-white">
                 Lexis AI Walkthrough
               </AlertDialogTitle>
-              <AlertDialogDescription className="text-[.625rem] sm:text-xs text-purple-400 font-medium">
+              <AlertDialogDescription className="text-[10px] sm:text-xs text-purple-400 font-medium">
                 How to test this feature
               </AlertDialogDescription>
             </div>
@@ -288,12 +419,12 @@ const BriefingPage = () => {
               {isTestKitExpanded && (
                 <div className="animate-in slide-in-from-top-2 fade-in duration-200 mt-4 relative">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-[.6875rem] text-slate-500 font-medium">
+                    <span className="text-[11px] text-slate-500 font-medium">
                       Use this prompt in ChatGPT/Claude:
                     </span>
                     <button
                       onClick={handleCopy}
-                      className="flex items-center gap-1.5 px-2.5 py-1 text-[.625rem] text-slate-400 bg-white/5 border border-white/10 rounded-md hover:bg-white/10 hover:text-white transition-all cursor-pointer outline-none"
+                      className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] text-slate-400 bg-white/5 border border-white/10 rounded-md hover:bg-white/10 hover:text-white transition-all cursor-pointer outline-none"
                     >
                       {copied ? (
                         <>
@@ -308,7 +439,7 @@ const BriefingPage = () => {
                       )}
                     </button>
                   </div>
-                  <p className="text-[.6875rem] text-slate-400 bg-black/50 border border-white/5 p-3 rounded-lg select-all leading-relaxed whitespace-pre-wrap">
+                  <p className="text-[11px] text-slate-400 bg-black/50 border border-white/5 p-3 rounded-lg select-all leading-relaxed whitespace-pre-wrap">
                     {TEST_KIT_PROMPT}
                   </p>
                 </div>
