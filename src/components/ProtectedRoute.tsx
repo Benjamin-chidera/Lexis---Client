@@ -10,7 +10,14 @@ export const ProtectedRoute = ({ children }: Props) => {
   const sessionChecked = useAuthStore((s) => s.sessionChecked);
 
   if (!sessionChecked) {
-    return null;
+    return (
+      <div className="fixed inset-0 bg-black flex flex-col items-center justify-center gap-4 z-50">
+        <div className="w-10 h-10 rounded-full border-2 border-purple-500/20 border-t-purple-500 animate-spin" />
+        <span className="text-slate-500 text-[10px] font-black tracking-[0.2em] uppercase animate-pulse">
+          Securing Session
+        </span>
+      </div>
+    );
   }
 
   if (!isAuthenticated) {
