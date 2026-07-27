@@ -244,16 +244,12 @@ const BriefingPage = () => {
     setIsWalkthroughOpen(false);
   };
 
-  const hasContent =
-    pdfs.length > 0 ||
-    urls.length > 0 ||
-    images.length > 0 ||
-    context.trim().length > 0;
+  const hasContext = context.trim().length > 0;
 
   const handleStart = async () => {
-    if (!hasContent) {
+    if (!hasContext) {
       toast.error(
-        "Add at least one document, URL, image, or context note before starting.",
+        "Please describe the case context before starting.",
       );
       return;
     }
@@ -330,7 +326,8 @@ const BriefingPage = () => {
         <div className="flex justify-center">
           <Button
             onClick={handleStart}
-            disabled={isLoading || !hasContent}
+            disabled={isLoading || !hasContext}
+            title={!hasContext ? "Add case context to start" : ""}
             className="h-15 w-60 bg-white hover:bg-slate-200 text-black font-black rounded-2xl shadow-[0_0_3.125rem_rgba(255,255,255,0.15)] border border-white/40 flex items-center gap-4 text-xl uppercase tracking-[0.15em] transition-all hover:scale-105 active:scale-95 group relative overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <span className="relative z-10">
