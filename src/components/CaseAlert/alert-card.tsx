@@ -248,7 +248,7 @@ export const AlertCard = ({ alert, onMarkRead }: AlertCardProps) => {
                   ),
                 }}
               >
-                {alert.summary}
+                {formatAlertSummary(alert.summary)}
               </ReactMarkdown>
             </div>
 
@@ -281,6 +281,115 @@ export const AlertCard = ({ alert, onMarkRead }: AlertCardProps) => {
     </>
   );
 };
+
+function formatAlertSummary(rawSummary: string): string {
+  if (!rawSummary) return "";
+
+  // Already formatted markdown memo
+  if (
+    rawSummary.includes("## Strategic Legal Memo") ||
+    rawSummary.includes("### Liability Summary")
+  ) {
+    return rawSummary;
+  }
+
+  // Detect raw JSON with research output keys
+  if (
+    (rawSummary.includes('"evidence_log"') || rawSummary.includes('"liability_summary"')) &&
+    rawSummary.includes("{") &&
+    rawSummary.includes("}")
+  ) {
+    try {
+      const jsonStart = rawSummary.indexOf("{");
+      const jsonEnd = rawSummary.lastIndexOf("}");
+      if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
+        let jsonStr = rawSummary.slice(jsonStart, jsonEnd + 1);
+        jsonStr = jsonStr.replace(/:\s*“/g, ': "').replace(/[“”]/g, "'");
+
+        const parsed = JSON.parse(jsonStr);
+        if (parsed && typeof parsed === "object") {
+          const lines: string[] = ["## Strategic Legal Memo"];
+
+          const liabilitySummary = parsed.liability_summary || "";
+          if (liabilitySummary) {
+            lines.push(
+              `\n### Liability Summary\n${
+                typeof liabilitySummary === "string"
+                  ? liabilitySummary
+                  : JSON.stringify(liabilitySummary)
+              }`
+            );
+          }
+
+          const evidenceLog = Array.isArray(parsed.evidence_log)
+            ? parsed.evidence_log
+            : [];
+          if (evidenceLog.length > 0) {
+            lines.push("\n### Evidence Log");
+            for (const item of evidenceLog) {
+              if (!item || typeof item !== "object") continue;
+              const type =
+                item.evidence_type ||
+                item.type ||
+                (item.web_url ? "Legislation" : "Vault Document");
+              const title =
+                item.title || item.document_name || "Evidence Finding";
+              const summary =
+                item.summary || item.snippet || item.description || "";
+              const webUrl = item.web_url || item.url || "";
+              const docName = item.document_name || item.doc || "";
+
+              lines.push(`\n#### [${type}] ${title}`);
+              if (summary) lines.push(summary);
+              if (webUrl && String(webUrl).startsWith("http")) {
+                lines.push(`[Source](${webUrl})`);
+              } else if (docName) {
+                lines.push(`📄 Source: ${docName}`);
+              }
+            }
+          }
+
+          const leverage = parsed.leverage_strategy || parsed;
+          const settlement =
+            leverage.settlement_trigger || parsed.settlement_trigger || "";
+          const barriers =
+            leverage.barriers_to_defense || parsed.barriers_to_defense || "";
+          const nextMove =
+            leverage.next_tactical_move || parsed.next_tactical_move || "";
+
+          if (settlement || barriers || nextMove) {
+            lines.push("\n---");
+            lines.push("\n### LEVERAGE & WINNING STRATEGY");
+            if (settlement) lines.push(`\n**SETTLEMENT TRIGGER**\n${settlement}`);
+            if (barriers) lines.push(`\n**BARRIERS TO DEFENSE**\n${barriers}`);
+            if (nextMove) lines.push(`\n**NEXT TACTICAL MOVE**\n${nextMove}`);
+          }
+
+          const sources = Array.isArray(parsed.source_index)
+            ? parsed.source_index
+            : [];
+          if (sources.length > 0) {
+            lines.push("\n### Source Index");
+            for (const s of sources) {
+              const sClean = String(s).trim();
+              if (sClean.startsWith("http")) {
+                lines.push(`- [${sClean}](${sClean})`);
+              } else {
+                lines.push(`- 📄 ${sClean}`);
+              }
+            }
+          }
+
+          return lines.join("\n");
+        }
+      }
+    } catch {
+      // Fallback to raw text if parsing fails
+    }
+  }
+
+  return rawSummary;
+}
 
 function formatRelativeTime(isoString: string): string {
   // Python datetime.utcnow() creates naive timestamps that lack 'Z'

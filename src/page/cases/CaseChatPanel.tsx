@@ -6,13 +6,13 @@ import {
   FileText,
   ExternalLink,
   Loader2,
-  // CheckCircle2
+  Globe,
+  Image as ImageIcon,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useCasesStore, getActiveCase } from "@/store/casesStore";
 import { useShallow } from "zustand/react/shallow";
 import type { ChatMessage } from "@/store/casesStore";
-import * as Sentry from "@sentry/react";
 
 interface CaseChatPanelProps {
   caseId: string;
@@ -177,16 +177,32 @@ const AiMessage = memo(
     const handleCitationClick = () => {
       if (!message.citation) return;
 
+      // 1. Direct URL on citation object
+      if (message.citation.url) {
+        window.open(message.citation.url, "_blank", "noopener,noreferrer");
+        return;
+      }
+
+      // 2. Direct URL in filename
+      if (
+        message.citation.filename.startsWith("http://") ||
+        message.citation.filename.startsWith("https://")
+      ) {
+        window.open(message.citation.filename, "_blank", "noopener,noreferrer");
+        return;
+      }
+
       const cleanName = (name: string) => {
         try {
           return decodeURIComponent(name)
             .replace(/^(image|pdf|file|document|url):\s*/i, "")
+            .replace(/^\d{9,12}_/, "")
             .trim()
             .toLowerCase();
-        } catch (e) {
-          Sentry.captureException(e);
+        } catch {
           return name
             .replace(/^(image|pdf|file|document|url):\s*/i, "")
+            .replace(/^\d{9,12}_/, "")
             .trim()
             .toLowerCase();
         }
@@ -300,35 +316,55 @@ const AiMessage = memo(
           </div>
 
           {/* Optional citation card */}
-          {message.citation && (
-            <div className="mt-4 pl-3">
-              <div
-                onClick={handleCitationClick}
-                className="bg-white/3 border border-white/10 rounded-xl p-3 flex items-center justify-between hover:border-white/20 transition-all cursor-pointer group/card w-full min-w-0"
-              >
-                <div className="flex items-center gap-3 min-w-0 flex-1">
-                  <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 shrink-0">
-                    <FileText className="w-4 h-4 text-slate-400" />
+          {message.citation && (() => {
+            const rawFilename = message.citation.filename;
+            let displayFilename = rawFilename;
+            try {
+              displayFilename = decodeURIComponent(rawFilename);
+            } catch {
+              // keep fallback rawFilename
+            }
+
+            const isImage =
+              rawFilename.toLowerCase().includes("image") ||
+              /\.(png|jpe?g|webp|gif)$/i.test(rawFilename);
+            const isWeb =
+              rawFilename.toLowerCase().includes("web") ||
+              message.citation.exhibit.toLowerCase().includes("external") ||
+              rawFilename.startsWith("http");
+
+            const IconComponent = isImage ? ImageIcon : isWeb ? Globe : FileText;
+
+            return (
+              <div className="mt-4 pl-3">
+                <div
+                  onClick={handleCitationClick}
+                  className="bg-white/3 border border-white/10 rounded-xl p-3 flex items-center justify-between hover:border-white/20 transition-all cursor-pointer group/card w-full min-w-0"
+                >
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 shrink-0">
+                      <IconComponent className="w-4 h-4 text-purple-400" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p
+                        className="text-xs font-bold text-slate-200 truncate"
+                        title={displayFilename}
+                      >
+                        {displayFilename}
+                      </p>
+                      <p className="text-[0.625rem] text-slate-500 font-medium truncate">
+                        {message.citation.exhibit}
+                        {message.citation.page
+                          ? ` · Page ${message.citation.page}`
+                          : ""}
+                      </p>
+                    </div>
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <p
-                      className="text-xs font-bold text-slate-200 truncate"
-                      title={message.citation.filename}
-                    >
-                      {message.citation.filename}
-                    </p>
-                    <p className="text-[0.625rem] text-slate-500 font-medium truncate">
-                      {message.citation.exhibit}
-                      {message.citation.page
-                        ? ` · Page ${message.citation.page}`
-                        : ""}
-                    </p>
-                  </div>
+                  <ExternalLink className="w-3.5 h-3.5 text-slate-600 group-hover/card:text-slate-400 transition-colors shrink-0 ml-2" />
                 </div>
-                <ExternalLink className="w-3.5 h-3.5 text-slate-600 group-hover/card:text-slate-400 transition-colors shrink-0 ml-2" />
               </div>
-            </div>
-          )}
+            );
+          })()}
         </div>
 
         <span className="text-[0.625rem] font-bold text-slate-600 uppercase tracking-widest ml-1">
