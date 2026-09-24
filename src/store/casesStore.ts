@@ -24,6 +24,7 @@ export interface ChatMessage {
     filename: string;
     exhibit: string;
     page?: number;
+    url?: string;
   };
 }
 

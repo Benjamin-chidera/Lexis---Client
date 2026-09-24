@@ -199,16 +199,28 @@ const ChatPanel = ({ messages, caseId }: { messages: ChatMessage[]; caseId: stri
     (state) => state.cases.find((c) => c.id === caseId)?.vault ?? []
   );
 
-  const handleCitationClick = (filename: string) => {
+  const handleCitationClick = (filename: string, citationUrl?: string) => {
+    if (citationUrl) {
+      window.open(citationUrl, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    if (filename.startsWith("http://") || filename.startsWith("https://")) {
+      window.open(filename, "_blank", "noopener,noreferrer");
+      return;
+    }
+
     const cleanName = (name: string) => {
       try {
         return decodeURIComponent(name)
           .replace(/^(image|pdf|file|document|url):\s*/i, "")
+          .replace(/^\d{9,12}_/, "")
           .trim()
           .toLowerCase();
       } catch {
         return name
           .replace(/^(image|pdf|file|document|url):\s*/i, "")
+          .replace(/^\d{9,12}_/, "")
           .trim()
           .toLowerCase();
       }
@@ -328,12 +340,12 @@ const ChatPanel = ({ messages, caseId }: { messages: ChatMessage[]; caseId: stri
             {/* Citation badge */}
             {msg.citation && (
               <div
-                onClick={() => handleCitationClick(msg.citation!.filename)}
+                onClick={() => handleCitationClick(msg.citation!.filename, msg.citation?.url)}
                 className="mt-2 inline-flex items-center gap-1.5 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[0.625rem] font-bold px-2 py-1 rounded-md max-w-full min-w-0 cursor-pointer hover:bg-cyan-500/20 hover:border-cyan-500/40 transition-all"
               >
                 <FileText className="w-3 h-3 shrink-0" />
                 <span className="truncate" title={msg.citation.filename}>
-                  {msg.citation.filename}
+                  {decodeURIComponent(msg.citation.filename)}
                 </span>
                 {msg.citation.page && <span className="shrink-0"> — p.{msg.citation.page}</span>}
               </div>
